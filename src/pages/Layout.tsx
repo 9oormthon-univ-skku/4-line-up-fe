@@ -1,3 +1,4 @@
+import SideNavBar from '@/components/SideNavBar/SideNavBar';
 import { Outlet } from 'react-router-dom';
 
 const Layout = () => {
@@ -5,6 +6,7 @@ const Layout = () => {
     <>
       <div>Layout</div>
       <Outlet />
+      <SideNavBar/>
     </>
   );
 };
