@@ -40,6 +40,15 @@ const reset = css`
     border-collapse: collapse;
     border-spacing: 0;
   }
+  button {
+    cursor: pointer;
+    padding: 0;
+    font: inherit;
+    color: inherit;
+    background-color: transparent;
+    appearance: none;
+    border: none;
+  }
 `;
 
 const indexCss = css`
