@@ -38,21 +38,28 @@ const SideNavBar = () => {
       activeSnapPoint={snap}
       setActiveSnapPoint={setSnap}
     >
-      <DrawerOverlay visible={snap === 1} onClick={handleSnapClick} />
+      <DrawerOverlay
+        visible={snap === 1}
+        onClick={() => {
+          if (snap === 1) {
+            handleSnapClick();
+          }
+        }}
+      />
       <Drawer.Portal>
         <Drawer.Content css={drawerContentCss}>
-          <Drawer.Title/>
-          <Drawer.Description/>
+          <Drawer.Title />
+          <Drawer.Description />
           <SideNavOpenBtn
             onClick={handleSnapClick}
             css={css`
               position: fixed;
               right: 18rem;
-              top: 5.4rem;
+              top: 5.2rem;
             `}
           />
           <SideNavBarPanel>
-            <SideNavCloseBtn onClick={handleSnapClick}/>
+            <SideNavCloseBtn onClick={handleSnapClick} />
             <SideNavCloseBtn />
             <SideNavCloseBtn />
             <SideNavCloseBtn />

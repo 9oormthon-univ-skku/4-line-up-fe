@@ -7,7 +7,7 @@ const SideNavBarPanel = (props: React.HTMLAttributes<HTMLDivElement>) => {
       css={css`
         height: 100lvh;
         width: 100%;
-        padding: 14px;
+        padding: 5.4rem 16px;
         display: flex;
         flex-direction: column;
         justify-content: space-between;

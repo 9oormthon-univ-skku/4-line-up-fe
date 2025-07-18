@@ -5,8 +5,7 @@ import CloseIcon from '@icons/close.svg?react';
 const SideNavCloseBtn = (props:React.HTMLAttributes<HTMLDivElement>) => {
   return (
     <div css={css`
-        display: flex;
-        flex-direction: row-reverse;
+        margin-left: auto;
         svg {
             height: 5.6rem;
             width: 5.6rem;
