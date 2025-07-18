@@ -3,6 +3,7 @@ import SideNavOpenBtn from './SideNavOpenBtn';
 import { css } from '@emotion/react';
 import { useState } from 'react';
 import SideNavBarPanel from './SideNavBarPanel';
+import SideNavCloseBtn from './SideNavCloseBtn';
 
 const drawerOverlayCss = css`
   background-color: rgba(0, 0, 0, 0.35);
@@ -53,11 +54,10 @@ const SideNavBar = () => {
             `}
           />
           <SideNavBarPanel>
-            <SideNavOpenBtn onClick={handleSnapClick} css={css`margin-left: auto;`}/>
-            <p>1</p>
-            <p>2</p>
-            <p>3</p>
-            <p>4</p>
+            <SideNavCloseBtn onClick={handleSnapClick}/>
+            <SideNavCloseBtn />
+            <SideNavCloseBtn />
+            <SideNavCloseBtn />
           </SideNavBarPanel>
         </Drawer.Content>
       </Drawer.Portal>
