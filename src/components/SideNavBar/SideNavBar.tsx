@@ -4,12 +4,8 @@ import { css } from '@emotion/react';
 import { useState } from 'react';
 import SideNavBarPanel from './SideNavBarPanel';
 import SideNavCloseBtn from './SideNavCloseBtn';
+import DrawerOverlay from './DrawerOverlay';
 
-const drawerOverlayCss = css`
-  background-color: rgba(0, 0, 0, 0.35);
-  position: fixed;
-  inset: 0;
-`;
 const drawerContentCss = css`
   height: 100%;
   width: 230px;
@@ -35,16 +31,18 @@ const SideNavBar = () => {
     <Drawer.Root
       direction='right'
       dismissible={false}
+      modal={false}
       open={open}
       onOpenChange={setOpen}
       snapPoints={snapPoints}
       activeSnapPoint={snap}
       setActiveSnapPoint={setSnap}
     >
+      <DrawerOverlay visible={snap === 1} onClick={handleSnapClick} />
       <Drawer.Portal>
-        <Drawer.Overlay onClick={ () => { if (snap === 1) handleSnapClick()}} css={drawerOverlayCss} />
         <Drawer.Content css={drawerContentCss}>
           <Drawer.Title/>
+          <Drawer.Description/>
           <SideNavOpenBtn
             onClick={handleSnapClick}
             css={css`
