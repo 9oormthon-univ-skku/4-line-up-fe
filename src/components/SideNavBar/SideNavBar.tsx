@@ -12,15 +12,15 @@ const drawerOverlayCss = css`
 `;
 const drawerContentCss = css`
   height: 100%;
-  width: 228px;
+  width: 230px;
 
   position: fixed;
   top: 0;
   right: 0;
 `;
 // const snapPoints = ['180px', 1];
-const snapPoints = [`${ window.innerWidth - 232}px`, 1]; //228px + shadow 4px
-// const snapPoints = [`${ window.innerWidth - 232 + Math.max(0, (window.innerWidth - 480) / 2) }px`, 1];
+const snapPoints = [`${window.innerWidth - 234}px`, 1]; //230px + shadow 4px
+// const snapPoints = [`${ window.innerWidth - 234 + Math.max(0, (window.innerWidth - 480) / 2) }px`, 1];
 // should Resize be handled?
 
 const SideNavBar = () => {
@@ -28,7 +28,7 @@ const SideNavBar = () => {
   const [open, setOpen] = useState(true);
 
   const handleSnapClick = () => {
-    (snap === 1) ? setSnap(snapPoints[0]) : setSnap(1);
+    snap === 1 ? setSnap(snapPoints[0]) : setSnap(1);
   };
 
   return (
