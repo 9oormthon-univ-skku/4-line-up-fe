@@ -1,0 +1,13 @@
+<svg width="56" height="56" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="btnIcon/02">
+<rect width="56" height="56" rx="28" fill="white"/>
+<g id="Clock" clip-path="url(#clip0_487_2484)">
+<path id="Icon" d="M28 19.4999V27.9999L33.6666 30.8333M42.1666 27.9999C42.1666 35.824 35.824 42.1666 28 42.1666C20.1759 42.1666 13.8333 35.824 13.8333 27.9999C13.8333 20.1759 20.1759 13.8333 28 13.8333C35.824 13.8333 42.1666 20.1759 42.1666 27.9999Z" stroke="currentcolor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+</g>
+</g>
+<defs>
+<clipPath id="clip0_487_2484">
+<rect width="34" height="34" fill="white" transform="translate(11 11)"/>
+</clipPath>
+</defs>
+</svg>

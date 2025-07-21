@@ -40,6 +40,10 @@ const reset = css`
     border-collapse: collapse;
     border-spacing: 0;
   }
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
   button {
     cursor: pointer;
     padding: 0;

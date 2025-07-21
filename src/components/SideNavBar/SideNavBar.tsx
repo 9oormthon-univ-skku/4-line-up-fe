@@ -1,10 +1,12 @@
 import { Drawer } from 'vaul';
 import SideNavOpenBtn from './SideNavOpenBtn';
 import { css } from '@emotion/react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import SideNavBarPanel from './SideNavBarPanel';
 import SideNavCloseBtn from './SideNavCloseBtn';
 import DrawerOverlay from './DrawerOverlay';
+import SideNavMenuBtn from './SideNavMenuBtn';
+import { useLocation } from 'react-router-dom';
 
 const drawerContentCss = css`
   height: 100%;
@@ -22,11 +24,16 @@ const snapPoints = [`${window.innerWidth - 234}px`, 1]; //230px + shadow 4px
 const SideNavBar = () => {
   const [snap, setSnap] = useState<number | string | null>(snapPoints[0]);
   const [open, setOpen] = useState(true);
+  const navigate = useLocation();
 
   const handleSnapClick = () => {
     snap === 1 ? setSnap(snapPoints[0]) : setSnap(1);
   };
 
+  useEffect(() => {
+    handleSnapClick();
+  }, [navigate])
+  
   return (
     <Drawer.Root
       direction='right'
@@ -60,9 +67,26 @@ const SideNavBar = () => {
           />
           <SideNavBarPanel>
             <SideNavCloseBtn onClick={handleSnapClick} />
-            <SideNavCloseBtn />
-            <SideNavCloseBtn />
-            <SideNavCloseBtn />
+            <SideNavMenuBtn
+              to='home'
+              text='메인'
+              selected={navigate.pathname === '/home'}
+            />
+            <SideNavMenuBtn
+              to='notice'
+              text='공지'
+              selected={navigate.pathname === '/notice'}
+            />
+            <SideNavMenuBtn
+              to='timetable'
+              text='타임 테이블'
+              selected={navigate.pathname === '/timetable'}
+            />
+            <SideNavMenuBtn
+              to='map'
+              text='지도'
+              selected={navigate.pathname === '/map'}
+            />
           </SideNavBarPanel>
         </Drawer.Content>
       </Drawer.Portal>
