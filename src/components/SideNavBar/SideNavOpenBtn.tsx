@@ -13,7 +13,7 @@ const SideNavOpenBtn = (props:React.HTMLAttributes<HTMLDivElement>) => {
         ${shadows.dropBottom};
         display: flex;
         align-items: center;
-        z-index: -1;
+        z-index: -30;
         svg {
           height: 5.6rem;
           color: ${colors.primary};
