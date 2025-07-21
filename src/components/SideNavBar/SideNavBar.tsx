@@ -15,6 +15,11 @@ const drawerContentCss = css`
   position: fixed;
   top: 0;
   right: 0;
+  
+  h2 {
+    visibility: hidden;
+    height: 0;
+  }
 `;
 // const snapPoints = ['180px', 1];
 const snapPoints = [`${window.innerWidth - 234}px`, 1]; //230px + shadow 4px
@@ -32,8 +37,8 @@ const SideNavBar = () => {
 
   useEffect(() => {
     handleSnapClick();
-  }, [navigate])
-  
+  }, [navigate]);
+
   return (
     <Drawer.Root
       direction='right'
@@ -55,7 +60,7 @@ const SideNavBar = () => {
       />
       <Drawer.Portal>
         <Drawer.Content css={drawerContentCss}>
-          <Drawer.Title />
+          <Drawer.Title>메뉴</Drawer.Title>
           <Drawer.Description />
           <SideNavOpenBtn
             onClick={handleSnapClick}
