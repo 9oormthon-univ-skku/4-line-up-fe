@@ -1,0 +1,13 @@
+<svg width="56" height="56" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="btnIcon/01">
+<rect width="56" height="56" rx="28" fill="white"/>
+<g id="Map" clip-path="url(#clip0_487_2485)">
+<path id="Icon" d="M22.6666 36.0001L13.3333 41.3334V20.0001L22.6666 14.6667M22.6666 36.0001L33.3333 41.3334M22.6666 36.0001V14.6667M33.3333 41.3334L42.6666 36.0001V14.6667L33.3333 20.0001M33.3333 41.3334V20.0001M33.3333 20.0001L22.6666 14.6667" stroke="currentcolor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+</g>
+</g>
+<defs>
+<clipPath id="clip0_487_2485">
+<rect width="32" height="32" fill="white" transform="translate(12 12)"/>
+</clipPath>
+</defs>
+</svg>
