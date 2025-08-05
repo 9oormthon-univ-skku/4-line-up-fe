@@ -1,4 +1,4 @@
-import { css } from "@emotion/react";
+import { css } from '@emotion/react';
 
 export const colors = {
   primary: '#B01616',
@@ -25,13 +25,75 @@ const _shadows = {
   bottom: '0px 4px 4px rgba(0,0,0,0.25)',
   center: '0px 0px 4px rgba(0,0,0,0.25)',
   left: '-4px 0px 4px rgba(0,0,0,0.25)',
-}
+};
 export const shadows = {
   bottom: _shadows.bottom,
   center: _shadows.center,
   left: _shadows.left,
-  dropBottom: css`filter:drop-shadow(${_shadows.bottom})`,
-  dropCenter: css`filter:drop-shadow(${_shadows.center})`,
-  dropLeft: css`filter:drop-shadow(${_shadows.left})`,
+  dropBottom: css`
+    filter: drop-shadow(${_shadows.bottom});
+  `,
+  dropCenter: css`
+    filter: drop-shadow(${_shadows.center});
+  `,
+  dropLeft: css`
+    filter: drop-shadow(${_shadows.left});
+  `,
 };
-export const fonts = {};
+export const fonts = {
+  title_xlg: css`
+    font-family: 'JNE-Ttobak';
+    font-size: 9.6rem;
+  `,
+  title_lg: css`
+    font-family: 'JNE-Ttobak';
+    font-size: 4rem;
+  `,
+  title_md: css`
+    font-family: 'JNE-Ttobak';
+    font-size: 3.2rem;
+  `,
+  title_sm: css`
+    font-family: 'Pretendard Variable';
+    font-size: 2rem;
+    font-weight: 600;
+  `,
+  title_xsm: css`
+    font-family: 'Pretendard Variable';
+    font-size: 1.8rem;
+    font-weight: 600;
+  `,
+  title_xxsm: css`
+    font-family: 'Pretendard Variable';
+    font-size: 1.6rem;
+    font-weight: 600;
+  `,
+
+  display: css`
+    font-family: 'Pretendard Variable';
+    font-size: 2.4rem;
+    font-weight: 700;
+  `,
+
+  body_lg: css`
+    font-family: 'Pretendard Variable';
+    font-size: 2rem;
+    font-weight: 500;
+  `,
+  body_md: css`
+    font-family: 'Pretendard Variable';
+    font-size: 1.8rem;
+    font-weight: 500;
+  `,
+
+  label_sm: css`
+    font-family: 'Pretendard Variable';
+    font-size: 1.6rem;
+    font-weight: 400;
+  `,
+  label_xsm: css`
+    font-family: 'Pretendard Variable';
+    font-size: 1.2rem;
+    font-weight: 400;
+  `,
+};
