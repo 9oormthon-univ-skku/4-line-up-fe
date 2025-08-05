@@ -43,7 +43,7 @@ export const shadows = {
 export const fonts = {
   title_xlg: css`
     font-family: 'JNE-Ttobak';
-    font-size: 9.6rem;
+    font-size: 96px;
   `,
   title_lg: css`
     font-family: 'JNE-Ttobak';
