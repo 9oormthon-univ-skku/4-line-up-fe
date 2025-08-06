@@ -56,6 +56,17 @@ const reset = css`
 `;
 
 const indexCss = css`
+  @import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css");
+  /* Pretendard Variable */
+
+  @font-face {
+    font-family: 'JNE-Ttobak';
+    src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/2408-1@1.0/JNE-Ttobak-TTF-Extrabold.woff2')
+      format('woff2');
+    font-weight: normal;
+    font-style: normal;
+  }
+  
   ${reset}
 
   *, *::before, *::after {
@@ -78,32 +89,22 @@ const indexCss = css`
     justify-content: center;
 
     font-size: 1.6rem;
-    font-family: "Pretendard Variable"
+    font-family: "Pretendard Variable";
+    white-space: pre-wrap;
   }
 
   #root {
     height: 100dvh;
     width: 100%;
+    overflow-x: hidden;
   }
 
-  @media (min-width: 480px) {
+  @media (min-width: 430px) {
     #root {
-      max-width: 480px;
+      max-width: 430px;
     }
   }
 
-  @font-face {
-    font-family: 'Pretendard Variable';
-    src: url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css');
-  }
-
-  @font-face {
-    font-family: 'JNE-Ttobak';
-    src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/2408-1@1.0/JNE-Ttobak-TTF-Extrabold.woff2')
-      format('woff2');
-    font-weight: normal;
-    font-style: normal;
-  }
 `;
 
 export default indexCss;
