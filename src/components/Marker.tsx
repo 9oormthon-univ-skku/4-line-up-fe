@@ -11,19 +11,22 @@ const markerCss = css`
     stroke: ${colors.primary20};
   }
   img {
+}
+div {
     width: 24px;
-  }
-  div {
     position: absolute;
     left: 17px;
     top: 17px;
+    path {
+        stroke: ${colors.primary};
+    }
   }
 `;
 
 const selectedCss = css`
   color: ${colors.primary20};
   path {
-    stroke: ${colors.primary30};
+    stroke: ${colors.primary30} !important;
   }
 `;
 
