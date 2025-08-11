@@ -8,6 +8,7 @@ import { KeepScale } from 'react-zoom-pan-pinch';
 
 const markerCss = css`
   position: fixed;
+  transform: translateX(-29px);
   color: ${colors.primary};
   svg {
     ${shadows.dropBottom}
@@ -15,7 +16,7 @@ const markerCss = css`
   path {
     stroke: ${colors.primary20};
   }
-  div {
+  .markerIcon {
     width: 24px;
     position: absolute;
     left: 17px;
@@ -58,9 +59,9 @@ const Marker = ({
       <KeepScale>
         <MarkerPin />
         {iconUrl ? (
-          <SvgInline url={iconUrl} />
+          <SvgInline className='markerIcon' url={iconUrl} />
         ) : (
-          <div>
+          <div className='markerIcon'>
             <DefaultMarkerIcon />
           </div>
         )}

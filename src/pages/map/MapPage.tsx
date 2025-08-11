@@ -11,6 +11,9 @@ import {
   type ReactZoomPanPinchState,
 } from 'react-zoom-pan-pinch';
 
+const mapImgSize = { h: '1000px', w: '750px' };
+// const mapImgSize = {h: '2000px', w: '1500px'}
+
 const containerCss = css`
   .transformWrapper {
     height: 100vh;
@@ -18,15 +21,15 @@ const containerCss = css`
     background-color: ${colors.primary10};
   }
   .transformContent {
-    height: 1000px;
-    width: 1000px;
+    height: ${mapImgSize.h};
+    width: ${mapImgSize.w};
   }
   .markers {
     position: absolute;
   }
   #mapImg {
-    height: 100%;
-    object-fit: cover;
+    height: ${mapImgSize.h};
+    width: ${mapImgSize.w};
   }
 `;
 
@@ -34,8 +37,13 @@ const mapImageSrc = ['/img-01.jpg', '/img-02.jpg'];
 
 const MapImg = () => {
   return useTransformComponent(({ state }) => {
+    const secondMapScale = 1.9;
     const src = (state: ReactZoomPanPinchState) => {
-      return state.scale < 2 ? mapImageSrc[0] : mapImageSrc[1];
+      if (state.scale < secondMapScale) {
+        return mapImageSrc[0];
+      } else {
+        return mapImageSrc[1];
+      }
     };
     return <img id='mapImg' src={src(state)} />;
   });
@@ -54,16 +62,22 @@ const MapPage = () => {
 
   return (
     <div css={containerCss}>
-      <TransformWrapper ref={transformComponentRef}>
+      <TransformWrapper
+        minScale={0.9}
+        centerZoomedOut
+        centerOnInit
+        ref={transformComponentRef}
+      >
         <TransformComponent
           wrapperClass='transformWrapper'
           contentClass='transformContent'
         >
           <div className='markers'>
-            <Marker x={400} y={400} id='m1' 
-              onClick={() => zoomTo('m1', 1.5)} />
+            <Marker x={375} y={375} id='m1' onClick={() => zoomTo('m1', 1.5)} />
             <Marker
-              x={200} y={800} id='m2' 
+              x={250}
+              y={750}
+              id='m2'
               onClick={() => zoomTo('m2', 1.5)}
               selected
             />
