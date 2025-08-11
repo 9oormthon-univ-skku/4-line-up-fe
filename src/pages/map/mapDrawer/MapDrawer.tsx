@@ -1,14 +1,16 @@
-import { colors, shadows } from '@/styles/styles';
+import { colors, fonts, shadows } from '@/styles/styles';
 import { css } from '@emotion/react';
 import type React from 'react';
 import { useState } from 'react';
 import { Drawer } from 'vaul';
+import RingBinder from '@images/ring-binder-hz.svg?react';
 
 const drawerContentCss = css`
   background-color: ${colors.primary20};
-  height: 95%;
+  height: 100%;
   width: 100%;
   max-width: 100vw;
+  margin-top: 50px;
   border-radius: 32px 32px 0 0;
   ${shadows.dropUp};
 
@@ -24,18 +26,24 @@ const drawerContentCss = css`
     justify-content: center;
     width: 100%;
     padding: 36px;
+    ${fonts.display_lg};
+  }
+  header svg {
+    position: fixed;
+    top: -18px;
+    color: ${colors.primary20}
   }
   z-index: 10;
 `;
 
-const snapPoints = ['80px', '300px', 0.95];
+const snapPoints = ['130px', '300px', 1];
 
 const MapDrawer = ({ children }: React.HTMLAttributes<HTMLDivElement>) => {
   const [snapMap, setSnapMap] = useState<number | string | null>(snapPoints[0]);
   const [open, setOpen] = useState(true);
 
   const handleSnapClick = () => {
-    snapMap === 0.95 ? setSnapMap(snapPoints[0]) : setSnapMap(0.95);
+    snapMap === 1 ? setSnapMap(snapPoints[0]) : setSnapMap(1);
   };
 
   return (
@@ -52,6 +60,7 @@ const MapDrawer = ({ children }: React.HTMLAttributes<HTMLDivElement>) => {
       <Drawer.Portal>
         <Drawer.Content css={drawerContentCss}>
           <header onClick={handleSnapClick}>
+            <RingBinder/>
             <Drawer.Title>부스 목록</Drawer.Title>
           </header>
           {children}
