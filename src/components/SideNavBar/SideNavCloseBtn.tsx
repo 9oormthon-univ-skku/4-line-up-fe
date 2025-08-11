@@ -14,6 +14,11 @@ const SideNavCloseBtn = (props:React.HTMLAttributes<HTMLDivElement>) => {
             }
             circle {
                 fill: ${colors.primary10};
+                transition: fill 0.5s;
+            }
+            circle:active {
+                fill: ${colors.primary20};
+                transition: none;
             }
             ${shadows.dropBottom};
         }
