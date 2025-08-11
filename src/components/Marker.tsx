@@ -4,24 +4,24 @@ import DefaultMarkerIcon from '@icons/marker-icon-default.svg?react';
 import MarkerPin from '@icons/marker.svg?react';
 import SvgInline from './SvgInline';
 import type { ComponentProps } from 'react';
+import { KeepScale } from 'react-zoom-pan-pinch';
 
 const markerCss = css`
-  width: fit-content;
-  height: fit-content;
+  position: fixed;
   color: ${colors.primary};
-  ${shadows.dropBottom}
+  svg {
+    ${shadows.dropBottom}
+  }
   path {
     stroke: ${colors.primary20};
   }
-  img {
-}
-div {
+  div {
     width: 24px;
     position: absolute;
     left: 17px;
     top: 17px;
     path {
-        stroke: ${colors.primary};
+      stroke: ${colors.primary};
     }
   }
 `;
@@ -36,19 +36,35 @@ const selectedCss = css`
 interface MarkerProps extends ComponentProps<'div'> {
   selected?: boolean;
   iconUrl?: string;
+  y?: number;
+  x?: number;
+  coord?: { x: number; y: number };
 }
 
-const Marker = ({ selected = false, iconUrl, ...props }: MarkerProps) => {
+const Marker = ({
+  selected = false,
+  iconUrl,
+  y: bottomPx = 0,
+  x: leftPx = 0,
+  ...props
+}: MarkerProps) => {
   return (
-    <div id={props.id} onClick={props.onClick} css={[markerCss, selected && selectedCss]}>
-      <MarkerPin />
-      {iconUrl ? (
-        <SvgInline url={iconUrl} />
-      ) : (
-        <div>
-          <DefaultMarkerIcon />
-        </div>
-      )}
+    <div
+      id={props.id}
+      onClick={props.onClick}
+      css={[markerCss, selected && selectedCss]}
+      style={{ bottom: `${bottomPx}px`, left: `${leftPx}px` }}
+    >
+      <KeepScale>
+        <MarkerPin />
+        {iconUrl ? (
+          <SvgInline url={iconUrl} />
+        ) : (
+          <div>
+            <DefaultMarkerIcon />
+          </div>
+        )}
+      </KeepScale>
     </div>
   );
 };
