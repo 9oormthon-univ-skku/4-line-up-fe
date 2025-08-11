@@ -25,6 +25,7 @@ const drawerContentCss = css`
     width: 100%;
     padding: 36px;
   }
+  z-index: 10;
 `;
 
 const snapPoints = ['80px', '300px', 0.95];

@@ -14,6 +14,7 @@ const drawerContentCss = css`
   position: fixed;
   top: 0;
   right: 0;
+  z-index: 40;
 
   h2 {
     visibility: hidden;
@@ -41,6 +42,7 @@ const SideNavBarMissable = () => {
             position: fixed;
             right: -5rem;
             top: 5.2rem;
+            z-index: 30;
           `}
         >
           <SideNavOpenBtn />
@@ -51,6 +53,7 @@ const SideNavBarMissable = () => {
           position: fixed;
           inset: 0;
           background-color: rgba(0, 0, 0, 0.35);
+          z-index: 20;
         `}
       />
       <Drawer.Portal>
