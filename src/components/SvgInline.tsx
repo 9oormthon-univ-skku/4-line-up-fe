@@ -1,12 +1,12 @@
 import { css } from '@emotion/react';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, type ComponentProps } from 'react';
 
 const svgInlineCss = css`
   width: fit-content;
   height: fit-content;
 `;
 
-interface SvgInlineProps {
+interface SvgInlineProps extends ComponentProps<'div'> {
   url: string;
 }
 
@@ -14,7 +14,7 @@ interface SvgInlineProps {
  * Render SVG element with a file from url.
  * (Codes from https://stackoverflow.com/a/56258761)
  */
-const SvgInline = ({ url }: SvgInlineProps) => {
+const SvgInline = ({ url, ...props }: SvgInlineProps) => {
   const [svg, setSvg] = useState<TrustedHTML>('');
   useEffect(() => {
     fetch(url)
@@ -27,7 +27,13 @@ const SvgInline = ({ url }: SvgInlineProps) => {
       });
   }, [url]);
 
-  return <div css={svgInlineCss} dangerouslySetInnerHTML={{ __html: svg }} />;
+  return (
+    <div
+      className={props.className}
+      css={svgInlineCss}
+      dangerouslySetInnerHTML={{ __html: svg }}
+    />
+  );
 };
 
 export default SvgInline;

@@ -23,15 +23,20 @@ export const gradients = {};
 
 const _shadows = {
   bottom: '0px 4px 4px rgba(0,0,0,0.25)',
+  up: '0px -4px 4px rgba(0,0,0,0.25)',
   center: '0px 0px 4px rgba(0,0,0,0.25)',
   left: '-4px 0px 4px rgba(0,0,0,0.25)',
 };
 export const shadows = {
   bottom: _shadows.bottom,
+  up: _shadows.up,
   center: _shadows.center,
   left: _shadows.left,
   dropBottom: css`
     filter: drop-shadow(${_shadows.bottom});
+  `,
+  dropUp: css`
+    filter: drop-shadow(${_shadows.up});
   `,
   dropCenter: css`
     filter: drop-shadow(${_shadows.center});
