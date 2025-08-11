@@ -58,25 +58,25 @@ export const fonts = {
     font-family: 'JNE-Ttobak';
     font-size: 3.2rem;
   `,
-  title_sm: css`
-    font-family: 'Pretendard Variable';
-    font-size: 2rem;
-    font-weight: 600;
-  `,
-  title_xsm: css`
-    font-family: 'Pretendard Variable';
-    font-size: 1.8rem;
-    font-weight: 600;
-  `,
-  title_xxsm: css`
-    font-family: 'Pretendard Variable';
-    font-size: 1.6rem;
-    font-weight: 600;
-  `,
 
-  display: css`
+  display_xlg: css`
     font-family: 'Pretendard Variable';
     font-size: 2.4rem;
+    font-weight: 700;
+  `,
+  display_lg: css`
+    font-family: 'Pretendard Variable';
+    font-size: 2rem;
+    font-weight: 700;
+  `,
+  display_md: css`
+    font-family: 'Pretendard Variable';
+    font-size: 1.8rem;
+    font-weight: 700;
+  `,
+  display_sm: css`
+    font-family: 'Pretendard Variable';
+    font-size: 1.6rem;
     font-weight: 700;
   `,
 

@@ -1,4 +1,4 @@
-import { colors, shadows } from '@/styles/styles';
+import { colors, fonts, shadows } from '@/styles/styles';
 import { css } from '@emotion/react';
 import HomeIcon from '@icons/home.svg?react';
 import BellIcon from '@icons/bell.svg?react';
@@ -57,6 +57,7 @@ const SideNavMenuBtn = ({
             overflow: hidden;
             white-space: nowrap;
             text-overflow: ellipsis;
+            ${fonts.body_md};
           }
         `,
         selected && selectedCss,
