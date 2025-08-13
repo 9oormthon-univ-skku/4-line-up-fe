@@ -2,7 +2,7 @@ import { colors, shadows } from '@/styles/styles';
 import { css } from '@emotion/react';
 import DefaultMarkerIcon from '@icons/marker-icon-default.svg?react';
 import MarkerPin from '@icons/marker.svg?react';
-import SvgInline from './SvgInline';
+import SvgInline from './icons/SvgInline';
 import type { ComponentProps } from 'react';
 import { KeepScale } from 'react-zoom-pan-pinch';
 
@@ -51,10 +51,10 @@ const Marker = ({
 }: MarkerProps) => {
   return (
     <div
-      id={props.id}
       onClick={props.onClick}
       css={[markerCss, selected && selectedCss]}
       style={{ bottom: `${bottomPx}px`, left: `${leftPx}px` }}
+      {...props}
     >
       <KeepScale>
         <MarkerPin />
