@@ -29,9 +29,9 @@ const SvgInline = ({ url, ...props }: SvgInlineProps) => {
 
   return (
     <div
-      className={props.className}
       css={svgInlineCss}
       dangerouslySetInnerHTML={{ __html: svg }}
+      {...props}
     />
   );
 };
