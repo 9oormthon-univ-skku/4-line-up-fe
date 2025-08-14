@@ -1,7 +1,9 @@
 import Banner from '@/components/Banner';
 import Star from '@/components/icons/Star';
-import { colors, fonts } from '@/styles/styles';
+import { colors, fonts, shadows } from '@/styles/styles';
 import { css } from '@emotion/react';
+import { useState } from 'react';
+import RingBinder from '@images/ring-binder-vt.svg?react';
 
 const containerCss = css`
   height: 100%;
@@ -39,20 +41,74 @@ const containerCss = css`
     gap: 16px;
     padding: 36px 24px 72px 24px;
   }
+
+  #modal {
+    width: 100%;
+    height: calc(100vh - 140px);
+    top: 140px;
+    position: absolute;
+    z-index: 40;
+    background-color: ${colors.primary10};
+    color: ${colors.white};
+    padding: 24px;
+    padding-bottom: 0;
+    #notice-detail {
+      width: 100%;
+      height: 100%;
+      border-radius: 14px 14px 0 0;
+      background-color: ${colors.primary};
+      ${shadows.dropBottom};
+      padding: 20px 14px 64px 56px;
+      overflow-y: scroll;
+    }
+    #ringbinder {
+      position: fixed;
+      top: 200px;
+      left: 12px;
+      color: ${colors.primary20};
+      ${shadows.dropBottom};
+    }
+    #inset {
+      background-color: transparent;
+      inset: 0;
+      position: fixed;
+    }
+  }
 `;
 
-const Posts = [
+// TODO: 꺼내기
+interface Link {
+  label: string;
+  href: string;
+}
+interface Post {
+  title: string;
+  content: string;
+  images?: string[];
+  links?: Link[];
+}
+
+const Posts: Post[] = [
   {
     title: 'title1',
-    content: 'content',
+    content: 'content1',
   },
   {
     title: 'title2',
-    content: 'content',
+    content:
+      'content2 Lorem ipsum dolor sit amet, consectetur adipisicing elit. Harum error consequatur qui nostrum voluptatem vero saepe velit nesciunt fugit et nemo eius perspiciatis, consequuntur, temporibus exercitationem similique minima ab rem!Lorem ipsum dolor sit amet, consectetur adipisicing elit. Harum error consequatur qui nostrum voluptatem vero saepe velit nesciunt fugit et nemo eius perspiciatis, consequuntur, temporibus exercitationem similique minima ab rem!Lorem ipsum dolor sit amet, consectetur adipisicing elit. Harum error consequatur qui nostrum voluptatem vero saepe velit nesciunt fugit et nemo eius perspiciatis, consequuntur, temporibus exercitationem similique minima ab rem!Lorem ipsum dolor sit amet, consectetur adipisicing elit. Harum error consequatur qui nostrum voluptatem vero saepe velit nesciunt fugit et nemo eius perspiciatis, consequuntur, temporibus exercitationem similique minima ab rem!Lorem ipsum dolor sit amet, consectetur adipisicing elit. Harum error consequatur qui nostrum voluptatem vero saepe velit nesciunt fugit et nemo eius perspiciatis, consequuntur, temporibus exercitationem similique minima ab rem!Lorem ipsum dolor sit amet, consectetur adipisicing elit. Harum error consequatur qui nostrum voluptatem vero saepe velit nesciunt fugit et nemo eius perspiciatis, consequuntur, temporibus exercitationem similique minima ab rem!Lorem ipsum dolor sit amet, consectetur adipisicing elit. Harum error consequatur qui nostrum voluptatem vero saepe velit nesciunt fugit et nemo eius perspiciatis, consequuntur, temporibus exercitationem similique minima ab rem!Lorem ipsum dolor sit amet, consectetur adipisicing elit. Harum error consequatur qui nostrum voluptatem vero saepe velit nesciunt fugit et nemo eius perspiciatis, consequuntur, temporibus exercitationem similique minima ab rem!Lorem ipsum dolor sit amet, consectetur adipisicing elit. Harum error consequatur qui nostrum voluptatem vero saepe velit nesciunt fugit et nemo eius perspiciatis, consequuntur, temporibus exercitationem similique minima ab rem!Lorem ipsum dolor sit amet, consectetur adipisicing elit. Harum error consequatur qui nostrum voluptatem vero saepe velit nesciunt fugit et nemo eius perspiciatis, consequuntur, temporibus exercitationem similique minima ab rem!Lorem ipsum dolor sit amet, consectetur adipisicing elit. Harum error consequatur qui nostrum voluptatem vero saepe velit nesciunt fugit et nemo eius perspiciatis, consequuntur, temporibus exercitationem similique minima ab rem!Lorem ipsum dolor sit amet, consectetur adipisicing elit. Harum error consequatur qui nostrum voluptatem vero saepe velit nesciunt fugit et nemo eius perspiciatis, consequuntur, temporibus exercitationem similique minima ab rem!',
   },
 ];
 
 const Notice = () => {
+  const [modalOpen, setModalOpen] = useState(false);
+  const [currentPost, setCurrentPost] = useState<Post>();
+  const handleBannerClick = (i: number) => {
+    // console.log(Posts.at(i)?.content);
+    setCurrentPost(Posts[i]);
+    setModalOpen(true);
+  };
+
   return (
     <div css={containerCss}>
       <header>
@@ -64,9 +120,26 @@ const Notice = () => {
         <Star size='md' color='primary' />
         <Banner text='공지 1' variant='primary' />
         {Posts.map((e, i) => (
-          <Banner text={e.title} variant='secondary' key={i}/>
+          <Banner
+            text={e.title}
+            onClick={() => {
+              handleBannerClick(i);
+            }}
+            variant='secondary'
+            key={i}
+          />
         ))}
       </section>
+      {modalOpen && (
+        <div id='modal'>
+          <div id='inset' onClick={() => setModalOpen(false)} />
+          <div id='notice-detail'>
+            <p>{currentPost?.title}</p>
+            <p>{currentPost?.content}</p>
+          </div>
+          <RingBinder id='ringbinder' />
+        </div>
+      )}
     </div>
   );
 };
