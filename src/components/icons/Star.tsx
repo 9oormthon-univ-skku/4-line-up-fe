@@ -12,6 +12,7 @@ interface StarProps {
 const starCss = css`
   color: ${colors.primary20};
   ${shadows.dropBottom};
+  flex-shrink: 0;
   `;
 const starSecondaryCss = css`
   color: ${colors.white};
