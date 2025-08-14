@@ -3,6 +3,8 @@ import MainPage from '@/pages/MainPage';
 import Layout from '@pages/Layout';
 import Home from '@pages/home/Home';
 import MapPage from './pages/map/MapPage';
+import Notice from './pages/notice/Notice';
+import TestPage from './pages/TestPage';
 
 const router = createBrowserRouter([
   {
@@ -18,7 +20,7 @@ const router = createBrowserRouter([
       },
       {
         path: 'notice',
-        element: <Home />,
+        element: <Notice />,
       },
       {
         path: 'timetable',
@@ -29,6 +31,10 @@ const router = createBrowserRouter([
         element: <MapPage />,
       },
     ],
+  },
+  {
+    path: 'test',
+    element: <TestPage />,
   },
 ]);
 
