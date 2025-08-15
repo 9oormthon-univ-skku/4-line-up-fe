@@ -4,6 +4,7 @@ import { colors, fonts, shadows } from '@/styles/styles';
 import { css } from '@emotion/react';
 import { useState } from 'react';
 import RingBinder from '@images/ring-binder-vt.svg?react';
+import type { Post } from '@/types/schema';
 
 const containerCss = css`
   height: 100%;
@@ -76,24 +77,14 @@ const containerCss = css`
   }
 `;
 
-// TODO: 꺼내기
-interface Link {
-  label: string;
-  href: string;
-}
-interface Post {
-  title: string;
-  content: string;
-  images?: string[];
-  links?: Link[];
-}
-
 const Posts: Post[] = [
   {
+    id: 0,
     title: 'title1',
     content: 'content1',
   },
   {
+    id: 1,
     title: 'title2',
     content:
       'content2 Lorem ipsum dolor sit amet, consectetur adipisicing elit. Harum error consequatur qui nostrum voluptatem vero saepe velit nesciunt fugit et nemo eius perspiciatis, consequuntur, temporibus exercitationem similique minima ab rem!Lorem ipsum dolor sit amet, consectetur adipisicing elit. Harum error consequatur qui nostrum voluptatem vero saepe velit nesciunt fugit et nemo eius perspiciatis, consequuntur, temporibus exercitationem similique minima ab rem!Lorem ipsum dolor sit amet, consectetur adipisicing elit. Harum error consequatur qui nostrum voluptatem vero saepe velit nesciunt fugit et nemo eius perspiciatis, consequuntur, temporibus exercitationem similique minima ab rem!Lorem ipsum dolor sit amet, consectetur adipisicing elit. Harum error consequatur qui nostrum voluptatem vero saepe velit nesciunt fugit et nemo eius perspiciatis, consequuntur, temporibus exercitationem similique minima ab rem!Lorem ipsum dolor sit amet, consectetur adipisicing elit. Harum error consequatur qui nostrum voluptatem vero saepe velit nesciunt fugit et nemo eius perspiciatis, consequuntur, temporibus exercitationem similique minima ab rem!Lorem ipsum dolor sit amet, consectetur adipisicing elit. Harum error consequatur qui nostrum voluptatem vero saepe velit nesciunt fugit et nemo eius perspiciatis, consequuntur, temporibus exercitationem similique minima ab rem!Lorem ipsum dolor sit amet, consectetur adipisicing elit. Harum error consequatur qui nostrum voluptatem vero saepe velit nesciunt fugit et nemo eius perspiciatis, consequuntur, temporibus exercitationem similique minima ab rem!Lorem ipsum dolor sit amet, consectetur adipisicing elit. Harum error consequatur qui nostrum voluptatem vero saepe velit nesciunt fugit et nemo eius perspiciatis, consequuntur, temporibus exercitationem similique minima ab rem!Lorem ipsum dolor sit amet, consectetur adipisicing elit. Harum error consequatur qui nostrum voluptatem vero saepe velit nesciunt fugit et nemo eius perspiciatis, consequuntur, temporibus exercitationem similique minima ab rem!Lorem ipsum dolor sit amet, consectetur adipisicing elit. Harum error consequatur qui nostrum voluptatem vero saepe velit nesciunt fugit et nemo eius perspiciatis, consequuntur, temporibus exercitationem similique minima ab rem!Lorem ipsum dolor sit amet, consectetur adipisicing elit. Harum error consequatur qui nostrum voluptatem vero saepe velit nesciunt fugit et nemo eius perspiciatis, consequuntur, temporibus exercitationem similique minima ab rem!Lorem ipsum dolor sit amet, consectetur adipisicing elit. Harum error consequatur qui nostrum voluptatem vero saepe velit nesciunt fugit et nemo eius perspiciatis, consequuntur, temporibus exercitationem similique minima ab rem!',
