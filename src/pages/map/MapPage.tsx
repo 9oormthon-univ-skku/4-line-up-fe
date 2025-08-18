@@ -10,6 +10,7 @@ import {
   type ReactZoomPanPinchRef,
   type ReactZoomPanPinchState,
 } from 'react-zoom-pan-pinch';
+import type { Booth, Category } from '@/types/schema';
 
 const mapImgSize = { h: '1000px', w: '750px' };
 // const mapImgSize = {h: '2000px', w: '1500px'}
@@ -34,6 +35,27 @@ const containerCss = css`
 `;
 
 const mapImageSrc = ['/img-01.jpg', '/img-02.jpg'];
+const boothData: Booth[] = [
+  {
+    id: 0,
+    categoryId: 0,
+    areaId: 0,
+    name: '',
+    point: { x: 375, y: 750 },
+    hour: { open: new Date().toString(), close: new Date().toString() },
+  },
+  {
+    id: 3,
+    categoryId: 0,
+    areaId: 0,
+    name: '',
+    point: { x: 375, y: 250 },
+    hour: { open: new Date().toString(), close: new Date().toString() },
+  },
+];
+const categoryData: Category[] = [
+  { id: 0, name: '', icon: '/mk-example.svg' },
+];
 
 const MapImg = () => {
   return useTransformComponent(({ state }) => {
@@ -73,14 +95,26 @@ const MapPage = () => {
           contentClass='transformContent'
         >
           <div className='markers'>
-            <Marker x={375} y={375} id='m1' onClick={() => zoomTo('m1', 1.5)} />
-            <Marker
-              x={250}
-              y={750}
-              id='m2'
-              onClick={() => zoomTo('m2', 1.5)}
-              selected
-            />
+            {boothData.map((e, i) => {
+              const category = categoryData.find((cat) => cat.id == e.categoryId);
+              return (
+                <Marker
+                  key={i}
+                  x={e.point.x}
+                  y={e.point.y}
+                  id={`m${e.id}`}
+                  iconUrl={
+                    category?.icon
+                  }
+                  color={
+                    category?.color
+                  }
+                  onClick={() => zoomTo(`m${e.id}`, 1.5)}
+                />
+              );
+            })}
+            {/* <Marker x={375} y={375} id='m1' onClick={() => zoomTo('m1', 1.5)} />
+            <Marker x={250} y={750} id='m2' onClick={() => zoomTo('m2', 1.5)} selected /> */}
           </div>
           <MapImg />
         </TransformComponent>
