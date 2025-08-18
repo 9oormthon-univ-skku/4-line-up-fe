@@ -39,7 +39,7 @@ interface MarkerProps extends ComponentProps<'div'> {
   iconUrl?: string;
   y?: number;
   x?: number;
-  coord?: { x: number; y: number };
+  color?: string;
 }
 
 const Marker = ({
@@ -47,13 +47,14 @@ const Marker = ({
   iconUrl,
   y: bottomPx = 0,
   x: leftPx = 0,
+  color,
   ...props
 }: MarkerProps) => {
   return (
     <div
       onClick={props.onClick}
       css={[markerCss, selected && selectedCss]}
-      style={{ bottom: `${bottomPx}px`, left: `${leftPx}px` }}
+      style={{ bottom: `${bottomPx}px`, left: `${leftPx}px`, color: color ? color : '' }}
       {...props}
     >
       <KeepScale>

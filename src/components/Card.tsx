@@ -53,7 +53,7 @@ interface CardProps extends ComponentProps<'div'> {
   title: string;
   desc?: string;
   btnText?: string;
-  btnOnClick?: React.MouseEventHandler;
+  btnOnClick?: () => void;
 }
 
 const Card = ({
@@ -67,7 +67,7 @@ const Card = ({
   const handleBtnClick = (e: React.MouseEvent) => {
     if (!btnOnClick) return;
     e.stopPropagation();
-    btnOnClick(e);
+    btnOnClick();
   };
   return (
     <div css={cardCss} {...props}>
