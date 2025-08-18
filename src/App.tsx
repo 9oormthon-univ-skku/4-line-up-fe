@@ -5,6 +5,7 @@ import Home from '@/pages/home/Home';
 import MapPage from '@/pages/map/MapPage';
 import Notice from '@/pages/notice/Notice';
 import TestPage from '@/pages/TestPage';
+import Timetable from './pages/timetable/Timetable';
 
 const router = createBrowserRouter([
   {
@@ -24,7 +25,7 @@ const router = createBrowserRouter([
       },
       {
         path: 'timetable',
-        element: <Home />,
+        element: <Timetable />,
       },
       {
         path: 'map',
