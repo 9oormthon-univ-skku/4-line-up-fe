@@ -18,11 +18,13 @@ const containerCss = css`
   }
 `;
 
+const imageList = ['/img-01.jpg', '/img-02.jpg', '/img-02.jpg'];
+
 const Home = () => {
   return (
     <div css={containerCss}>
       <h1 css={fonts.title_lg}>{`Karts:\nFestival`}</h1>
-      <Gallery />
+      <Gallery images={imageList} />
       <HomeContents />
       <footer
         css={[
