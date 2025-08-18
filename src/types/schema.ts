@@ -68,3 +68,11 @@ export interface Stop extends Booth {
 export interface Store extends Booth {
   menus: Menu[];
 }
+
+export interface Timeslot {
+  id: number;
+  name: string;
+  startTime: string;
+  endTime: string;
+  href?: string;
+}

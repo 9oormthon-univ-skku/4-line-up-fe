@@ -67,7 +67,7 @@ const containerCss = css`
   }
 `;
 
-type valueType = 'left' | 'center' | 'right';
+export type valueType = 'left' | 'center' | 'right';
 
 interface TripleToggleSwitchProps {
   labels: {
