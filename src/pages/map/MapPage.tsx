@@ -1,7 +1,7 @@
 import Marker from '@/components/Marker';
 import { css } from '@emotion/react';
 import { colors } from '@/styles/styles';
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import MapDrawer from './mapDrawer/MapDrawer';
 import {
   TransformComponent,
@@ -12,6 +12,7 @@ import {
 } from 'react-zoom-pan-pinch';
 import type { Booth, Category } from '@/types/schema';
 import Card from '@/components/Card';
+import BoothInfoModal from './BoothInfoModal';
 
 const mapImgSize = { h: '1000px', w: '750px' };
 // const mapImgSize = {h: '2000px', w: '1500px'}
@@ -82,7 +83,9 @@ const MapPage = () => {
     const { zoomToElement } = transformComponentRef.current;
     console.log('zoomTo', elementId);
     zoomToElement(elementId, scale ?? 3.0);
+    setSelectedBooth(boothData.find((e) => `m${e.id}` === elementId) ?? null);
   };
+  const [selectedBooth, setSelectedBooth] = useState<Booth | null>(null);
 
   return (
     <div css={containerCss}>
@@ -110,13 +113,14 @@ const MapPage = () => {
                   iconUrl={category?.icon}
                   color={category?.color}
                   onClick={() => zoomTo(`m${e.id}`, 1.5)}
+                  selected={selectedBooth?.id === e.id}
                 />
               );
             })}
           </div>
           <MapImg />
         </TransformComponent>
-        <MapDrawer>
+        <MapDrawer selected={selectedBooth} setSelected={setSelectedBooth}>
           {boothData.map((e, i) => {
             return (
               <Card
@@ -131,6 +135,19 @@ const MapPage = () => {
           })}
         </MapDrawer>
       </TransformWrapper>
+      {selectedBooth && (
+        <BoothInfoModal>
+          <Card
+            title={selectedBooth.name}
+            desc={selectedBooth.description}
+            imgUrl={selectedBooth.images?.at(0)}
+            btnText='자세히 보기'
+            btnOnClick={() => {
+              alert(`btn ${selectedBooth.id} clicked.`);
+            }}
+          />
+        </BoothInfoModal>
+      )}
     </div>
   );
 };
