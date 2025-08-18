@@ -2,7 +2,14 @@ import Banner from '@/components/Banner';
 import Button from '@/components/Button';
 import Card from '@/components/Card';
 import Star from '@/components/icons/Star';
+import DateSelector from '@/components/Selector/DateSelector';
 import { css } from '@emotion/react';
+
+const dateSelectorLabels = {
+  left: '5/7',
+  center: '5/8',
+  right: '5/9',
+};
 
 const TestPage = () => {
   return (
@@ -69,6 +76,10 @@ const TestPage = () => {
         btnText='자세히 보기'
         imgUrl='/img-02.jpg'
         onClick={() => alert('clicked!')}
+      />
+      <DateSelector
+        labels={dateSelectorLabels}
+        onChange={(value) => console.log(value)}
       />
     </div>
   );
