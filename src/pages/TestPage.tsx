@@ -3,6 +3,7 @@ import Button from '@/components/Button';
 import Card from '@/components/Card';
 import Star from '@/components/icons/Star';
 import DateSelector from '@/components/Selector/DateSelector';
+import DayNightSelector from '@/components/Selector/DayNightSelector';
 import { css } from '@emotion/react';
 
 const dateSelectorLabels = {
@@ -79,6 +80,9 @@ const TestPage = () => {
       />
       <DateSelector
         labels={dateSelectorLabels}
+        onChange={(value) => console.log(value)}
+      />
+      <DayNightSelector
         onChange={(value) => console.log(value)}
       />
     </div>

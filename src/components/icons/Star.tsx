@@ -3,6 +3,7 @@ import StarMd from '@icons/star-md.svg?react';
 import { css } from '@emotion/react';
 import { colors, shadows } from '@/styles/styles';
 import { useEffect, useRef } from 'react';
+import { hexToMatix } from '@/utils';
 
 interface StarProps {
   size?: 'md' | 'sm';
@@ -19,24 +20,6 @@ const starSecondaryCss = css`
   ${shadows.dropBottom};
 `;
 
-const hexToRgb = (hex: string) => {
-  const m = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-  return m
-    ? [
-        parseInt(m[1], 16) / 255,
-        parseInt(m[2], 16) / 255,
-        parseInt(m[3], 16) / 255,
-      ]
-    : null;
-};
-
-const hexToMatix = (hex: string) => {
-  const rgb = hexToRgb(hex);
-  if (!rgb) throw new Error('Invalid color');
-  const [r, g, b] = rgb;
-  return [0, 0, 0, 0, r, 0, 0, 0, 0, g, 0, 0, 0, 0, b, 0, 0, 0, 1, 0].join(' ');
-};
-
 const Star = ({ size = 'md', color = 'primary' }: StarProps) => {
   const svgRef = useRef<SVGSVGElement>(null);
   const innerShadowColor =
@@ -47,7 +30,7 @@ const Star = ({ size = 'md', color = 'primary' }: StarProps) => {
     const matrixEl = svgRef.current.querySelectorAll('feColorMatrix')[1];
     if (matrixEl) {
       matrixEl.setAttribute('values', hexToMatix(innerShadowColor));
-      console.log(matrixEl.attributes);
+      // console.log(matrixEl.attributes);
     }
   }, [color]);
 
