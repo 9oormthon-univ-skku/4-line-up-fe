@@ -1,32 +1,41 @@
 import { shadows } from '@/styles/styles';
 import { css } from '@emotion/react';
-// TODO: import useEmblaCarousel from 'embla-carousel-react'
+import useEmblaCarousel from 'embla-carousel-react';
 
 const galleryCss = css`
-  overflow: scroll;
+  overflow: hidden;
   width: 100%;
-  .container {
+  ${shadows.dropBottom}
+  .embla__container {
     display: flex;
-    width: fit-content;
   }
-  .slide {
+  .embla__slide {
     height: 443px;
-    width: 314px;
+    flex: 0 0 314px;
+    min-width: 0;
     border-radius: 15px;
-    ${shadows.dropBottom}
+    background: center/cover;
   }
 `;
 
-const Gallery = () => {
+interface GalleryProps {
+  images: string[];
+}
+
+const Gallery = ({ images }: GalleryProps) => {
+  const [emblaRef] = useEmblaCarousel({ loop: true });
+
   return (
-    <div css={galleryCss}>
-      <div className='container'>
-        <div className='slide' style={{ background: 'grey' }}>
-          temp
-        </div>
-        <div className='slide' style={{ background: 'grey' }}>
-          temp
-        </div>
+    <div css={galleryCss} ref={emblaRef} className='embla__viewport'>
+      <div className='embla__container'>
+        {images.map((e, i) => (
+          <div
+            className='embla__slide'
+            style={{ backgroundImage: `url(${e})` }}
+            key={i}
+          >
+          </div>
+        ))}
       </div>
     </div>
   );
