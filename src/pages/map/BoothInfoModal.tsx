@@ -6,8 +6,8 @@ const BoothInfoModal = ({ children }: ComponentProps<'div'>) => {
   return (
     <div
       css={css`
-        position: absolute;
-        bottom: 12.8rem;
+        position: fixed;
+        bottom: 130px;
         width: 100%;
         padding: 12px 28px;
         background-color: ${colors.primary20};

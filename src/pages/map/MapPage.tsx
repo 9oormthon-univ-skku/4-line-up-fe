@@ -13,6 +13,8 @@ import {
 import type { Booth, Category } from '@/types/schema';
 import Card from '@/components/Card';
 import BoothInfoModal from './BoothInfoModal';
+import DateSelector from '@/components/Selector/DateSelector';
+import DayNightSelector from '@/components/Selector/DayNightSelector';
 
 const mapImgSize = { h: '1000px', w: '750px' };
 // const mapImgSize = {h: '2000px', w: '1500px'}
@@ -33,6 +35,14 @@ const containerCss = css`
   #mapImg {
     height: ${mapImgSize.h};
     width: ${mapImgSize.w};
+  }
+  .controlPanels {
+    position: fixed;
+    top: 24px;
+    left: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
   }
 `;
 
@@ -59,6 +69,11 @@ const boothData: Booth[] = [
   },
 ];
 const categoryData: Category[] = [{ id: 0, name: '', icon: '/mk-example.svg' }];
+const dateLabels = {
+  left: '5/7',
+  center: '5/8',
+  right: '5/9',
+};
 
 const MapImg = () => {
   return useTransformComponent(({ state }) => {
@@ -76,6 +91,7 @@ const MapImg = () => {
 
 const MapPage = () => {
   const transformComponentRef = useRef<ReactZoomPanPinchRef | null>(null);
+  const [selectedBooth, setSelectedBooth] = useState<Booth | null>(null);
   const zoomTo = (elementId: string, scale?: number) => {
     if (!transformComponentRef.current) {
       return;
@@ -85,7 +101,13 @@ const MapPage = () => {
     zoomToElement(elementId, scale ?? 3.0);
     setSelectedBooth(boothData.find((e) => `m${e.id}` === elementId) ?? null);
   };
-  const [selectedBooth, setSelectedBooth] = useState<Booth | null>(null);
+  const onDateChange = (value: string) => {
+    console.log(value);
+    //TODO: filter boothData
+  };
+  const onDayNightChange = (value: string) => {
+    console.log(value);
+  };
 
   return (
     <div css={containerCss}>
@@ -148,6 +170,10 @@ const MapPage = () => {
           />
         </BoothInfoModal>
       )}
+      <div className='controlPanels'>
+        <DateSelector labels={dateLabels} onChange={onDateChange} />
+        <DayNightSelector onChange={onDayNightChange} />
+      </div>
     </div>
   );
 };
