@@ -4,6 +4,7 @@ import type React from 'react';
 import { useState } from 'react';
 import { Drawer } from 'vaul';
 import RingBinder from '@images/ring-binder-hz.svg?react';
+import BoothList from './BoothList';
 
 const drawerContentCss = css`
   background-color: ${colors.primary20};
@@ -45,6 +46,9 @@ const MapDrawer = ({ children }: React.HTMLAttributes<HTMLDivElement>) => {
   const handleSnapClick = () => {
     snapMap === 1 ? setSnapMap(snapPoints[0]) : setSnapMap(1);
   };
+  const onSelect = () => {
+    setSnapMap(snapPoints[0]);
+  };
 
   return (
     <Drawer.Root
@@ -62,8 +66,11 @@ const MapDrawer = ({ children }: React.HTMLAttributes<HTMLDivElement>) => {
           <header onClick={handleSnapClick}>
             <RingBinder/>
             <Drawer.Title>부스 목록</Drawer.Title>
+            <Drawer.Description/>
           </header>
-          {children}
+          <BoothList onClick={onSelect}>
+            {children}
+          </BoothList>
         </Drawer.Content>
       </Drawer.Portal>
     </Drawer.Root>

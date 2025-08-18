@@ -11,6 +11,7 @@ import {
   type ReactZoomPanPinchState,
 } from 'react-zoom-pan-pinch';
 import type { Booth, Category } from '@/types/schema';
+import Card from '@/components/Card';
 
 const mapImgSize = { h: '1000px', w: '750px' };
 // const mapImgSize = {h: '2000px', w: '1500px'}
@@ -40,7 +41,8 @@ const boothData: Booth[] = [
     id: 0,
     categoryId: 0,
     areaId: 0,
-    name: '',
+    name: '부스명 01',
+    description: '부스에 관한 설명 예시',
     point: { x: 375, y: 750 },
     hour: { open: new Date().toString(), close: new Date().toString() },
   },
@@ -48,14 +50,14 @@ const boothData: Booth[] = [
     id: 3,
     categoryId: 0,
     areaId: 0,
-    name: '',
+    name: '부스명 03',
+    description: 'Lorem ipsum dolor, sit amet consectetur adipisicing elit.',
     point: { x: 375, y: 250 },
     hour: { open: new Date().toString(), close: new Date().toString() },
+    images: ['/img-02.jpg'],
   },
 ];
-const categoryData: Category[] = [
-  { id: 0, name: '', icon: '/mk-example.svg' },
-];
+const categoryData: Category[] = [{ id: 0, name: '', icon: '/mk-example.svg' }];
 
 const MapImg = () => {
   return useTransformComponent(({ state }) => {
@@ -96,32 +98,37 @@ const MapPage = () => {
         >
           <div className='markers'>
             {boothData.map((e, i) => {
-              const category = categoryData.find((cat) => cat.id == e.categoryId);
+              const category = categoryData.find(
+                (cat) => cat.id == e.categoryId
+              );
               return (
                 <Marker
                   key={i}
                   x={e.point.x}
                   y={e.point.y}
                   id={`m${e.id}`}
-                  iconUrl={
-                    category?.icon
-                  }
-                  color={
-                    category?.color
-                  }
+                  iconUrl={category?.icon}
+                  color={category?.color}
                   onClick={() => zoomTo(`m${e.id}`, 1.5)}
                 />
               );
             })}
-            {/* <Marker x={375} y={375} id='m1' onClick={() => zoomTo('m1', 1.5)} />
-            <Marker x={250} y={750} id='m2' onClick={() => zoomTo('m2', 1.5)} selected /> */}
           </div>
           <MapImg />
         </TransformComponent>
         <MapDrawer>
-          <div onClick={() => zoomTo('m1')}>Booth List Element 1</div>
-          <div onClick={() => zoomTo('m2')}>Booth List Element 2</div>
-          <div>Booth List Element 3</div>
+          {boothData.map((e, i) => {
+            return (
+              <Card
+                title={e.name}
+                desc={e.description}
+                imgUrl={e.images?.at(0)}
+                btnText='선택'
+                key={i}
+                onClick={() => zoomTo(`m${e.id}`)}
+              />
+            );
+          })}
         </MapDrawer>
       </TransformWrapper>
     </div>
