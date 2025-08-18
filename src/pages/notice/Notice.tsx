@@ -5,23 +5,21 @@ import { css } from '@emotion/react';
 import { useState } from 'react';
 import RingBinder from '@images/ring-binder-vt.svg?react';
 import type { Post } from '@/types/schema';
+import BtnBack from '@/components/icons/BtnBack';
 
 const containerCss = css`
   height: 100%;
-  overflow-y: hidden;
+  overflow-y: scroll;
   background-color: ${colors.primary10};
   color: ${colors.primary};
 
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 54px;
 
   header {
     width: 100%;
-    position: fixed;
     background-color: ${colors.primary10};
-    z-index: 10;
     border-bottom: dashed 5px ${colors.primary};
     * {
       margin: 54px auto 0 26px;
@@ -33,9 +31,7 @@ const containerCss = css`
   }
 
   section {
-    margin-top: calc(220px + 5rem);
     width: 100%;
-    overflow-y: scroll;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -45,11 +41,10 @@ const containerCss = css`
 
   #modal {
     width: 100%;
-    height: calc(100vh - 140px);
-    top: 140px;
+    height: calc(100vh - 120px);
+    top: 120px;
     position: absolute;
-    z-index: 40;
-    background-color: ${colors.primary10};
+    z-index: 20;
     color: ${colors.white};
     padding: 24px;
     padding-bottom: 0;
@@ -64,15 +59,21 @@ const containerCss = css`
     }
     #ringbinder {
       position: fixed;
-      top: 200px;
+      top: 180px;
       left: 12px;
       color: ${colors.primary20};
       ${shadows.dropBottom};
     }
     #inset {
-      background-color: transparent;
+      background-color: ${colors.primary10};
       inset: 0;
       position: fixed;
+    }
+    button {
+      position: fixed;
+      top: 5.2rem;
+      z-index: 20;
+      margin: 6px;
     }
   }
 `;
@@ -94,10 +95,12 @@ const Posts: Post[] = [
 const Notice = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const [currentPost, setCurrentPost] = useState<Post>();
-  const handleBannerClick = (i: number) => {
+  const [visitedPostIDs, setVisitedPostIDs] = useState<number[]>([]);
+  const handleBannerClick = (id: number) => {
     // console.log(Posts.at(i)?.content);
-    setCurrentPost(Posts[i]);
+    setCurrentPost(Posts.find((e) => e.id === id));
     setModalOpen(true);
+    setVisitedPostIDs([...visitedPostIDs, id]);
   };
 
   return (
@@ -109,21 +112,21 @@ const Notice = () => {
       <section>
         <Banner text='총학생회 카카오톡 채널' />
         <Star size='md' color='primary' />
-        <Banner text='공지 1' variant='primary' />
         {Posts.map((e, i) => (
           <Banner
             text={e.title}
             onClick={() => {
-              handleBannerClick(i);
+              handleBannerClick(e.id);
             }}
-            variant='secondary'
+            variant={visitedPostIDs.includes(e.id) ? 'secondary' : 'primary'}
             key={i}
           />
         ))}
       </section>
       {modalOpen && (
         <div id='modal'>
-          <div id='inset' onClick={() => setModalOpen(false)} />
+          <BtnBack onClick={() => setModalOpen(false)} />
+          <div id='inset' />
           <div id='notice-detail'>
             <p>{currentPost?.title}</p>
             <p>{currentPost?.content}</p>
