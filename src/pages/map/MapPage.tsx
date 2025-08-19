@@ -1,7 +1,7 @@
 import Marker from '@/components/Marker';
 import { css } from '@emotion/react';
 import { colors } from '@/styles/styles';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import MapDrawer from './mapDrawer/MapDrawer';
 import {
   TransformComponent,
@@ -15,6 +15,7 @@ import Card from '@/components/Card';
 import BoothInfoModal from './BoothInfoModal';
 import DateSelector from '@/components/Selector/DateSelector';
 import DayNightSelector from '@/components/Selector/DayNightSelector';
+import { getBooths } from '@/api';
 
 const mapImgSize = { h: '1000px', w: '750px' };
 // const mapImgSize = {h: '2000px', w: '1500px'}
@@ -47,7 +48,7 @@ const containerCss = css`
 `;
 
 const mapImageSrc = ['/img-01.jpg', '/img-02.jpg'];
-const boothData: Booth[] = [
+const booths: Booth[] = [
   {
     id: 0,
     categoryId: 0,
@@ -91,6 +92,7 @@ const MapImg = () => {
 
 const MapPage = () => {
   const transformComponentRef = useRef<ReactZoomPanPinchRef | null>(null);
+  const [_booths, setBooths] = useState<Booth[]>([]);
   const [selectedBooth, setSelectedBooth] = useState<Booth | null>(null);
   const zoomTo = (elementId: string, scale?: number) => {
     if (!transformComponentRef.current) {
@@ -99,7 +101,7 @@ const MapPage = () => {
     const { zoomToElement } = transformComponentRef.current;
     console.log('zoomTo', elementId);
     zoomToElement(elementId, scale ?? 3.0);
-    setSelectedBooth(boothData.find((e) => `m${e.id}` === elementId) ?? null);
+    setSelectedBooth(booths.find((e) => `m${e.id}` === elementId) ?? null);
   };
   const onDateChange = (value: string) => {
     console.log(value);
@@ -108,6 +110,10 @@ const MapPage = () => {
   const onDayNightChange = (value: string) => {
     console.log(value);
   };
+
+  useEffect(() => {
+    getBooths(setBooths);
+  }, []);
 
   return (
     <div css={containerCss}>
@@ -122,7 +128,7 @@ const MapPage = () => {
           contentClass='transformContent'
         >
           <div className='markers'>
-            {boothData.map((e, i) => {
+            {booths.map((e, i) => {
               const category = categoryData.find(
                 (cat) => cat.id == e.categoryId
               );
@@ -143,7 +149,7 @@ const MapPage = () => {
           <MapImg />
         </TransformComponent>
         <MapDrawer selected={selectedBooth} setSelected={setSelectedBooth}>
-          {boothData.map((e, i) => {
+          {booths.map((e, i) => {
             return (
               <Card
                 title={e.name}

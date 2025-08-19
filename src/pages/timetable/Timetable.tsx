@@ -1,4 +1,4 @@
-import { colors, fonts, shadows } from '@/styles/styles';
+import { colors, fonts } from '@/styles/styles';
 import { css } from '@emotion/react';
 import { useState } from 'react';
 import type { Timeslot } from '@/types/schema';
