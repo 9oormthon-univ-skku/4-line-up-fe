@@ -108,39 +108,31 @@ const MapPage = () => {
           contentClass='transformContent'
         >
           <div className='markers'>
-            {booths.map((e, i) => {
-              const category = categoryData.find(
-                (cat) => cat.id == e.categoryId
-              );
-              return (
-                <Marker
-                  key={i}
-                  x={e.point.x}
-                  y={e.point.y}
-                  id={`m${e.id}`}
-                  iconUrl={category?.icon}
-                  color={category?.color}
-                  onClick={() => zoomTo(`m${e.id}`, 1.5)}
-                  selected={selectedBooth?.id === e.id}
-                />
-              );
-            })}
+            {booths.map((e, i) => (
+              <Marker
+                key={i}
+                point={e.point}
+                id={`m${e.id}`}
+                iconUrl={e.category?.icon}
+                color={e.category?.color}
+                onClick={() => zoomTo(`m${e.id}`, 1.5)}
+                selected={selectedBooth?.id === e.id}
+              />
+            ))}
           </div>
           <MapImg />
         </TransformComponent>
         <MapDrawer selected={selectedBooth} setSelected={setSelectedBooth}>
-          {booths.map((e, i) => {
-            return (
-              <Card
-                title={e.name}
-                desc={e.description}
-                imgUrl={e.images?.at(0)}
-                btnText='선택'
-                key={i}
-                onClick={() => zoomTo(`m${e.id}`)}
-              />
-            );
-          })}
+          {booths.map((e, i) => (
+            <Card
+              title={e.name}
+              desc={e.description}
+              imgUrl={e.images?.at(0)}
+              btnText='선택'
+              key={i}
+              onClick={() => zoomTo(`m${e.id}`)}
+            />
+          ))}
         </MapDrawer>
       </TransformWrapper>
       {selectedBooth && (

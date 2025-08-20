@@ -5,6 +5,7 @@ import MarkerPin from '@icons/marker.svg?react';
 import SvgInline from './icons/SvgInline';
 import type { ComponentProps } from 'react';
 import { KeepScale } from 'react-zoom-pan-pinch';
+import type { Point } from '@/types/schema';
 
 const markerCss = css`
   position: fixed;
@@ -37,16 +38,14 @@ const selectedCss = css`
 interface MarkerProps extends ComponentProps<'div'> {
   selected?: boolean;
   iconUrl?: string;
-  y?: number;
-  x?: number;
+  point: Point;
   color?: string;
 }
 
 const Marker = ({
   selected = false,
   iconUrl,
-  y: bottomPx = 0,
-  x: leftPx = 0,
+  point,
   color,
   ...props
 }: MarkerProps) => {
@@ -54,7 +53,7 @@ const Marker = ({
     <div
       onClick={props.onClick}
       css={[markerCss, selected && selectedCss]}
-      style={{ bottom: `${bottomPx}px`, left: `${leftPx}px`, color: color ? color : '' }}
+      style={{ bottom: `${point.x}px`, left: `${point.y}px`, color: color ? color : '' }}
       {...props}
     >
       <KeepScale>
