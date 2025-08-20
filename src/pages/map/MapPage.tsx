@@ -10,12 +10,13 @@ import {
   type ReactZoomPanPinchRef,
   type ReactZoomPanPinchState,
 } from 'react-zoom-pan-pinch';
-import type { Booth, Category } from '@/types/schema';
+import type { Booth } from '@/types/schema';
 import Card from '@/components/Card';
 import BoothInfoModal from './BoothInfoModal';
 import DateSelector from '@/components/Selector/DateSelector';
 import DayNightSelector from '@/components/Selector/DayNightSelector';
 import { getBooths } from '@/api';
+import { boothsData } from '@/api/mockData';
 
 const mapImgSize = { h: '1000px', w: '750px' };
 // const mapImgSize = {h: '2000px', w: '1500px'}
@@ -48,28 +49,6 @@ const containerCss = css`
 `;
 
 const mapImageSrc = ['/img-01.jpg', '/img-02.jpg'];
-const booths: Booth[] = [
-  {
-    id: 0,
-    categoryId: 0,
-    areaId: 0,
-    name: '부스명 01',
-    description: '부스에 관한 설명 예시',
-    point: { x: 375, y: 750 },
-    hour: { open: new Date().toString(), close: new Date().toString() },
-  },
-  {
-    id: 3,
-    categoryId: 0,
-    areaId: 0,
-    name: '부스명 03',
-    description: 'Lorem ipsum dolor, sit amet consectetur adipisicing elit.',
-    point: { x: 375, y: 250 },
-    hour: { open: new Date().toString(), close: new Date().toString() },
-    images: ['/img-02.jpg'],
-  },
-];
-const categoryData: Category[] = [{ id: 0, name: '', icon: '/mk-example.svg' }];
 const dateLabels = {
   left: '5/7',
   center: '5/8',
@@ -92,7 +71,7 @@ const MapImg = () => {
 
 const MapPage = () => {
   const transformComponentRef = useRef<ReactZoomPanPinchRef | null>(null);
-  const [_booths, setBooths] = useState<Booth[]>([]);
+  const [booths, setBooths] = useState<Booth[]>([]);
   const [selectedBooth, setSelectedBooth] = useState<Booth | null>(null);
   const zoomTo = (elementId: string, scale?: number) => {
     if (!transformComponentRef.current) {
@@ -112,6 +91,7 @@ const MapPage = () => {
   };
 
   useEffect(() => {
+    setBooths(boothsData); // Mockup data
     getBooths(setBooths);
   }, []);
 

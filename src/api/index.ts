@@ -5,7 +5,6 @@ import type { Dispatch, SetStateAction } from 'react';
 
 export const getPosts = async (setPosts: Dispatch<SetStateAction<Post[]>>) => {
   const { data } = await axiosInstance.get<Post[]>(API_ENDPOINTS.GET_POSTS);
-  console.log(data)
   setPosts(data);
 };
 

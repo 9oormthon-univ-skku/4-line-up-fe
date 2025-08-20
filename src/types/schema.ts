@@ -1,9 +1,15 @@
-interface Hour {
+interface BaseEntity {
+  id: number;
+  createdAt?: string;
+  modifiedAt?: string;
+}
+
+export interface Hour {
   open: string;
   close: string;
 }
 
-interface Point {
+export interface Point {
   x: number;
   y: number;
 }
@@ -13,23 +19,20 @@ export interface Link {
   href: string;
 }
 
-export interface Post {
-  id: number;
+export interface Post extends BaseEntity {
   title: string;
   content: string;
   images?: string[];
   links?: Link[];
 }
 
-export interface Category {
-  id: number;
+export interface Category extends BaseEntity {
   name: string;
   icon: string;
   color?: string;
 }
 
-export interface Area {
-  id: number;
+export interface Area extends BaseEntity {
   name: string;
   summary?: string;
   description: string;
@@ -39,10 +42,10 @@ export interface Area {
   links?: Link[];
 }
 
-export interface Booth {
-  id: number;
-  categoryId: number;
-  areaId: number;
+export interface Booth extends BaseEntity {
+  dtype: 'marker' | 'gate' | 'stop' | 'store';
+  category: Category;
+  area: Area;
   name: string;
   summary?: string;
   description?: string;
@@ -52,8 +55,7 @@ export interface Booth {
   links?: Link[];
 }
 
-interface Menu {
-  id: number;
+interface Menu extends BaseEntity {
   image: string;
   name: string;
   price: number;
