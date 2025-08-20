@@ -59,13 +59,11 @@ const Marker = ({
     >
       <KeepScale>
         <MarkerPin />
-        {iconUrl ? (
-          <SvgInline className='markerIcon' url={iconUrl} />
-        ) : (
-          <div className='markerIcon'>
-            <DefaultMarkerIcon />
-          </div>
-        )}
+        <SvgInline
+          className='markerIcon'
+          url={iconUrl}
+          defaultSvg={<DefaultMarkerIcon />}
+        />
       </KeepScale>
     </div>
   );

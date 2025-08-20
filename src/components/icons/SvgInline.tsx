@@ -7,16 +7,18 @@ const svgInlineCss = css`
 `;
 
 interface SvgInlineProps extends ComponentProps<'div'> {
-  url: string;
+  url?: string;
+  defaultSvg: React.ReactNode;
 }
 
 /**
  * Render SVG element with a file from url.
  * (Codes from https://stackoverflow.com/a/56258761)
  */
-const SvgInline = ({ url, ...props }: SvgInlineProps) => {
-  const [svg, setSvg] = useState<TrustedHTML>('');
+const SvgInline = ({ url, defaultSvg, ...props }: SvgInlineProps) => {
+  const [svg, setSvg] = useState<TrustedHTML | null>(null);
   useEffect(() => {
+    if (!url) return;
     fetch(url)
       .then((res) => (res.ok ? res.text() : ''))
       .then((body) => {
@@ -27,12 +29,16 @@ const SvgInline = ({ url, ...props }: SvgInlineProps) => {
       });
   }, [url]);
 
-  return (
+  return svg ? (
     <div
       css={svgInlineCss}
       dangerouslySetInnerHTML={{ __html: svg }}
       {...props}
     />
+  ) : (
+    <div {...props}>
+      { defaultSvg }
+    </div>
   );
 };
 
