@@ -9,8 +9,10 @@ import type { Point } from '@/types/schema';
 
 const markerCss = css`
   position: fixed;
-  transform: translateX(-29px);
   color: ${colors.primary};
+  & > * {
+    transform: translateY(-39.5px);
+  }
   svg {
     ${shadows.dropBottom}
   }
@@ -50,21 +52,23 @@ const Marker = ({
   ...props
 }: MarkerProps) => {
   return (
-    <div
+    <KeepScale
       onClick={props.onClick}
       css={[markerCss, selected && selectedCss]}
-      style={{ bottom: `${point.x}px`, left: `${point.y}px`, color: color ? color : '' }}
+      style={{
+        bottom: `${point.x}px`,
+        left: `${point.y}px`,
+        color: color ? color : '',
+      }}
       {...props}
     >
-      <KeepScale>
-        <MarkerPin />
-        <SvgInline
-          className='markerIcon'
-          url={iconUrl}
-          defaultSvg={<DefaultMarkerIcon />}
-        />
-      </KeepScale>
-    </div>
+      <MarkerPin />
+      <SvgInline
+        className='markerIcon'
+        url={iconUrl}
+        defaultSvg={<DefaultMarkerIcon />}
+      />
+    </KeepScale>
   );
 };
 
