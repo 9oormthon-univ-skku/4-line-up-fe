@@ -18,13 +18,14 @@ const containerCss = css`
   }
 `;
 
-const imageList = ['/img-01.jpg', '/img-02.jpg', '/img-02.jpg'];
+// const imageList = ['/img-01.jpg', '/img-02.jpg', '/img-02.jpg'];
+const imageList = ['/img-sample-01.jpg', '/img-sample-02.jpg', '/img-sample-03.jpg'];
 const dateList = ['05.07.', '08', '09'];
 
 const Home = () => {
   return (
     <div css={containerCss}>
-      <h1 css={fonts.title_lg}>{`Karts:\nFestival`}</h1>
+      <h1 css={fonts.title_lg}>{`SKKU:\nEskara`}</h1>
       <Gallery images={imageList} />
       <HomeContents dateList={dateList} />
       <footer
@@ -35,7 +36,7 @@ const Home = () => {
             bottom: 44px;
           `,
         ]}
-      >{`Karts:\nFestival`}</footer>
+      >{`SKKU:\nEskara`}</footer>
     </div>
   );
 };

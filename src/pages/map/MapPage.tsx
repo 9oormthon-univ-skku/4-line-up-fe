@@ -16,7 +16,7 @@ import BoothInfoModal from './BoothInfoModal';
 import DateSelector from '@/components/Selector/DateSelector';
 import DayNightSelector from '@/components/Selector/DayNightSelector';
 import { getBooths } from '@/api';
-import { boothsData } from '@/api/mockData';
+// import { boothsData } from '@/api/mockData';
 
 const mapImgSize = { h: '1000px', w: '750px' };
 // const mapImgSize = {h: '2000px', w: '1500px'}
@@ -48,7 +48,7 @@ const containerCss = css`
   }
 `;
 
-const mapImageSrc = ['/img-01.jpg', '/img-02.jpg'];
+const mapImageSrc = ['/map-sample-01.jpg', '/map-sample-02.jpg'];
 const dateLabels = {
   left: '5/7',
   center: '5/8',
@@ -57,7 +57,7 @@ const dateLabels = {
 
 const MapImg = () => {
   return useTransformComponent(({ state }) => {
-    const secondMapScale = 1.9;
+    const secondMapScale = 1.5;
     const src = (state: ReactZoomPanPinchState) => {
       if (state.scale < secondMapScale) {
         return mapImageSrc[0];
@@ -91,7 +91,7 @@ const MapPage = () => {
   };
 
   useEffect(() => {
-    setBooths(boothsData); // Mockup data
+    // setBooths(boothsData); // Mockup data
     getBooths(setBooths);
   }, []);
 

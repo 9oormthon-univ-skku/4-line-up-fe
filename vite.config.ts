@@ -12,6 +12,6 @@ export default defineConfig({
     }),
     tsconfigPaths(),
     svgr(),
-    mkcert(),
+    // mkcert(),
   ],
 });

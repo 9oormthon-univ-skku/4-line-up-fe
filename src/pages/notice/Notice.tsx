@@ -7,7 +7,7 @@ import RingBinder from '@images/ring-binder-vt.svg?react';
 import type { Post } from '@/types/schema';
 import BtnBack from '@/components/icons/BtnBack';
 import { getPosts } from '@/api';
-import { postsData } from '@/api/mockData';
+// import { postsData } from '@/api/mockData';
 
 const containerCss = css`
   height: 100%;
@@ -93,7 +93,7 @@ const Notice = () => {
   };
 
   useEffect(() => {
-    setPosts(postsData); // Mockup data
+    // setPosts(postsData); // Mockup data
     getPosts(setPosts);
   }, []);
 

@@ -18,6 +18,8 @@ const galleryCss = css`
   }
 `;
 
+const imgBaseUrl = 'https://flzedqolwsvpundopfcv.supabase.co/storage/v1/object/public/images';
+
 interface GalleryProps {
   images: string[];
 }
@@ -31,7 +33,7 @@ const Gallery = ({ images }: GalleryProps) => {
         {images.map((e, i) => (
           <div
             className='embla__slide'
-            style={{ backgroundImage: `url(${e})` }}
+            style={{ backgroundImage: `url(${imgBaseUrl}${e})` }}
             key={i}
           >
           </div>
