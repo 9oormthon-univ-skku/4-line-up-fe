@@ -8,7 +8,6 @@ import {
   TransformWrapper,
   useTransformComponent,
   type ReactZoomPanPinchRef,
-  type ReactZoomPanPinchState,
 } from 'react-zoom-pan-pinch';
 import type { Booth } from '@/types/schema';
 import Card from '@/components/Card';
@@ -38,6 +37,9 @@ const containerCss = css`
     height: ${mapImgSize.h};
     width: ${mapImgSize.w};
   }
+  .hidden {
+    display: none;
+  }
   .controlPanels {
     position: fixed;
     top: 24px;
@@ -55,19 +57,22 @@ const dateLabels = {
   right: '5/9',
 };
 
-const MapImg = () => {
-  return useTransformComponent(({ state }) => {
-    const secondMapScale = 1.9;
-    const src = (state: ReactZoomPanPinchState) => {
-      if (state.scale < secondMapScale) {
-        return mapImageSrc[0];
-      } else {
-        return mapImageSrc[1];
-      }
-    };
-    return <img id='mapImg' src={src(state)} />;
-  });
-};
+const secondMapScale = 1.9;
+const MapImg = () =>
+  useTransformComponent(({ state }) => (
+    <>
+      <img
+        id='mapImg'
+        src={mapImageSrc[0]}
+        className={state.scale < secondMapScale ? '' : 'hidden'}
+      />
+      <img
+        id='mapImg'
+        src={mapImageSrc[1]}
+        className={state.scale > secondMapScale ? '' : 'hidden'}
+      />
+    </>
+  ));
 
 const MapPage = () => {
   const transformComponentRef = useRef<ReactZoomPanPinchRef | null>(null);
