@@ -1,4 +1,4 @@
-import { colors, fonts, shadows } from '@/styles/styles';
+import { colors, shadows } from '@/styles/styles';
 import { css } from '@emotion/react';
 import { useState } from 'react';
 import DayNightIcon from '../icons/DayNightIcon';
@@ -13,33 +13,10 @@ const containerCss = css`
     background-color: ${colors.white};
     border: 2px solid ${colors.primary20};
     ${shadows.dropBottom};
-
-    label {
-      flex: 1;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: ${colors.primary20};
-      z-index: 10;
-      cursor: pointer;
-      height: 100%;
-      transition: color 0.3s ease;
-    }
+    cursor: pointer;
+    overflow: hidden;
   }
 
-  input[type='radio'] {
-    display: none;
-  }
-
-  h4 {
-    line-height: 0;
-    user-select: none;
-    ${fonts.display_xlg};
-  }
-
-  /*
- * 실제 움직이는 스위치 부분
- */
   .switch {
     position: absolute;
     top: -2px;
@@ -53,60 +30,34 @@ const containerCss = css`
   .night-position {
     transform: translateX(5.2rem);
   }
-
-  .selected-font {
-    color: ${colors.white} !important;
-    font-weight: bold;
-  }
 `;
 
 type valueType = 'day' | 'night';
 
-interface TripleToggleSwitchProps {
+interface ToggleSwitchProps {
   onChange: (value: valueType) => void;
 }
 
-const DayNightSelector = ({ onChange }: TripleToggleSwitchProps) => {
+const DayNightSelector = ({ onChange }: ToggleSwitchProps) => {
   const [switchPosition, setSwitchPosition] = useState<valueType>('day');
 
-  const handleSwitchChange = (value: string) => {
-    setSwitchPosition(value as valueType);
-    onChange(value as valueType);
+  const handleToggle = () => {
+    setSwitchPosition(switchPosition === 'day' ? 'night' : 'day');
+    onChange(switchPosition);
   };
 
   return (
     <div css={containerCss}>
-      <div className='switch-wrapper'>
+      <div
+        className='switch-wrapper'
+        onClick={handleToggle}
+        role='switch'
+        aria-checked={switchPosition === 'day' ? 'true' : 'false'}
+        aria-label={`day night selector, ${switchPosition}`}
+      >
         <div className={`switch ${switchPosition}-position`}>
           <DayNightIcon value={switchPosition} />
         </div>
-        <input
-          defaultChecked
-          onChange={(e) => handleSwitchChange(e.target.value)}
-          name='map-switch'
-          id='day'
-          type='radio'
-          value='day'
-        />
-        <label
-          className={`day-label ${switchPosition === 'day' ? 'selected-font' : ''}`}
-          htmlFor='day'
-        >
-        </label>
-
-        <input
-          onChange={(e) => handleSwitchChange(e.target.value)}
-          name='map-switch'
-          id='night'
-          type='radio'
-          value='night'
-        />
-        <label
-          className={`night-label ${switchPosition === 'night' ? 'selected-font' : ''}`}
-          htmlFor='night'
-        >
-          
-        </label>
       </div>
     </div>
   );
