@@ -82,6 +82,18 @@ const TestPage = () => {
         labels={dateSelectorLabels}
         onChange={(value) => console.log(value)}
       />
+      {/* <DateSelector
+        labels={{left:'12/21', center:'12/22', right:'12/23'}}
+        onChange={(value) => console.log(value)}
+      />
+      <DateSelector
+        labels={{left:'12/21', right:'12/23'}}
+        onChange={(value) => console.log(value)}
+      />
+      <DateSelector
+        labels={{left:'9/11', right:'9/12'}}
+        onChange={(value) => console.log(value)}
+      /> */}
       <DayNightSelector
         onChange={(value) => console.log(value)}
       />
