@@ -98,7 +98,6 @@ const MapPage = () => {
   return (
     <div css={containerCss}>
       <TransformWrapper
-        minScale={0.9}
         centerZoomedOut
         centerOnInit
         ref={transformComponentRef}
@@ -120,7 +119,9 @@ const MapPage = () => {
               />
             ))}
           </div>
-          <MapImg />
+          <div onClick={() => setSelectedBooth(null)}>
+            <MapImg />
+          </div>
         </TransformComponent>
         <MapDrawer selected={selectedBooth} setSelected={setSelectedBooth}>
           {booths.map((e, i) => (
@@ -128,7 +129,7 @@ const MapPage = () => {
               title={e.name}
               desc={e.description}
               imgUrl={e.images?.at(0)}
-              btnText='선택'
+              btnText={e.category.name}
               key={i}
               onClick={() => zoomTo(`m${e.id}`)}
             />
