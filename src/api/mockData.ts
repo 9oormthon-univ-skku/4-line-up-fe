@@ -8,8 +8,9 @@ export const areaData: Area = {
   points: [],
 };
 export const categoriesData: Category[] = [
-  { id: 1, name: 'cat1', icon: '/mk-example.svg' },
-  { id: 2, name: 'cat2', icon: '', color: '#1c60adff' },
+  { id: 1, name: '체험', icon: 'https://flzedqolwsvpundopfcv.supabase.co/storage/v1/object/public/images/mk-basketball.svg' },
+  { id: 2, name: '주점', icon: 'https://flzedqolwsvpundopfcv.supabase.co/storage/v1/object/public/images/mk-wine.svg', color: '#1c60ad' },
+  { id: 3, name: '협찬', icon: 'https://flzedqolwsvpundopfcv.supabase.co/storage/v1/object/public/images/mk-star.svg', color: '#b74ad8' },
 ];
 export const boothsData: Booth[] = [
   {
