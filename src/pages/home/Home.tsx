@@ -23,7 +23,7 @@ const containerCss = css`
 `;
 
 // const imageList = ['/img-01.jpg', '/img-02.jpg', '/img-02.jpg'];
-const dateList = ['05.07.', '08', '09'];
+const dateList = ['09.11.', '12'];
 
 const Home = () => {
   const [posts, setPosts] = useState<Post[]>([]);
@@ -44,7 +44,7 @@ const Home = () => {
 
   return (
     <div css={containerCss}>
-      <h1 css={fonts.title_lg}>{`Karts:\nFestival`}</h1>
+      <h1 css={fonts.title_lg}>{`2025 Eskara:\n초록의 파도`}</h1>
       <Gallery images={galleryImgages} onClick={()=> navigate('/notice')}/>
       <HomeContents dateList={dateList} />
       <footer
@@ -55,7 +55,7 @@ const Home = () => {
             bottom: 44px;
           `,
         ]}
-      >{`Karts:\nFestival`}</footer>
+      >{`2025 Eskara:\n초록의 파도`}</footer>
     </div>
   );
 };
