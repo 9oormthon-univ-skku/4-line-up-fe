@@ -3,7 +3,7 @@ import { css } from '@emotion/react';
 import useEmblaCarousel from 'embla-carousel-react';
 
 const galleryCss = css`
-  overflow: hidden;
+  /* overflow: hidden; */
   width: 100%;
   ${shadows.dropBottom}
   .embla__container {
@@ -25,10 +25,17 @@ const galleryCss = css`
 interface GalleryProps {
   images: string[];
   size?: 'default' | 'small';
+  loop?: boolean;
+  onClick?: (key: number) => void;
 }
 
-const Gallery = ({ images, size = 'default' }: GalleryProps) => {
-  const [emblaRef] = useEmblaCarousel({ loop: true });
+const Gallery = ({
+  images,
+  size = 'default',
+  loop = true,
+  onClick = () => {},
+}: GalleryProps) => {
+  const [emblaRef] = useEmblaCarousel({ loop: loop });
 
   return (
     <div css={galleryCss} ref={emblaRef} className='embla__viewport'>
@@ -38,6 +45,9 @@ const Gallery = ({ images, size = 'default' }: GalleryProps) => {
             className={`embla__slide ${size === 'small' ? 'small' : ''}`}
             style={{ backgroundImage: `url(${e})` }}
             key={i}
+            onClick={() => {
+              onClick(i);
+            }}
           ></div>
         ))}
       </div>

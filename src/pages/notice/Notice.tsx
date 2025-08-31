@@ -65,6 +65,9 @@ const containerCss = css`
         padding-bottom: 64px;
         overflow-y: scroll;
       }
+      h3 {
+        ${fonts.body_lg}
+      }
     }
     #ringbinder {
       position: absolute;
@@ -78,11 +81,33 @@ const containerCss = css`
     button {
       margin: 6px;
     }
+
+    #inset {
+      inset: 0;
+      height: 100%;
+      position: absolute;
+      z-index: 10;
+      background-color: #ffffff55;
+    }
+    .imgModal {
+      height: 120vw;
+      width: 90vw;
+      max-height: 80vh;
+      border-radius: 15px;
+      background: center/cover;
+      margin: auto;
+      margin-top: 135px;
+      ${shadows.dropBottom};
+    }
   }
 `;
 
+const BannerLinkUrl =
+  'https://pf.kakao.com/_VPICn/friend?fbclid=PAZXh0bgNhZW0CMTEAAaeuhFM2BKXJz68LzaOAtR9UBTl902e9eT93txC5W83vIu2RJeh6eEsJja8dcw_aem_mWsbiFqllOCegHYX9moHYw';
+
 const Notice = () => {
   const [modalOpen, setModalOpen] = useState(false);
+  const [imgModal, setImgModal] = useState<string | null>(null);
   const [posts, setPosts] = useState<Post[]>([]);
   const [currentPost, setCurrentPost] = useState<Post>();
   const [visitedPostIDs, setVisitedPostIDs] = useState<number[]>([]);
@@ -91,6 +116,12 @@ const Notice = () => {
     setCurrentPost(posts.find((e) => e.id === id));
     setModalOpen(true);
     setVisitedPostIDs([...visitedPostIDs, id]);
+  };
+
+  const handleImageClick = (key: number) => {
+    if (currentPost?.images?.at(key) === undefined) return;
+    // console.log(currentPost?.images?.at(key))
+    setImgModal(currentPost?.images?.at(key) ?? '');
   };
 
   useEffect(() => {
@@ -105,13 +136,29 @@ const Notice = () => {
         <div id='modal'>
           <BtnBack onClick={() => setModalOpen(false)} />
           {currentPost?.images && currentPost.images.length > 0 && (
-            <div>
-              <Gallery images={currentPost.images} size='small' />
-            </div>
+            <>
+              <div>
+                <Gallery
+                  images={currentPost.images}
+                  size='small'
+                  loop={false}
+                  onClick={handleImageClick}
+                />
+              </div>
+              {imgModal && (
+                <>
+                  <div id='inset' onClick={() => setImgModal(null)}>
+                  <div className="imgModal" style={{backgroundImage:`url(${imgModal})`}} />
+                  </div>
+                </>
+              )}
+            </>
           )}
           <div id='notice-detail'>
             <article>
-              <p>{currentPost?.title}</p>
+              <h3>{currentPost?.title}</h3>
+              <br />
+              <br />
               <p>{currentPost?.content}</p>
             </article>
             <div id='ringbinder'>
@@ -125,7 +172,10 @@ const Notice = () => {
             <h2>New</h2>
           </header>
           <section>
-            <Banner text='총학생회 카카오톡 채널' />
+            <Banner
+              text='총학생회 카카오톡 채널'
+              onClick={() => window.open(BannerLinkUrl)}
+            />
             <Star size='md' color='primary' />
             {posts.map((e, i) => (
               <Banner
