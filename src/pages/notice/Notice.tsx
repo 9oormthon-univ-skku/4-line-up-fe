@@ -8,6 +8,7 @@ import type { Post } from '@/types/schema';
 import BtnBack from '@/components/icons/BtnBack';
 import { getPosts } from '@/api';
 import { postsData } from '@/api/mockData';
+import Gallery from '@/components/Gallery';
 
 const containerCss = css`
   height: 100%;
@@ -19,17 +20,17 @@ const containerCss = css`
   flex-direction: column;
   align-items: center;
 
+  h1 {
+    margin: 60px auto 0 26px;
+    ${fonts.title_lg};
+    line-height: 100%;
+  }
   header {
     width: 100%;
+    padding: 54px 0 0 26px;
     background-color: ${colors.primary10};
     border-bottom: dashed 5px ${colors.primary};
-    * {
-      margin: 54px auto 0 26px;
-    }
-    ${fonts.title_lg};
-    h2 {
-      ${fonts.title_xlg};
-    }
+    ${fonts.title_xlg};
   }
 
   section {
@@ -43,38 +44,38 @@ const containerCss = css`
 
   #modal {
     width: 100%;
-    height: calc(100vh - 120px);
-    top: 120px;
-    position: absolute;
-    z-index: 20;
+    height: 100%;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
     color: ${colors.white};
     padding: 24px;
     padding-bottom: 0;
     #notice-detail {
       width: 100%;
       height: 100%;
+      min-height: 0;
       border-radius: 14px 14px 0 0;
       background-color: ${colors.primary};
       ${shadows.dropBottom};
-      padding: 20px 14px 64px 56px;
-      overflow-y: scroll;
+      padding: 20px 14px 0 56px;
+      article {
+        height: 100%;
+        padding-bottom: 64px;
+        overflow-y: scroll;
+      }
     }
     #ringbinder {
-      position: fixed;
-      top: 180px;
-      left: 12px;
+      position: absolute;
+      top: 24px;
+      left: -12px;
+      height: calc(100% - 24px);
       color: ${colors.primary20};
       ${shadows.dropBottom};
-    }
-    #inset {
-      background-color: ${colors.primary10};
-      inset: 0;
-      position: fixed;
+      overflow: hidden;
     }
     button {
-      position: fixed;
-      top: 5.2rem;
-      z-index: 20;
       margin: 6px;
     }
   }
@@ -99,34 +100,47 @@ const Notice = () => {
 
   return (
     <div css={containerCss}>
-      <header>
-        <h1>Notification</h1>
-        <h2>New</h2>
-      </header>
-      <section>
-        <Banner text='총학생회 카카오톡 채널' />
-        <Star size='md' color='primary' />
-        {posts.map((e, i) => (
-          <Banner
-            text={e.title}
-            onClick={() => {
-              handleBannerClick(e.id);
-            }}
-            variant={visitedPostIDs.includes(e.id) ? 'secondary' : 'primary'}
-            key={i}
-          />
-        ))}
-      </section>
-      {modalOpen && (
+      <h1>Notice</h1>
+      {modalOpen ? (
         <div id='modal'>
           <BtnBack onClick={() => setModalOpen(false)} />
-          <div id='inset' />
+          {currentPost?.images && currentPost.images.length > 0 && (
+            <div>
+              <Gallery images={currentPost.images} size='small' />
+            </div>
+          )}
           <div id='notice-detail'>
-            <p>{currentPost?.title}</p>
-            <p>{currentPost?.content}</p>
+            <article>
+              <p>{currentPost?.title}</p>
+              <p>{currentPost?.content}</p>
+            </article>
+            <div id='ringbinder'>
+              <RingBinder />
+            </div>
           </div>
-          <RingBinder id='ringbinder' />
         </div>
+      ) : (
+        <>
+          <header>
+            <h2>New</h2>
+          </header>
+          <section>
+            <Banner text='총학생회 카카오톡 채널' />
+            <Star size='md' color='primary' />
+            {posts.map((e, i) => (
+              <Banner
+                text={e.title}
+                onClick={() => {
+                  handleBannerClick(e.id);
+                }}
+                variant={
+                  visitedPostIDs.includes(e.id) ? 'secondary' : 'primary'
+                }
+                key={i}
+              />
+            ))}
+          </section>
+        </>
       )}
     </div>
   );

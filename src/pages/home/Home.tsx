@@ -1,6 +1,6 @@
 import { colors, fonts } from '@/styles/styles';
 import { css } from '@emotion/react';
-import Gallery from './Gallery';
+import Gallery from '../../components/Gallery';
 import HomeContents from './HomeContents';
 
 const containerCss = css`
