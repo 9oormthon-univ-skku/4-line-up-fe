@@ -1,12 +1,12 @@
 import { colors, fonts } from '@/styles/styles';
 import { css } from '@emotion/react';
 import { useState } from 'react';
-import type { Timeslot } from '@/types/schema';
 import DateSelector, {
   type valueType,
 } from '@/components/Selector/DateSelector';
 import TimetableTable from './TimetableTable';
 import { Link } from 'react-router-dom';
+import { timeslotData } from '@/api/mockData';
 
 const containerCss = css`
   height: 100%;
@@ -58,33 +58,34 @@ const itemCss = css`
   }
 `;
 
-const Timeslots: Timeslot[] = [
-  {
-    id: 0,
-    name: 'name',
-    startTime: '2025-05-07T13:00:00',
-    endTime: '2025-05-07T15:00:00',
-  },
-  {
-    id: 1,
-    name: 'name',
-    startTime: '2025-05-07T16:00:00',
-    endTime: '2025-05-07T20:00:00',
-    href: 'https://instagram.com/',
-  },
-];
+
 const dateLabels = {
-  left: '5/7',
-  center: '5/8',
-  right: '12/25',
+  left: '9/11',
+  center: '9/11',
+  right: '9/12',
 };
 const hourRange = { start: 9, end: 21 }; // TODO: 응답 데이터 최대 최소 시각 동적으로 구하기
 
+/**
+ * @returns 0 | 0.5 | -0.5
+ */
+const getHalfHours = (date: Date, secondDate?: Date): number => {
+  if (secondDate) {
+    return getHalfHours(date) - getHalfHours(secondDate);
+  } else {
+    return date.getMinutes() < 30 ? 0 : 0.5;
+  }
+};
+const gethhmm = (date: Date): string => {
+  // return `${date.getHours().toString().padStart(2, '0')}:${getHalfHours(date)===0 ? '00':'30'}`
+  return `${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`
+}
+
 const Timetable = () => {
-  const [currentDateValue, setCurrentDateValue] = useState<valueType>('left');
+  const [currentDateLabel, setCurrentDateLabel] = useState<string>('9/11');
   const onDateChange = (value: valueType) => {
     console.log(value);
-    setCurrentDateValue(value);
+    setCurrentDateLabel(dateLabels[value]);
   };
   return (
     <div css={containerCss}>
@@ -92,7 +93,7 @@ const Timetable = () => {
         <h1>Time Line</h1>
         <DateSelector labels={dateLabels} onChange={onDateChange} />
         <h2>
-          {dateLabels[currentDateValue]
+          {currentDateLabel
             .split('/')
             .map((e) => e.padStart(2, '0'))
             .join('.')}
@@ -103,24 +104,29 @@ const Timetable = () => {
           rangeStartHour={hourRange.start}
           rangeEndHour={hourRange.end}
         >
-          {Timeslots.map((timeslot, i) => {
+          {timeslotData.map((timeslot, i) => {
             const startTime = new Date(timeslot.startTime);
             const endTime = new Date(timeslot.endTime);
-            const top = startTime.getHours() - hourRange.start;
-            const duration = endTime.getHours() - startTime.getHours();
+            const top =
+              startTime.getHours() - hourRange.start + getHalfHours(startTime);
+            const duration =
+              endTime.getHours() -
+              startTime.getHours() +
+              getHalfHours(endTime, startTime);
             return (
               <Link
                 css={itemCss}
                 style={{
                   top: `${top * 44 - 2}px`,
                   height: `${duration * 44 + 2}px`,
+                  left: i%2===0 ? '0' : '50%',
                 }}
                 key={i}
                 to={timeslot.href ?? ''}
               >
                 {timeslot.name}
                 <p>
-                  {startTime.getHours()}:00~{endTime.getHours()}:00
+                  {gethhmm(startTime)}~{gethhmm(endTime)}
                 </p>
               </Link>
             );
