@@ -61,7 +61,7 @@ const containerCss = css`
 `;
 
 export type valueType = 'left' | 'center' | 'right';
-type LabelsType = {
+export type LabelsType = {
   left: string;
   center?: string;
   right: string;
@@ -109,7 +109,9 @@ const DateSelector = ({ labels, onChange }: TripleToggleSwitchProps) => {
           }}
         ></div>
 
-        {labelKeys.map((key) => (
+        {labelKeys
+          .filter((key) => labels[key])
+          .map((key) => (
           <label
             key={key}
             ref={(el) => {

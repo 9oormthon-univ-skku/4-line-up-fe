@@ -1,4 +1,11 @@
 import type { Area, Booth, Category, Post, Timeslot } from '@/types/schema';
+import dayjs from 'dayjs';
+
+export const days = [
+  dayjs('2025-09-11'),
+  dayjs('2025-09-12'),
+  // dayjs('2025-09-13'),
+]
 
 export const areaData: Area = {
   id: 1,

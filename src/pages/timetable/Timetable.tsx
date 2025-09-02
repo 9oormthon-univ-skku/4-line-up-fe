@@ -2,13 +2,18 @@ import { colors, fonts } from '@/styles/styles';
 import { css } from '@emotion/react';
 import { useEffect, useState } from 'react';
 import DateSelector, {
+  type LabelsType,
   type valueType,
 } from '@/components/Selector/DateSelector';
 import TimetableTable from './TimetableTable';
 import { Link } from 'react-router-dom';
-// import { timeslotData } from '@/api/mockData';
+import { days, timeslotData } from '@/api/mockData';
 import type { Timeslot } from '@/types/schema';
 import { getTimeSlots } from '@/api';
+import dayjs from 'dayjs';
+import duration from 'dayjs/plugin/duration';
+
+dayjs.extend(duration);
 
 const containerCss = css`
   height: 100%;
@@ -60,52 +65,39 @@ const itemCss = css`
   }
 `;
 
-
-const dateLabels = {
-  left: '9/11',
-  center: '9/11',
-  right: '9/12',
+const dateLabels: LabelsType = {
+  left: days[0].format('M/D'),
+  right: days[1].format('M/D'),
+  center: days.at(2)?.format('M/D'),
+};
+const valueIdx = {
+  left: 0,
+  right: 1,
+  center: 2,
 };
 const hourRange = { start: 9, end: 21 }; // TODO: 응답 데이터 최대 최소 시각 동적으로 구하기
 
-/**
- * @returns 0 | 0.5 | -0.5
- */
-const getHalfHours = (date: Date, secondDate?: Date): number => {
-  if (secondDate) {
-    return getHalfHours(date) - getHalfHours(secondDate);
-  } else {
-    return date.getMinutes() < 30 ? 0 : 0.5;
-  }
-};
-const gethhmm = (date: Date): string => {
-  // return `${date.getHours().toString().padStart(2, '0')}:${getHalfHours(date)===0 ? '00':'30'}`
-  return `${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`
-}
-
 const Timetable = () => {
-  const [currentDateLabel, setCurrentDateLabel] = useState<string>('9/11');
-  const onDateChange = (value: valueType) => {
-    console.log(value);
-    setCurrentDateLabel(dateLabels[value]);
+  const [timeslots, setTimeslots] = useState<Timeslot[]>([]);
+  const [selectedDate, setSelectedDate] = useState<dayjs.Dayjs | undefined>(
+    days[0]
+  );
+  const onDateChange = (value: string) => {
+    // console.log(value);
+    setSelectedDate(days.at(valueIdx[value as valueType]));
   };
-  const [timeslots, setTimeslots] = useState<Timeslot[]>([])
 
   useEffect(() => {
-      // setTimeslots(timeslotData); // Mockup data
-      getTimeSlots(setTimeslots);
-    }, []);
+    // setTimeslots(timeslotData); // Mockup data
+    getTimeSlots(setTimeslots);
+  }, []);
+
   return (
     <div css={containerCss}>
       <header>
         <h1>Time Line</h1>
         <DateSelector labels={dateLabels} onChange={onDateChange} />
-        <h2>
-          {currentDateLabel
-            .split('/')
-            .map((e) => e.padStart(2, '0'))
-            .join('.')}
-        </h2>
+        <h2>{selectedDate?.format('MM.DD')}</h2>
       </header>
       <section>
         <TimetableTable
@@ -113,28 +105,35 @@ const Timetable = () => {
           rangeEndHour={hourRange.end}
         >
           {timeslots.map((timeslot, i) => {
-            const startTime = new Date(timeslot.startTime);
-            const endTime = new Date(timeslot.endTime);
+            const startTime = dayjs(timeslot.startTime);
+            const endTime = dayjs(timeslot.endTime);
             const top =
-              startTime.getHours() - hourRange.start + getHalfHours(startTime);
+              Math.floor(
+                dayjs
+                  .duration({
+                    hours: startTime.hour() - hourRange.start,
+                    minutes: startTime.minute(),
+                  })
+                  .asMinutes() / 30
+              ) / 2; // round to every 30mins
             const duration =
-              endTime.getHours() -
-              startTime.getHours() +
-              getHalfHours(endTime, startTime);
+              Math.floor(
+                dayjs.duration(endTime.diff(startTime)).asMinutes() / 30
+              ) / 2;
             return (
               <Link
                 css={itemCss}
                 style={{
                   top: `${top * 44 - 2}px`,
                   height: `${duration * 44 + 2}px`,
-                  left: i%2===0 ? '0' : '50%',
+                  left: i % 2 === 0 ? '0' : '50%',
                 }}
                 key={i}
                 to={timeslot.href ?? ''}
               >
                 {timeslot.name}
                 <p>
-                  {gethhmm(startTime)}~{gethhmm(endTime)}
+                  {startTime.format('HH:mm')}~{endTime.format('HH:mm')}
                 </p>
               </Link>
             );
