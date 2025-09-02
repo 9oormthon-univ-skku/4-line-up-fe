@@ -1,12 +1,14 @@
 import { colors, fonts } from '@/styles/styles';
 import { css } from '@emotion/react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import DateSelector, {
   type valueType,
 } from '@/components/Selector/DateSelector';
 import TimetableTable from './TimetableTable';
 import { Link } from 'react-router-dom';
-import { timeslotData } from '@/api/mockData';
+// import { timeslotData } from '@/api/mockData';
+import type { Timeslot } from '@/types/schema';
+import { getTimeSlots } from '@/api';
 
 const containerCss = css`
   height: 100%;
@@ -87,6 +89,12 @@ const Timetable = () => {
     console.log(value);
     setCurrentDateLabel(dateLabels[value]);
   };
+  const [timeslots, setTimeslots] = useState<Timeslot[]>([])
+
+  useEffect(() => {
+      // setTimeslots(timeslotData); // Mockup data
+      getTimeSlots(setTimeslots);
+    }, []);
   return (
     <div css={containerCss}>
       <header>
@@ -104,7 +112,7 @@ const Timetable = () => {
           rangeStartHour={hourRange.start}
           rangeEndHour={hourRange.end}
         >
-          {timeslotData.map((timeslot, i) => {
+          {timeslots.map((timeslot, i) => {
             const startTime = new Date(timeslot.startTime);
             const endTime = new Date(timeslot.endTime);
             const top =
