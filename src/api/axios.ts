@@ -1,4 +1,5 @@
 import axios, { type AxiosResponse } from 'axios';
+import dayjs from 'dayjs';
 
 const apiUrl = `${import.meta.env.VITE_API}`;
 
@@ -15,11 +16,35 @@ class BadResponseFormatError extends Error {
   }
 }
 
+const parseDates = (data: any): any => {
+  if (typeof data !== 'object' || data === null) {
+    return data;
+  }
+  if (Array.isArray(data)) {
+    return data.map((e) => parseDates(e));
+  }
+  const newData: Record<string, any> = {};
+  for (const k in data) {
+    if (Object.prototype.hasOwnProperty.call(data, k)) {
+      const v = data[k];
+      if (typeof v === 'string' && dayjs(v).isValid()) {
+        newData[k] = dayjs(v); // parse string to date
+      } else if (typeof v === 'object') {
+        newData[k] = parseDates(v); // recursion
+      } else {
+        newData[k] = v;
+      }
+    }
+  }
+  return newData;
+};
+
 axiosInstance.interceptors.response.use(
   (response) => {
     if (response.headers['content-type'] !== 'application/json') {
       throw new BadResponseFormatError(response);
     }
+    response.data = parseDates(response.data);
     return response;
   },
   (error) => {

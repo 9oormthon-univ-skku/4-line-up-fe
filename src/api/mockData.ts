@@ -5,13 +5,16 @@ export const days = [
   dayjs('2025-09-11'),
   dayjs('2025-09-12'),
   // dayjs('2025-09-13'),
-]
+];
 
 export const areaData: Area = {
   id: 1,
   name: 'area1',
   description: 'desc',
-  hour: { open: '2025-08-20T09:00:00', close: '2025-08-20T18:00:00' },
+  hour: {
+    open: dayjs('2025-08-20T09:00:00'),
+    close: dayjs('2025-08-20T18:00:00'),
+  },
   points: [],
 };
 export const categoriesData: Category[] = [
@@ -27,7 +30,10 @@ export const boothsData: Booth[] = [
     name: '부스명 01',
     description: '부스에 관한 설명 예시',
     point: { x: 375, y: 750 },
-    hour: { open: '2025-08-20T09:00:00', close: '2025-08-20T18:00:00' },
+    hour: {
+      open: dayjs('2025-08-20T09:00:00'),
+      close: dayjs('2025-08-20T18:00:00'),
+    },
   },
   {
     dtype: 'store',
@@ -37,8 +43,14 @@ export const boothsData: Booth[] = [
     name: '부스명 03',
     description: 'Lorem ipsum dolor, sit amet consectetur adipisicing elit.',
     point: { x: 375, y: 250 },
-    hour: { open: '2025-08-20T09:00:00', close: '2025-08-20T18:00:00' },
-    images: ['https://avatars.githubusercontent.com/u/220365751?s=200&v=4','/img-02.jpg'],
+    hour: {
+      open: dayjs('2025-08-20T09:00:00'),
+      close: dayjs('2025-08-20T18:00:00'),
+    },
+    images: [
+      'https://avatars.githubusercontent.com/u/220365751?s=200&v=4',
+      '/img-02.jpg',
+    ],
   },
 ];
 
@@ -76,21 +88,21 @@ export const timeslotData: Timeslot[] = [
   {
     id: 0,
     name: 'name',
-    startTime: '2025-05-07T13:00:00',
-    endTime: '2025-05-07T15:00:00',
+    startTime: dayjs('2025-05-07T13:00:00'),
+    endTime: dayjs('2025-05-07T15:00:00'),
   },
   {
     id: 1,
     name: 'name',
-    startTime: '2025-05-07T16:00:00',
-    endTime: '2025-05-07T20:00:00',
+    startTime: dayjs('2025-05-07T16:00:00'),
+    endTime: dayjs('2025-05-07T20:00:00'),
     href: 'https://instagram.com/',
   },
   {
     id: 2,
     name: 'name',
-    startTime: '2025-05-07T10:30:00',
-    endTime: '2025-05-07T11:45:00',
+    startTime: dayjs('2025-05-07T10:30:00'),
+    endTime: dayjs('2025-05-07T11:45:00'),
     href: 'https://instagram.com/',
   },
 ];

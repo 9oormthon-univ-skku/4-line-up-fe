@@ -105,8 +105,8 @@ const Timetable = () => {
           rangeEndHour={hourRange.end}
         >
           {timeslots.map((timeslot, i) => {
-            const startTime = dayjs(timeslot.startTime);
-            const endTime = dayjs(timeslot.endTime);
+            const startTime = timeslot.startTime;
+            const endTime = timeslot.endTime;
             const top =
               Math.floor(
                 dayjs
