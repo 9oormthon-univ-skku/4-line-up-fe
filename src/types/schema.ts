@@ -1,12 +1,14 @@
+import type dayjs from "dayjs";
+
 interface BaseEntity {
   id: number;
-  createdAt?: string;
-  modifiedAt?: string;
+  createdAt?: dayjs.Dayjs;
+  modifiedAt?: dayjs.Dayjs;
 }
 
 export interface Hour {
-  open: string;
-  close: string;
+  open: dayjs.Dayjs;
+  close: dayjs.Dayjs;
 }
 
 export interface Point {
@@ -65,16 +67,16 @@ export interface Gate extends Booth {
   type: 'ENTRY' | 'EXIT' | 'ALL';
 }
 export interface Stop extends Booth {
-  times: string[];
+  times: dayjs.Dayjs[];
 }
 export interface Store extends Booth {
   menus: Menu[];
 }
 
-export interface Timeslot {
+export interface Timeslot extends BaseEntity {
   id: number;
   name: string;
-  startTime: string;
-  endTime: string;
+  startTime: dayjs.Dayjs;
+  endTime: dayjs.Dayjs;
   href?: string;
 }

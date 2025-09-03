@@ -2,6 +2,7 @@ import { colors, fonts } from '@/styles/styles';
 import { css } from '@emotion/react';
 import Arrow0 from '@images/arrow-bold-down.svg?react';
 import Arrow1 from '@images/arrow-second.svg?react';
+import type dayjs from 'dayjs';
 
 const contentsCss = css`
   width: 101%;
@@ -28,11 +29,11 @@ const contentsCss = css`
   .arrow {
     height: 0;
     position: relative;
-    right: 20px;
-    top: 30px;
+    right: 90px;
+    top: 50px;
   }
   .date-wrapper:nth-of-type(2n) .arrow{
-    left: 80px;
+    left: 100px;
     svg{
       -webkit-transform: scaleX(-1);
       transform: scaleX(-1);
@@ -43,7 +44,7 @@ const contentsCss = css`
   }
 `;
 interface HomeContentsProps {
-  dateList: string[];
+  dateList: dayjs.Dayjs[];
 }
 const HomeContents = ({ dateList }: HomeContentsProps) => {
   return (
@@ -63,7 +64,7 @@ const HomeContents = ({ dateList }: HomeContentsProps) => {
           return (
             <div className='date-wrapper' key={i}>
               <div className='dayorder'>day{i + 1}</div>
-              <div className='date'>{date}</div>
+              <div className='date'>{date.format((i==0) ? 'MM.DD' : 'DD')}</div>
               <div className="arrow"><Arrow1/></div>
             </div>
           );

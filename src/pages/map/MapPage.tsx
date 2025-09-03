@@ -12,10 +12,10 @@ import {
 import type { Booth } from '@/types/schema';
 import Card from '@/components/Card';
 import BoothInfoModal from './BoothInfoModal';
-import DateSelector from '@/components/Selector/DateSelector';
+import DateSelector, { type LabelsType } from '@/components/Selector/DateSelector';
 import DayNightSelector from '@/components/Selector/DayNightSelector';
 import { getBooths } from '@/api';
-import { boothsData } from '@/api/mockData';
+import { days } from '@/api/mockData';
 
 const mapImgSize = { h: '1000px', w: '750px' };
 // const mapImgSize = {h: '2000px', w: '1500px'}
@@ -51,10 +51,10 @@ const containerCss = css`
 `;
 
 const mapImageSrc = ['/img-01.jpg', '/img-02.jpg'];
-const dateLabels = {
-  left: '5/7',
-  center: '5/8',
-  right: '5/9',
+const dateLabels: LabelsType = {
+  left: days[0].format('M/D'),
+  right: days[1].format('M/D'),
+  center: days.at(2)?.format('M/D'),
 };
 
 const secondMapScale = 1.9;
@@ -96,7 +96,7 @@ const MapPage = () => {
   };
 
   useEffect(() => {
-    setBooths(boothsData); // Mockup data
+    // setBooths(boothsData); // Mockup data
     getBooths(setBooths);
   }, []);
 

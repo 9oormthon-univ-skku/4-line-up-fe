@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react';
 import { getPosts } from '@/api';
 import type { Post } from '@/types/schema';
 import { useNavigate } from 'react-router-dom';
+import { days } from '@/api/mockData';
 
 const containerCss = css`
   min-height: 100%;
@@ -23,7 +24,7 @@ const containerCss = css`
 `;
 
 // const imageList = ['/img-01.jpg', '/img-02.jpg', '/img-02.jpg'];
-const dateList = ['09.11.', '12'];
+const dateList = days;
 
 const Home = () => {
   const [posts, setPosts] = useState<Post[]>([]);
