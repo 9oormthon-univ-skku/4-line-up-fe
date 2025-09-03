@@ -2,7 +2,6 @@ import { colors, fonts } from '@/styles/styles';
 import { css } from '@emotion/react';
 import { useEffect, useState } from 'react';
 import DateSelector, {
-  type LabelsType,
   type valueType,
 } from '@/components/Selector/DateSelector';
 import TimetableTable from './TimetableTable';
@@ -66,11 +65,6 @@ const itemCss = css`
   }
 `;
 
-const dateLabels: LabelsType = {
-  left: days[0].format('M/D'),
-  right: days[1].format('M/D'),
-  center: days.at(2)?.format('M/D'),
-};
 const valueIdx = {
   left: 0,
   right: 1,
@@ -97,7 +91,7 @@ const Timetable = () => {
     <div css={containerCss}>
       <header>
         <h1>Time Line</h1>
-        <DateSelector labels={dateLabels} onChange={onDateChange} />
+        <DateSelector onChange={onDateChange} />
         <h2>{selectedDate?.format('MM.DD')}</h2>
       </header>
       <section>

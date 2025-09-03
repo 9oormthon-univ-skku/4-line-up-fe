@@ -12,10 +12,10 @@ import {
 import type { Booth } from '@/types/schema';
 import Card from '@/components/Card';
 import BoothInfoModal from './BoothInfoModal';
-import DateSelector, { type LabelsType } from '@/components/Selector/DateSelector';
+import DateSelector from '@/components/Selector/DateSelector';
 import DayNightSelector from '@/components/Selector/DayNightSelector';
 import { getBooths } from '@/api';
-import { days, imageList } from '@/constants';
+import { imageList } from '@/constants';
 // import { boothsData } from '@/api/mockData';
 
 const mapImgSize = { h: '1000px', w: '750px' };
@@ -52,12 +52,6 @@ const containerCss = css`
 `;
 
 const mapImageSrc = imageList.slice(0, 2);
-
-const dateLabels: LabelsType = {
-  left: days[0].format('M/D'),
-  right: days[1].format('M/D'),
-  center: days.at(2)?.format('M/D'),
-};
 
 const secondMapScale = 1.9;
 const MapImg = () =>
@@ -157,7 +151,7 @@ const MapPage = () => {
         </BoothInfoModal>
       )}
       <div className='controlPanels'>
-        <DateSelector labels={dateLabels} onChange={onDateChange} />
+        <DateSelector onChange={onDateChange} />
         <DayNightSelector onChange={onDayNightChange} />
       </div>
     </div>
