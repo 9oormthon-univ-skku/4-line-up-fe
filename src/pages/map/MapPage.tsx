@@ -12,11 +12,17 @@ import {
 import type { Booth } from '@/types/schema';
 import Card from '@/components/Card';
 import BoothInfoModal from './BoothInfoModal';
-import DateSelector from '@/components/Selector/DateSelector';
+import DateSelector, {
+  type valueType,
+} from '@/components/Selector/DateSelector';
 import DayNightSelector from '@/components/Selector/DayNightSelector';
 import { getBooths } from '@/api';
-import { imageList } from '@/constants';
+import { days, imageList } from '@/constants';
+import dayjs, { type Dayjs } from 'dayjs';
+import isBetween from 'dayjs/plugin/isBetween';
 // import { boothsData } from '@/api/mockData';
+
+dayjs.extend(isBetween);
 
 const mapImgSize = { h: '1000px', w: '750px' };
 // const mapImgSize = {h: '2000px', w: '1500px'}
@@ -70,9 +76,17 @@ const MapImg = () =>
     </>
   ));
 
+const valueIdx = {
+  left: 0,
+  right: 1,
+  center: 2,
+};
+
 const MapPage = () => {
   const transformComponentRef = useRef<ReactZoomPanPinchRef | null>(null);
   const [booths, setBooths] = useState<Booth[]>([]);
+  const [currentBooths, setCurrentBooths] = useState<Booth[]>([]);
+  const [currentDay, setCurrentDay] = useState<Dayjs>(days[0]);
   const [selectedBooth, setSelectedBooth] = useState<Booth | null>(null);
   const zoomTo = (elementId: string, scale?: number) => {
     if (!transformComponentRef.current) {
@@ -84,17 +98,40 @@ const MapPage = () => {
     setSelectedBooth(booths.find((e) => `m${e.id}` === elementId) ?? null);
   };
   const onDateChange = (value: string) => {
-    console.log(value);
-    //TODO: filter boothData
+    // console.log(value, days.at(valueIdx[value as valueType]));
+    setCurrentDay(days.at(valueIdx[value as valueType]) ?? currentDay);
   };
   const onDayNightChange = (value: string) => {
     console.log(value);
   };
 
+  const filterBooths = (
+    booths: Booth[],
+    date?: Dayjs,
+    areaId?: number
+  ): Booth[] => {
+    console.log(`date: ${date?.format('MM/DD')} areaId:${areaId} all booths:`, booths);
+    return booths.filter((booth) => currentDay.isSame(booth.hour.open, 'day'));
+    // TODO: dayNight filtering
+  };
+
   useEffect(() => {
     // setBooths(boothsData); // Mockup data
     getBooths(setBooths);
+
+    if (
+      dayjs().isBetween(days[0], days.at(-1), 'day', '[]') && // during fest and..
+      days.some((day) => day.isSame(dayjs(), 'day')) // today exist in days
+    ) {
+      setCurrentDay(dayjs()); // if during festival, set default day with TODAY
+      console.log('enjoy the festival!');
+      // TODO: set selector props
+    }
   }, []);
+
+  useEffect(() => {
+    setCurrentBooths(filterBooths(booths, currentDay));
+  }, [currentDay, booths]);
 
   return (
     <div css={containerCss}>
@@ -108,7 +145,7 @@ const MapPage = () => {
           contentClass='transformContent'
         >
           <div className='markers'>
-            {booths.map((e, i) => (
+            {currentBooths.map((e, i) => (
               <Marker
                 key={i}
                 point={e.point}
@@ -125,7 +162,7 @@ const MapPage = () => {
           </div>
         </TransformComponent>
         <MapDrawer selected={selectedBooth} setSelected={setSelectedBooth}>
-          {booths.map((e, i) => (
+          {currentBooths.map((e, i) => (
             <Card
               title={e.name}
               desc={e.description}
