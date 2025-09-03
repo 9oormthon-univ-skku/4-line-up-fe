@@ -15,7 +15,7 @@ import BoothInfoModal from './BoothInfoModal';
 import DateSelector, { type LabelsType } from '@/components/Selector/DateSelector';
 import DayNightSelector from '@/components/Selector/DayNightSelector';
 import { getBooths } from '@/api';
-import { boothsData, days } from '@/api/mockData';
+import { days } from '@/api/mockData';
 
 const mapImgSize = { h: '1000px', w: '750px' };
 // const mapImgSize = {h: '2000px', w: '1500px'}
@@ -96,7 +96,7 @@ const MapPage = () => {
   };
 
   useEffect(() => {
-    setBooths(boothsData); // Mockup data
+    // setBooths(boothsData); // Mockup data
     getBooths(setBooths);
   }, []);
 

@@ -1,5 +1,7 @@
 import axios, { type AxiosResponse } from 'axios';
 import dayjs from 'dayjs';
+import customParseFormat from 'dayjs/plugin/customParseFormat';
+dayjs.extend(customParseFormat);
 
 const apiUrl = `${import.meta.env.VITE_API}`;
 
@@ -27,7 +29,14 @@ const parseDates = (data: any): any => {
   for (const k in data) {
     if (Object.prototype.hasOwnProperty.call(data, k)) {
       const v = data[k];
-      if (typeof v === 'string' && dayjs(v).isValid()) {
+      if (
+        typeof v === 'string' &&
+        dayjs(
+          v,
+          ['YYYY-MM-DDTHH:mm:ss', 'YYYY-MM-DDTHH:mm:ss.SSS'],
+          true
+        ).isValid()
+      ) {
         newData[k] = dayjs(v); // parse string to date
       } else if (typeof v === 'object') {
         newData[k] = parseDates(v); // recursion
