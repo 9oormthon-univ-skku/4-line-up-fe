@@ -15,7 +15,8 @@ import BoothInfoModal from './BoothInfoModal';
 import DateSelector, { type LabelsType } from '@/components/Selector/DateSelector';
 import DayNightSelector from '@/components/Selector/DayNightSelector';
 import { getBooths } from '@/api';
-import { days } from '@/api/mockData';
+import { days, imageList } from '@/constants';
+// import { boothsData } from '@/api/mockData';
 
 const mapImgSize = { h: '1000px', w: '750px' };
 // const mapImgSize = {h: '2000px', w: '1500px'}
@@ -50,7 +51,8 @@ const containerCss = css`
   }
 `;
 
-const mapImageSrc = ['/img-01.jpg', '/img-02.jpg'];
+const mapImageSrc = imageList.slice(0, 2);
+
 const dateLabels: LabelsType = {
   left: days[0].format('M/D'),
   right: days[1].format('M/D'),

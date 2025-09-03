@@ -7,11 +7,12 @@ import DateSelector, {
 } from '@/components/Selector/DateSelector';
 import TimetableTable from './TimetableTable';
 import { Link } from 'react-router-dom';
-import { days } from '@/api/mockData';
 import type { Timeslot } from '@/types/schema';
 import { getTimeSlots } from '@/api';
 import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';
+import { days } from '@/constants';
+// import { timeslotData } from '@/api/mockData';
 
 dayjs.extend(duration);
 

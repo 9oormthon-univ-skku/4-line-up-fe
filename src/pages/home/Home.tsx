@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react';
 import { getPosts } from '@/api';
 import type { Post } from '@/types/schema';
 import { useNavigate } from 'react-router-dom';
-import { days } from '@/api/mockData';
+import { days, festivalTitle } from '@/constants';
 
 const containerCss = css`
   min-height: 100%;
@@ -22,9 +22,6 @@ const containerCss = css`
     margin: 54px auto 0 26px;
   }
 `;
-
-// const imageList = ['/img-01.jpg', '/img-02.jpg', '/img-02.jpg'];
-const dateList = days;
 
 const Home = () => {
   const [posts, setPosts] = useState<Post[]>([]);
@@ -45,9 +42,9 @@ const Home = () => {
 
   return (
     <div css={containerCss}>
-      <h1 css={fonts.title_lg}>{`2025 Eskara:\n초록의 파도`}</h1>
+      <h1 css={fonts.title_lg}>{festivalTitle}</h1>
       <Gallery images={galleryImgages} onClick={()=> navigate('/notice')}/>
-      <HomeContents dateList={dateList} />
+      <HomeContents dateList={days} />
       <footer
         css={[
           fonts.title_md,
@@ -56,7 +53,7 @@ const Home = () => {
             bottom: 44px;
           `,
         ]}
-      >{`2025 Eskara:\n초록의 파도`}</footer>
+      >{festivalTitle}</footer>
     </div>
   );
 };
