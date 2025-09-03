@@ -56,10 +56,10 @@ const containerCss = css`
     gap: 16px;
   }
 `;
-
-const mapImageSrc = imageList.slice(0, 2);
+const dayNightBoundary = 18;
 
 const secondMapScale = 1.9;
+const mapImageSrc = imageList.slice(0, 2);
 const MapImg = () =>
   useTransformComponent(({ state }) => (
     <>
@@ -82,11 +82,32 @@ const valueIdx = {
   center: 2,
 };
 
+const filterBooths = (
+  booths: Booth[],
+  date: Dayjs,
+  dayOrNight: 'day' | 'night',
+  areaId?: number
+): Booth[] => {
+  console.log(
+    `date: ${date?.format('MM/DD')} areaId:${areaId} all booths:`,
+    booths
+  );
+  return booths
+    .filter((booth) => date.isSame(booth.hour.open, 'day'))
+    .filter((booth) =>
+      dayOrNight === 'day'
+        ? booth.hour.open.isBefore(date.add(dayNightBoundary, 'h'))
+        : booth.hour.close.isAfter(date.add(dayNightBoundary, 'h'))
+    );
+  // TODO: area filtering
+};
+
 const MapPage = () => {
   const transformComponentRef = useRef<ReactZoomPanPinchRef | null>(null);
   const [booths, setBooths] = useState<Booth[]>([]);
   const [currentBooths, setCurrentBooths] = useState<Booth[]>([]);
   const [currentDay, setCurrentDay] = useState<Dayjs>(days[0]);
+  const [dayOrNight, setDayOrNight] = useState<'day' | 'night'>('day');
   const [selectedBooth, setSelectedBooth] = useState<Booth | null>(null);
   const zoomTo = (elementId: string, scale?: number) => {
     if (!transformComponentRef.current) {
@@ -103,16 +124,7 @@ const MapPage = () => {
   };
   const onDayNightChange = (value: string) => {
     console.log(value);
-  };
-
-  const filterBooths = (
-    booths: Booth[],
-    date?: Dayjs,
-    areaId?: number
-  ): Booth[] => {
-    console.log(`date: ${date?.format('MM/DD')} areaId:${areaId} all booths:`, booths);
-    return booths.filter((booth) => currentDay.isSame(booth.hour.open, 'day'));
-    // TODO: dayNight filtering
+    setDayOrNight(value as 'day' | 'night');
   };
 
   useEffect(() => {
@@ -123,15 +135,19 @@ const MapPage = () => {
       dayjs().isBetween(days[0], days.at(-1), 'day', '[]') && // during fest and..
       days.some((day) => day.isSame(dayjs(), 'day')) // today exist in days
     ) {
-      setCurrentDay(dayjs()); // if during festival, set default day with TODAY
+      setCurrentDay(dayjs().startOf('date'));
+      // if during festival, set default day with TODAY 00:00
       console.log('enjoy the festival!');
       // TODO: set selector props
     }
   }, []);
 
   useEffect(() => {
-    setCurrentBooths(filterBooths(booths, currentDay));
-  }, [currentDay, booths]);
+    setCurrentBooths(filterBooths(booths, currentDay, dayOrNight));
+    if (transformComponentRef.current) {
+      transformComponentRef.current.zoomIn(0); // KeepScale bugfix
+    }
+  }, [currentDay, booths, dayOrNight]);
 
   return (
     <div css={containerCss}>
