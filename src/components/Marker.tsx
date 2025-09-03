@@ -56,8 +56,8 @@ const Marker = ({
       onClick={props.onClick}
       css={[markerCss, selected && selectedCss]}
       style={{
-        bottom: `${point.x}px`,
-        left: `${point.y}px`,
+        bottom: `${point.y}px`,
+        left: `${point.x}px`,
         color: color ? color : '',
       }}
       {...props}
