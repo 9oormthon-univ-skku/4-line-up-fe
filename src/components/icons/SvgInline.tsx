@@ -29,10 +29,10 @@ const SvgInline = ({ url, defaultSvg, ...props }: SvgInlineProps) => {
       });
   }, [url]);
 
-  return svg ? (
+  return url ? (
     <div
       css={svgInlineCss}
-      dangerouslySetInnerHTML={{ __html: svg }}
+      dangerouslySetInnerHTML={{ __html: svg ?? "" }}
       {...props}
     />
   ) : (

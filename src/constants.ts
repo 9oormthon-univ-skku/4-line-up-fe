@@ -3,9 +3,9 @@ import dayjs from 'dayjs';
 export const festivalTitle = '2025 Eskara:\n초록의 파도';
 
 export const days = [
-  dayjs('2025-08-20'),
-  dayjs('2025-08-21'),
+//   dayjs('2025-08-20'),
   dayjs('2025-09-11'),
+  dayjs('2025-09-12'),
 ];
 
 export const imageList = ['/img-01.jpg', '/img-02.jpg', '/img-02.jpg'];

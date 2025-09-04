@@ -124,7 +124,7 @@ const DateSelector = ({ labels=dateLabels, onChange }: TripleToggleSwitchProps) 
             ref={(el) => {
               labelRefs.current[key] = el;
             }}
-            className={`${key}-label ${switchPosition === key ? 'selected-font' : ''}`}
+            className={`${switchPosition === key ? 'selected-font' : ''}`}
             htmlFor={key}
           >
             <input
