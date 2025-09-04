@@ -7,8 +7,9 @@ import RingBinder from '@images/ring-binder-vt.svg?react';
 import type { Post } from '@/types/schema';
 import BtnBack from '@/components/icons/BtnBack';
 import { getPosts } from '@/api';
-import { postsData } from '@/api/mockData';
 import Gallery from '@/components/Gallery';
+import { BannerLinkUrl } from '@/constants';
+// import { postsData } from '@/api/mockData';
 
 const containerCss = css`
   height: 100%;
@@ -102,9 +103,6 @@ const containerCss = css`
   }
 `;
 
-const BannerLinkUrl =
-  'https://pf.kakao.com/_VPICn/friend?fbclid=PAZXh0bgNhZW0CMTEAAaeuhFM2BKXJz68LzaOAtR9UBTl902e9eT93txC5W83vIu2RJeh6eEsJja8dcw_aem_mWsbiFqllOCegHYX9moHYw';
-
 const Notice = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const [imgModal, setImgModal] = useState<string | null>(null);
@@ -125,7 +123,7 @@ const Notice = () => {
   };
 
   useEffect(() => {
-    setPosts(postsData); // Mockup data
+    // setPosts(postsData); // Mockup data
     getPosts(setPosts);
   }, []);
 

@@ -1,6 +1,6 @@
 import { colors, shadows } from '@/styles/styles';
 import { css } from '@emotion/react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import DayNightIcon from '../icons/DayNightIcon';
 
 const containerCss = css`
@@ -43,8 +43,12 @@ const DayNightSelector = ({ onChange }: ToggleSwitchProps) => {
 
   const handleToggle = () => {
     setSwitchPosition(switchPosition === 'day' ? 'night' : 'day');
-    onChange(switchPosition);
   };
+
+  useEffect(() => {
+    onChange(switchPosition)
+  }, [switchPosition])
+  
 
   return (
     <div css={containerCss}>

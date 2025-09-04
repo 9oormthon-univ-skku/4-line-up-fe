@@ -12,10 +12,17 @@ import {
 import type { Booth } from '@/types/schema';
 import Card from '@/components/Card';
 import BoothInfoModal from './BoothInfoModal';
-import DateSelector, { type LabelsType } from '@/components/Selector/DateSelector';
+import DateSelector, {
+  type valueType,
+} from '@/components/Selector/DateSelector';
 import DayNightSelector from '@/components/Selector/DayNightSelector';
 import { getBooths } from '@/api';
-import { days } from '@/api/mockData';
+import { days, imageList } from '@/constants';
+import dayjs, { type Dayjs } from 'dayjs';
+import isBetween from 'dayjs/plugin/isBetween';
+// import { boothsData } from '@/api/mockData';
+
+dayjs.extend(isBetween);
 
 const mapImgSize = { h: '1000px', w: '750px' };
 // const mapImgSize = {h: '2000px', w: '1500px'}
@@ -49,15 +56,10 @@ const containerCss = css`
     gap: 16px;
   }
 `;
-
-const mapImageSrc = ['/img-01.jpg', '/img-02.jpg'];
-const dateLabels: LabelsType = {
-  left: days[0].format('M/D'),
-  right: days[1].format('M/D'),
-  center: days.at(2)?.format('M/D'),
-};
+const dayNightBoundary = 18;
 
 const secondMapScale = 1.9;
+const mapImageSrc = imageList.slice(0, 2);
 const MapImg = () =>
   useTransformComponent(({ state }) => (
     <>
@@ -74,9 +76,38 @@ const MapImg = () =>
     </>
   ));
 
+const valueIdx = {
+  left: 0,
+  right: 1,
+  center: 2,
+};
+
+const filterBooths = (
+  booths: Booth[],
+  date: Dayjs,
+  dayOrNight: 'day' | 'night',
+  areaId?: number
+): Booth[] => {
+  console.log(
+    `date: ${date?.format('MM/DD')} areaId:${areaId} all booths:`,
+    booths
+  );
+  return booths
+    .filter((booth) => date.isSame(booth.hour.open, 'day'))
+    .filter((booth) =>
+      dayOrNight === 'day'
+        ? booth.hour.open.isBefore(date.add(dayNightBoundary, 'h'))
+        : booth.hour.close.isAfter(date.add(dayNightBoundary, 'h'))
+    );
+  // TODO: area filtering
+};
+
 const MapPage = () => {
   const transformComponentRef = useRef<ReactZoomPanPinchRef | null>(null);
   const [booths, setBooths] = useState<Booth[]>([]);
+  const [currentBooths, setCurrentBooths] = useState<Booth[]>([]);
+  const [currentDay, setCurrentDay] = useState<Dayjs>(days[0]);
+  const [dayOrNight, setDayOrNight] = useState<'day' | 'night'>('day');
   const [selectedBooth, setSelectedBooth] = useState<Booth | null>(null);
   const zoomTo = (elementId: string, scale?: number) => {
     if (!transformComponentRef.current) {
@@ -88,17 +119,35 @@ const MapPage = () => {
     setSelectedBooth(booths.find((e) => `m${e.id}` === elementId) ?? null);
   };
   const onDateChange = (value: string) => {
-    console.log(value);
-    //TODO: filter boothData
+    // console.log(value, days.at(valueIdx[value as valueType]));
+    setCurrentDay(days.at(valueIdx[value as valueType]) ?? currentDay);
   };
   const onDayNightChange = (value: string) => {
     console.log(value);
+    setDayOrNight(value as 'day' | 'night');
   };
 
   useEffect(() => {
     // setBooths(boothsData); // Mockup data
     getBooths(setBooths);
+
+    if (
+      dayjs().isBetween(days[0], days.at(-1), 'day', '[]') && // during fest and..
+      days.some((day) => day.isSame(dayjs(), 'day')) // today exist in days
+    ) {
+      setCurrentDay(dayjs().startOf('date'));
+      // if during festival, set default day with TODAY 00:00
+      console.log('enjoy the festival!');
+      // TODO: set selector props
+    }
   }, []);
+
+  useEffect(() => {
+    setCurrentBooths(filterBooths(booths, currentDay, dayOrNight));
+    if (transformComponentRef.current) {
+      transformComponentRef.current.zoomIn(0); // KeepScale bugfix
+    }
+  }, [currentDay, booths, dayOrNight]);
 
   return (
     <div css={containerCss}>
@@ -112,7 +161,7 @@ const MapPage = () => {
           contentClass='transformContent'
         >
           <div className='markers'>
-            {booths.map((e, i) => (
+            {currentBooths.map((e, i) => (
               <Marker
                 key={i}
                 point={e.point}
@@ -129,7 +178,7 @@ const MapPage = () => {
           </div>
         </TransformComponent>
         <MapDrawer selected={selectedBooth} setSelected={setSelectedBooth}>
-          {booths.map((e, i) => (
+          {currentBooths.map((e, i) => (
             <Card
               title={e.name}
               desc={e.description}
@@ -155,7 +204,7 @@ const MapPage = () => {
         </BoothInfoModal>
       )}
       <div className='controlPanels'>
-        <DateSelector labels={dateLabels} onChange={onDateChange} />
+        <DateSelector onChange={onDateChange} />
         <DayNightSelector onChange={onDayNightChange} />
       </div>
     </div>

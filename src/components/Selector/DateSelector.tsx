@@ -1,3 +1,4 @@
+import { days } from '@/constants';
 import { colors, fonts, shadows } from '@/styles/styles';
 import { css } from '@emotion/react';
 import { useState, useRef, useEffect } from 'react';
@@ -68,11 +69,17 @@ export type LabelsType = {
 };
 
 interface TripleToggleSwitchProps {
-  labels: LabelsType;
+  labels?: LabelsType;
   onChange: (value: valueType) => void;
 }
 
-const DateSelector = ({ labels, onChange }: TripleToggleSwitchProps) => {
+const dateLabels: LabelsType = {
+  left: days[0].format('M/D'),
+  right: days[1].format('M/D'),
+  center: days.at(2)?.format('M/D'),
+};
+
+const DateSelector = ({ labels=dateLabels, onChange }: TripleToggleSwitchProps) => {
   const [switchPosition, setSwitchPosition] = useState<valueType>('left');
   const [switchStyles, setSwitchStyles] = useState({ width: 0, transform: 0 });
 
@@ -117,7 +124,7 @@ const DateSelector = ({ labels, onChange }: TripleToggleSwitchProps) => {
             ref={(el) => {
               labelRefs.current[key] = el;
             }}
-            className={`${key}-label ${switchPosition === key ? 'selected-font' : ''}`}
+            className={`${switchPosition === key ? 'selected-font' : ''}`}
             htmlFor={key}
           >
             <input

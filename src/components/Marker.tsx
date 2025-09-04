@@ -17,7 +17,7 @@ const markerCss = css`
     ${shadows.dropBottom}
   }
   path {
-    stroke: ${colors.primary20};
+    stroke: ${colors.primary30};
   }
   .markerIcon {
     width: 24px;
@@ -32,7 +32,7 @@ const markerCss = css`
 
 const selectedCss = css`
   color: ${colors.primary20};
-  path {
+  svg * {
     stroke: ${colors.primary30} !important;
   }
 `;
@@ -56,9 +56,9 @@ const Marker = ({
       onClick={props.onClick}
       css={[markerCss, selected && selectedCss]}
       style={{
-        bottom: `${point.x}px`,
-        left: `${point.y}px`,
-        color: color ? color : '',
+        bottom: `${point.y}px`,
+        left: `${point.x}px`,
+        // color: color ? color : '',
       }}
       {...props}
     >
