@@ -8,7 +8,7 @@ import TimetableTable from './TimetableTable';
 import { Link } from 'react-router-dom';
 import type { Timeslot } from '@/types/schema';
 import { getTimeSlots } from '@/api';
-import dayjs from 'dayjs';
+import dayjs, { Dayjs } from 'dayjs';
 import duration from 'dayjs/plugin/duration';
 import { days } from '@/constants';
 // import { timeslotData } from '@/api/mockData';
@@ -72,34 +72,53 @@ const valueIdx = {
 };
 const hourRange = { start: 9, end: 21 }; // TODO: 응답 데이터 최대 최소 시각 동적으로 구하기
 
+const filterTimslots = (timeslots: Timeslot[], date: Dayjs) => {
+  console.log(`date: ${date?.format('MM/DD')} all timeslots:`, timeslots);
+  return timeslots.filter((timeslot) => date.isSame(timeslot.startTime, 'day'));
+};
+
 const Timetable = () => {
   const [timeslots, setTimeslots] = useState<Timeslot[]>([]);
-  const [selectedDate, setSelectedDate] = useState<dayjs.Dayjs | undefined>(
-    days[0]
-  );
+  const [currentTimeslots, setCurrentTimeslots] = useState<Timeslot[]>([]);
+  const [currentDay, setCurrentDay] = useState<dayjs.Dayjs>(days[0]);
   const onDateChange = (value: string) => {
     // console.log(value);
-    setSelectedDate(days.at(valueIdx[value as valueType]));
+    setCurrentDay(days.at(valueIdx[value as valueType]) ?? currentDay);
   };
 
   useEffect(() => {
     // setTimeslots(timeslotData); // Mockup data
     getTimeSlots(setTimeslots);
+
+    if (
+      dayjs().isBetween(days[0], days.at(-1), 'day', '[]') && // during fest and..
+      days.some((day) => day.isSame(dayjs(), 'day')) // today exist in days
+    ) {
+      setCurrentDay(dayjs().startOf('date'));
+      // if during festival, set default day with TODAY 00:00
+      console.log('enjoy the festival!');
+      // TODO: set selector props
+    }
   }, []);
+
+  useEffect(() => {
+    console.log(currentDay.format('MMDD HHmm'));
+    setCurrentTimeslots(filterTimslots(timeslots, currentDay));
+  }, [currentDay, timeslots]);
 
   return (
     <div css={containerCss}>
       <header>
         <h1>Time Line</h1>
         <DateSelector onChange={onDateChange} />
-        <h2>{selectedDate?.format('MM.DD')}</h2>
+        <h2>{currentDay?.format('MM.DD')}</h2>
       </header>
       <section>
         <TimetableTable
           rangeStartHour={hourRange.start}
           rangeEndHour={hourRange.end}
         >
-          {timeslots.map((timeslot, i) => {
+          {currentTimeslots.map((timeslot, i) => {
             const startTime = timeslot.startTime;
             const endTime = timeslot.endTime;
             const top =
