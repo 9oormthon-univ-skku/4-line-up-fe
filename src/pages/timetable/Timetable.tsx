@@ -52,7 +52,7 @@ const containerCss = css`
 
 const itemCss = css`
   position: absolute;
-  width: 30%;
+  width: 100%;
   background-color: ${colors.primary};
   color: ${colors.white};
   border: 2px solid ${colors.primary20};
@@ -70,7 +70,7 @@ const valueIdx = {
   right: 1,
   center: 2,
 };
-const hourRange = { start: 9, end: 21 }; // TODO: 응답 데이터 최대 최소 시각 동적으로 구하기
+const hourRange = { start: 12, end: 23 }; // TODO: 응답 데이터 최대 최소 시각 동적으로 구하기
 
 const filterTimslots = (timeslots: Timeslot[], date: Dayjs) => {
   console.log(`date: ${date?.format('MM/DD')} all timeslots:`, timeslots);
@@ -140,7 +140,6 @@ const Timetable = () => {
                 style={{
                   top: `${top * 44 - 2}px`,
                   height: `${duration * 44 + 2}px`,
-                  left: i % 2 === 0 ? '0' : '50%',
                 }}
                 key={i}
                 to={timeslot.href ?? ''}
