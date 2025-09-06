@@ -54,6 +54,7 @@ const containerCss = css`
     padding: 24px;
     padding-bottom: 0;
     #notice-detail {
+      position: relative;
       width: 100%;
       height: 100%;
       min-height: 0;
