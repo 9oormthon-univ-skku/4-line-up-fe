@@ -4,6 +4,7 @@ import type { ComponentProps } from 'react';
 
 const tableCss = css`
   width: 100%;
+  position: relative;
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -36,8 +37,18 @@ const tableCss = css`
   .item-wrapper {
     position: absolute;
     height: 100%;
-    width: calc(100% - 8.4rem - 8px);
-    right: 0;
+    width: 100%;
+    /* width: calc(100% - 8.4rem - 8px); */
+    /* right: 0; */
+    display: flex;
+    .column-place {
+      width: 8.4rem;
+    }
+    .items {
+      position: relative;
+      flex-grow: 1;
+      margin: 0 8px;
+    }
   }
   // calc(2.4rem + 20px) per line
 `;
@@ -64,7 +75,12 @@ const TimetableTable = ({
           <div className="inner-line"></div>
         </div>
       ))}
-      <div className="item-wrapper">{children}</div>
+      <div className="item-wrapper">
+        <div className="column-place"/>
+        <div className="items">
+          {children}
+        </div>
+      </div>
     </div>
   );
 };
