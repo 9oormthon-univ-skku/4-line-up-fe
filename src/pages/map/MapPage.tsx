@@ -20,6 +20,7 @@ import { getBooths } from '@/api';
 import { days, imageList } from '@/constants';
 import dayjs, { type Dayjs } from 'dayjs';
 import isBetween from 'dayjs/plugin/isBetween';
+import { useNavigate } from 'react-router-dom';
 // import { boothsData } from '@/api/mockData';
 
 dayjs.extend(isBetween);
@@ -127,6 +128,8 @@ const MapPage = () => {
     setDayOrNight(value as 'day' | 'night');
   };
 
+  const navigate = useNavigate();
+
   useEffect(() => {
     // setBooths(boothsData); // Mockup data
     getBooths(setBooths);
@@ -198,7 +201,8 @@ const MapPage = () => {
             imgUrl={selectedBooth.images?.at(0)}
             btnText='자세히 보기'
             btnOnClick={() => {
-              alert(`btn ${selectedBooth.id} clicked.`);
+              // alert(`btn ${selectedBooth.id} clicked.`);
+              navigate(`/booths/${selectedBooth.id}`);
             }}
           />
         </BoothInfoModal>
