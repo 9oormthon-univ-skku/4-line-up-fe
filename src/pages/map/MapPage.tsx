@@ -27,7 +27,7 @@ import MapImg2 from '@images/map-img-lv2.svg';
 
 dayjs.extend(isBetween);
 
-const mapImgSize = { h: '750px', w: '575px' };
+const mapImgSize = { h: '1000px', w: '660px' };
 // const mapImgSize = {h: '2000px', w: '1500px'}
 
 const containerCss = css`
@@ -69,7 +69,7 @@ const MapImg = () =>
       <img
         id='mapImg'
         src={MapImg1}
-        className={state.scale < secondMapScale ? '' : 'hidden'}
+        className={state.scale <= secondMapScale ? '' : 'hidden'}
       />
       <img
         id='mapImg'
@@ -112,6 +112,7 @@ const MapPage = () => {
   const [currentDay, setCurrentDay] = useState<Dayjs>(days[0]);
   const [dayOrNight, setDayOrNight] = useState<'day' | 'night'>('day');
   const [selectedBooth, setSelectedBooth] = useState<Booth | null>(null);
+  const [onlyOnce, setOnlyOnce] = useState(false);
   const zoomTo = (elementId: string, scale?: number) => {
     if (!transformComponentRef.current) {
       return;
@@ -135,7 +136,7 @@ const MapPage = () => {
   useEffect(() => {
     // setBooths(boothsData); // Mockup data
     getBooths(setBooths);
-
+    setOnlyOnce(true); // resolve collision between TransformWrapper's 'centerOnInit' prop and bugfix of KeepScale
     if (
       dayjs().isBetween(days[0], days.at(-1), 'day', '[]') && // during fest and..
       days.some((day) => day.isSame(dayjs(), 'day')) // today exist in days
@@ -149,7 +150,8 @@ const MapPage = () => {
 
   useEffect(() => {
     setCurrentBooths(filterBooths(booths, currentDay, dayOrNight));
-    if (transformComponentRef.current) {
+    if (transformComponentRef.current && onlyOnce) {
+      console.log("transform state: ", transformComponentRef.current.state)
       transformComponentRef.current.zoomIn(0); // KeepScale bugfix
     }
   }, [currentDay, booths, dayOrNight]);
@@ -158,6 +160,7 @@ const MapPage = () => {
     <div css={containerCss}>
       <TransformWrapper
         centerZoomedOut
+        initialScale={1.3}
         centerOnInit
         ref={transformComponentRef}
       >
