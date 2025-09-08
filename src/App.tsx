@@ -6,6 +6,7 @@ import MapPage from '@/pages/map/MapPage';
 import Notice from '@/pages/notice/Notice';
 import TestPage from '@/pages/TestPage';
 import Timetable from './pages/timetable/Timetable';
+import BoothDetail from './pages/booths/BoothDetail';
 
 const router = createBrowserRouter([
   {
@@ -30,6 +31,10 @@ const router = createBrowserRouter([
       {
         path: 'map',
         element: <MapPage />,
+      },
+      {
+        path: 'booths/:boothId',
+        element: <BoothDetail />,
       },
     ],
   },

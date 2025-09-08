@@ -1,4 +1,4 @@
-import type dayjs from "dayjs";
+import type dayjs from 'dayjs';
 
 interface BaseEntity {
   id: number;
@@ -44,7 +44,7 @@ export interface Area extends BaseEntity {
   links?: Link[];
 }
 
-export interface Booth extends BaseEntity {
+interface BoothBase extends BaseEntity {
   dtype: 'marker' | 'gate' | 'stop' | 'store';
   category: Category;
   area: Area;
@@ -63,15 +63,23 @@ interface Menu extends BaseEntity {
   price: number;
 }
 
-export interface Gate extends Booth {
+interface Marker extends BoothBase {
+  dtype: 'marker';
+}
+interface Gate extends BoothBase {
+  dtype: 'gate';
   type: 'ENTRY' | 'EXIT' | 'ALL';
 }
-export interface Stop extends Booth {
+interface Stop extends BoothBase {
+  dtype: 'stop';
   times: dayjs.Dayjs[];
 }
-export interface Store extends Booth {
+interface Store extends BoothBase {
+  dtype: 'store';
   menus: Menu[];
 }
+
+export type Booth = Marker | Gate | Stop | Store;
 
 export interface Timeslot extends BaseEntity {
   id: number;

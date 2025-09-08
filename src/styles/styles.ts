@@ -18,6 +18,7 @@ export const colors = {
   primary10: '#EEFBEE',
   white: '#FFFFFF',
   black: '#000000',
+  gray40: '#404040',
 };
 export const gradients = {};
 
@@ -100,5 +101,16 @@ export const fonts = {
     font-family: 'Pretendard Variable';
     font-size: 1.2rem;
     font-weight: 400;
+  `,
+
+  desc_lg: css`
+    font-family: 'Roboto Mono';
+    font-size: 2rem;
+    font-weight: bold;
+  `,
+  desc_md: css`
+    font-family: 'Roboto Mono';
+    font-size: 1.5rem;
+    font-weight: bold;
   `,
 };

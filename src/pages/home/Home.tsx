@@ -43,7 +43,10 @@ const Home = () => {
   return (
     <div css={containerCss}>
       <h1 css={fonts.title_lg}>{festivalTitle}</h1>
-      <Gallery images={galleryImgages} onClick={()=> navigate('/notice')}/>
+      <Gallery
+        images={galleryImgages}
+        onSlideClick={() => navigate('/notice')}
+      />
       <HomeContents dateList={days} />
       <footer
         css={[
@@ -53,7 +56,9 @@ const Home = () => {
             bottom: 44px;
           `,
         ]}
-      >{festivalTitle}</footer>
+      >
+        {festivalTitle}
+      </footer>
     </div>
   );
 };
