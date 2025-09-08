@@ -112,7 +112,8 @@ const MapPage = () => {
   const [currentDay, setCurrentDay] = useState<Dayjs>(days[0]);
   const [dayOrNight, setDayOrNight] = useState<'day' | 'night'>('day');
   const [selectedBooth, setSelectedBooth] = useState<Booth | null>(null);
-  const [onlyOnce, setOnlyOnce] = useState(false);
+  const [defaultVal, setDefaultVal] = useState<valueType>();
+  const [runOnlyOnce, setRunOnlyOnce] = useState(true);
   const zoomTo = (elementId: string, scale?: number) => {
     if (!transformComponentRef.current) {
       return;
@@ -130,13 +131,20 @@ const MapPage = () => {
     console.log(value);
     setDayOrNight(value as 'day' | 'night');
   };
+  const setDaySelector = (date: Dayjs) => {
+    setDefaultVal(
+      Object.keys(valueIdx).at(
+        days.findIndex((tgt) => tgt.isSame(date))
+      ) as valueType
+    );
+  };
 
   const navigate = useNavigate();
 
   useEffect(() => {
     // setBooths(boothsData); // Mockup data
     getBooths(setBooths);
-    setOnlyOnce(true); // resolve collision between TransformWrapper's 'centerOnInit' prop and bugfix of KeepScale
+    setRunOnlyOnce(false); // resolve collision between TransformWrapper's 'centerOnInit' prop and bugfix of KeepScale
     if (
       dayjs().isBetween(days[0], days.at(-1), 'day', '[]') && // during fest and..
       days.some((day) => day.isSame(dayjs(), 'day')) // today exist in days
@@ -144,13 +152,13 @@ const MapPage = () => {
       setCurrentDay(dayjs().startOf('date'));
       // if during festival, set default day with TODAY 00:00
       console.log('enjoy the festival!');
-      // TODO: set selector props
+      setDaySelector(dayjs().startOf('date'));
     }
   }, []);
 
   useEffect(() => {
     setCurrentBooths(filterBooths(booths, currentDay, dayOrNight));
-    if (transformComponentRef.current && onlyOnce) {
+    if (transformComponentRef.current && runOnlyOnce===false) {
       console.log("transform state: ", transformComponentRef.current.state)
       transformComponentRef.current.zoomIn(0); // KeepScale bugfix
     }
@@ -213,7 +221,7 @@ const MapPage = () => {
         </BoothInfoModal>
       )}
       <div className='controlPanels'>
-        <DateSelector onChange={onDateChange} />
+        <DateSelector onChange={onDateChange} defaultValue={defaultVal}/>
         <DayNightSelector onChange={onDayNightChange} />
       </div>
     </div>

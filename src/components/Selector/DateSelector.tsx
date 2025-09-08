@@ -70,6 +70,7 @@ export type LabelsType = {
 
 interface TripleToggleSwitchProps {
   labels?: LabelsType;
+  defaultValue?: valueType;
   onChange: (value: valueType) => void;
 }
 
@@ -79,8 +80,8 @@ const dateLabels: LabelsType = {
   center: days.at(2)?.format('M/D'),
 };
 
-const DateSelector = ({ labels=dateLabels, onChange }: TripleToggleSwitchProps) => {
-  const [switchPosition, setSwitchPosition] = useState<valueType>('left');
+const DateSelector = ({ labels=dateLabels, defaultValue='left', onChange }: TripleToggleSwitchProps) => {
+  const [switchPosition, setSwitchPosition] = useState<valueType>(defaultValue);
   const [switchStyles, setSwitchStyles] = useState({ width: 0, transform: 0 });
 
   const labelRefs = useRef<{
@@ -91,6 +92,10 @@ const DateSelector = ({ labels=dateLabels, onChange }: TripleToggleSwitchProps) 
     setSwitchPosition(value as valueType);
     onChange(value as valueType);
   };
+
+  useEffect(() => {
+    setSwitchPosition(defaultValue);
+  }, [defaultValue]);  
 
   useEffect(() => {
     const selectedLabel = labelRefs.current[switchPosition];
