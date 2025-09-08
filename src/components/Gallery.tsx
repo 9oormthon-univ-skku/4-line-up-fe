@@ -1,6 +1,7 @@
 import { shadows } from '@/styles/styles';
 import { css } from '@emotion/react';
 import useEmblaCarousel from 'embla-carousel-react';
+import type { ComponentProps } from 'react';
 
 const galleryCss = css`
   /* overflow: hidden; */
@@ -22,23 +23,24 @@ const galleryCss = css`
   }
 `;
 
-interface GalleryProps {
+interface GalleryProps extends ComponentProps<'div'> {
   images: string[];
   size?: 'default' | 'small';
   loop?: boolean;
-  onClick?: (key: number) => void;
+  onSlideClick?: (key: number) => void;
 }
 
 const Gallery = ({
   images,
   size = 'default',
   loop = true,
-  onClick = () => {},
+  onSlideClick = () => {},
+  ...props
 }: GalleryProps) => {
   const [emblaRef] = useEmblaCarousel({ loop: loop });
 
   return (
-    <div css={galleryCss} ref={emblaRef} className='embla__viewport'>
+    <div css={galleryCss} ref={emblaRef} className='embla__viewport' {...props}>
       <div className='embla__container'>
         {images.map((e, i) => (
           <div
@@ -46,7 +48,7 @@ const Gallery = ({
             style={{ backgroundImage: `url(${e})` }}
             key={i}
             onClick={() => {
-              onClick(i);
+              onSlideClick(i);
             }}
           ></div>
         ))}

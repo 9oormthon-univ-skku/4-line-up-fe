@@ -141,13 +141,16 @@ const Notice = () => {
                   images={currentPost.images}
                   size='small'
                   loop={false}
-                  onClick={handleImageClick}
+                  onSlideClick={handleImageClick}
                 />
               </div>
               {imgModal && (
                 <>
                   <div id='inset' onClick={() => setImgModal(null)}>
-                  <div className="imgModal" style={{backgroundImage:`url(${imgModal})`}} />
+                    <div
+                      className='imgModal'
+                      style={{ backgroundImage: `url(${imgModal})` }}
+                    />
                   </div>
                 </>
               )}
