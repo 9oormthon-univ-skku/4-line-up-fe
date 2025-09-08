@@ -163,11 +163,6 @@ const BoothDetail = () => {
                     onClick={() => window.open(link.href)}
                   />
                 ))}
-                <Button
-                  size='lg'
-                  text='주점 사전예약'
-                  onClick={() => navigate('reserve')}
-                />
               </div>
             </div>
           ) : (
