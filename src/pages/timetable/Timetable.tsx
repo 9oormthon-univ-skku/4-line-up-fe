@@ -5,7 +5,7 @@ import DateSelector, {
   type valueType,
 } from '@/components/Selector/DateSelector';
 import TimetableTable from './TimetableTable';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import type { Timeslot } from '@/types/schema';
 import { getTimeSlots } from '@/api';
 import dayjs, { Dayjs } from 'dayjs';
@@ -85,12 +85,15 @@ const Timetable = () => {
     // console.log(value);
     setCurrentDay(days.at(valueIdx[value as valueType]) ?? currentDay);
   };
+  const location = useLocation();
 
   useEffect(() => {
     // setTimeslots(timeslotData); // Mockup data
     getTimeSlots(setTimeslots);
 
-    if (
+    if(location.state?.date){
+      setCurrentDay(location.state.date as Dayjs);
+    } else if (
       dayjs().isBetween(days[0], days.at(-1), 'day', '[]') && // during fest and..
       days.some((day) => day.isSame(dayjs(), 'day')) // today exist in days
     ) {
@@ -102,7 +105,7 @@ const Timetable = () => {
   }, []);
 
   useEffect(() => {
-    console.log(currentDay.format('MMDD HHmm'));
+    // console.log(currentDay.format('MMDD HHmm'));
     setCurrentTimeslots(filterTimslots(timeslots, currentDay));
   }, [currentDay, timeslots]);
 
