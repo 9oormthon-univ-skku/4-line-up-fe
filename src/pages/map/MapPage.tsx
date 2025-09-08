@@ -205,7 +205,7 @@ const MapPage = () => {
             desc={selectedBooth.description}
             imgUrl={selectedBooth.images?.at(0)}
             btnText='자세히 보기'
-            btnOnClick={() => {
+            onClick={() => {
               // alert(`btn ${selectedBooth.id} clicked.`);
               navigate(`/booths/${selectedBooth.id}`);
             }}
