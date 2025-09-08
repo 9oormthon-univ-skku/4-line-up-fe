@@ -13,6 +13,7 @@ import { BannerLinkUrl } from '@/constants';
 
 const containerCss = css`
   height: 100%;
+  overflow-x: hidden;
   overflow-y: scroll;
   background-color: ${colors.primary10};
   color: ${colors.primary};
@@ -56,8 +57,9 @@ const containerCss = css`
     #notice-detail {
       position: relative;
       width: 100%;
-      height: 100%;
-      min-height: 0;
+      flex-grow: 1;
+      /* min-height: 0; */
+      max-height: 80vh;
       border-radius: 14px 14px 0 0;
       background-color: ${colors.primary};
       ${shadows.dropBottom};
