@@ -17,22 +17,25 @@ import DateSelector, {
 } from '@/components/Selector/DateSelector';
 import DayNightSelector from '@/components/Selector/DayNightSelector';
 import { getBooths } from '@/api';
-import { days, imageList } from '@/constants';
+import { days } from '@/constants';
 import dayjs, { type Dayjs } from 'dayjs';
 import isBetween from 'dayjs/plugin/isBetween';
 import { useNavigate } from 'react-router-dom';
 // import { boothsData } from '@/api/mockData';
+import MapImg1 from '@images/map-img-lv1.svg';
+import MapImg2 from '@images/map-img-lv2.svg';
 
 dayjs.extend(isBetween);
 
-const mapImgSize = { h: '1000px', w: '750px' };
+const mapImgSize = { h: '750px', w: '575px' };
 // const mapImgSize = {h: '2000px', w: '1500px'}
 
 const containerCss = css`
   .transformWrapper {
     height: 100vh;
     width: 100%;
-    background-color: ${colors.primary10};
+    /* background-color: ${colors.primary10}; */
+    background-color: #2E4035;  // temp
   }
   .transformContent {
     height: ${mapImgSize.h};
@@ -60,18 +63,17 @@ const containerCss = css`
 const dayNightBoundary = 18;
 
 const secondMapScale = 1.9;
-const mapImageSrc = imageList.slice(0, 2);
 const MapImg = () =>
   useTransformComponent(({ state }) => (
     <>
       <img
         id='mapImg'
-        src={mapImageSrc[0]}
+        src={MapImg1}
         className={state.scale < secondMapScale ? '' : 'hidden'}
       />
       <img
         id='mapImg'
-        src={mapImageSrc[1]}
+        src={MapImg2}
         className={state.scale > secondMapScale ? '' : 'hidden'}
       />
     </>
