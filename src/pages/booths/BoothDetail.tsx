@@ -119,6 +119,8 @@ const BoothDetail = () => {
         <section>
           {booth.images && (
             <Gallery
+              dotControl
+              size='sqaure'
               onSlideClick={(key) => {
                 console.log(key);
               }}
