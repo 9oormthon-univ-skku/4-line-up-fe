@@ -31,7 +31,7 @@ const tableCss = css`
     .inner-line {
       border-bottom: 2px dotted ${colors.primary20};
       flex-grow: 1;
-      margin-bottom: calc(1.2rem + 8px);  // calc((2.4rem + 18px - 2px) / 2);
+      margin-bottom: calc(1.2rem + 8px); // calc((2.4rem + 18px - 2px) / 2);
     }
   }
   .item-wrapper {
@@ -72,14 +72,12 @@ const TimetableTable = ({
       {hourList.map((e, i) => (
         <div className='hour-line' key={i}>
           <div>{e}</div>
-          <div className="inner-line"></div>
+          <div className='inner-line'></div>
         </div>
       ))}
-      <div className="item-wrapper">
-        <div className="column-place"/>
-        <div className="items">
-          {children}
-        </div>
+      <div className='item-wrapper'>
+        <div className='column-place' />
+        <div className='items'>{children}</div>
       </div>
     </div>
   );

@@ -96,19 +96,21 @@ const Gallery = ({
           ></div>
         ))}
       </div>
-      {dotControl && <div className='embla__controls' css={dotsCss}>
-        <div className='embla__dots'>
-          {scrollSnaps.map((_, index) => (
-            <DotButton
-              key={index}
-              onClick={() => onDotButtonClick(index)}
-              className={'embla__dot'.concat(
-                index === selectedIndex ? ' embla__dot--selected' : ''
-              )}
-            />
-          ))}
+      {dotControl && (
+        <div className='embla__controls' css={dotsCss}>
+          <div className='embla__dots'>
+            {scrollSnaps.map((_, index) => (
+              <DotButton
+                key={index}
+                onClick={() => onDotButtonClick(index)}
+                className={'embla__dot'.concat(
+                  index === selectedIndex ? ' embla__dot--selected' : ''
+                )}
+              />
+            ))}
+          </div>
         </div>
-      </div>}
+      )}
     </div>
   );
 };

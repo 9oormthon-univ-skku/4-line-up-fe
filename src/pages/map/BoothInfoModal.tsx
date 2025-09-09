@@ -13,17 +13,17 @@ const BoothInfoModal = ({ children }: ComponentProps<'div'>) => {
         background-color: ${colors.primary20};
         ${shadows.dropBottom};
         h3 {
-            position: absolute;
-            top: -3.4rem;
-            right: 0;
-            padding: 0.8rem 24px;
-            border-radius: 8px 8px 0 0;
-            background-color: ${colors.primary20};
-            ${fonts.display_sm};
+          position: absolute;
+          top: -3.4rem;
+          right: 0;
+          padding: 0.8rem 24px;
+          border-radius: 8px 8px 0 0;
+          background-color: ${colors.primary20};
+          ${fonts.display_sm};
         }
       `}
     >
-        <h3>부스 간단 정보</h3>
+      <h3>부스 간단 정보</h3>
       {children}
     </div>
   );

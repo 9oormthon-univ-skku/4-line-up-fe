@@ -2,6 +2,7 @@ import { colors, fonts } from '@/styles/styles';
 import { css } from '@emotion/react';
 import { useEffect, useState } from 'react';
 import DateSelector, {
+  valueIdx,
   type valueType,
 } from '@/components/Selector/DateSelector';
 import TimetableTable from './TimetableTable';
@@ -65,11 +66,6 @@ const itemCss = css`
   }
 `;
 
-const valueIdx = {
-  left: 0,
-  right: 1,
-  center: 2,
-};
 const hourRange = { start: 12, end: 23 }; // TODO: 응답 데이터 최대 최소 시각 동적으로 구하기
 
 const filterTimslots = (timeslots: Timeslot[], date: Dayjs) => {
