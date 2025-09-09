@@ -46,9 +46,8 @@ const DayNightSelector = ({ onChange }: ToggleSwitchProps) => {
   };
 
   useEffect(() => {
-    onChange(switchPosition)
-  }, [switchPosition])
-  
+    onChange(switchPosition);
+  }, [switchPosition]);
 
   return (
     <div css={containerCss}>

@@ -3,6 +3,7 @@ import { css } from '@emotion/react';
 import Arrow0 from '@images/arrow-bold-down.svg?react';
 import Arrow1 from '@images/arrow-second.svg?react';
 import type dayjs from 'dayjs';
+import { useNavigate } from 'react-router-dom';
 
 const contentsCss = css`
   width: 101%;
@@ -16,7 +17,7 @@ const contentsCss = css`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  .date-wrapper:nth-of-type(2n+1) {
+  .date-wrapper:nth-of-type(2n + 1) {
     align-self: flex-end;
     right: 0;
   }
@@ -32,14 +33,14 @@ const contentsCss = css`
     right: 90px;
     top: 50px;
   }
-  .date-wrapper:nth-of-type(2n) .arrow{
+  .date-wrapper:nth-of-type(2n) .arrow {
     left: 100px;
-    svg{
+    svg {
       -webkit-transform: scaleX(-1);
       transform: scaleX(-1);
     }
   }
-  .date-wrapper:last-of-type .arrow{
+  .date-wrapper:last-of-type .arrow {
     display: none;
   }
 `;
@@ -47,25 +48,32 @@ interface HomeContentsProps {
   dateList: dayjs.Dayjs[];
 }
 const HomeContents = ({ dateList }: HomeContentsProps) => {
+  const navigate = useNavigate();
   return (
     <>
       <div css={contentsCss}>
-      <div
-        css={css`
-          position: relative;
-          top: -140px;
-          height: 0;
-          text-align: center;
-        `}
-      >
-        <Arrow0 />
-      </div>
+        <div
+          css={css`
+            position: relative;
+            top: -140px;
+            height: 0;
+            text-align: center;
+          `}
+        >
+          <Arrow0 />
+        </div>
         {dateList.map((date, i) => {
           return (
-            <div className='date-wrapper' key={i}>
+            <div
+              className='date-wrapper'
+              key={i}
+              onClick={() => navigate('/timetable', { state: { date: date } })}
+            >
               <div className='dayorder'>day{i + 1}</div>
-              <div className='date'>{date.format((i==0) ? 'MM.DD' : 'DD')}</div>
-              <div className="arrow"><Arrow1/></div>
+              <div className='date'>{date.format(i == 0 ? 'MM.DD' : 'DD')}</div>
+              <div className='arrow'>
+                <Arrow1 />
+              </div>
             </div>
           );
         })}

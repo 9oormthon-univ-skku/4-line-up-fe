@@ -103,7 +103,16 @@ const BoothDetail = () => {
     getBooths(setBooths);
   }, []);
   useEffect(() => {
-    setBooth(booths.find((e) => e.id === Number(param.boothId)));
+    if (booths.length > 0) {
+      const found = booths.find((e) => e.id === Number(param.boothId));
+      console.log("found:", found, booths, Number(param.boothId))
+      if (found) {
+        setBooth(found);
+      } else {
+        // Not Found
+        navigate('/home');
+      }
+    }
   }, [booths]);
 
   useEffect(() => {
@@ -119,6 +128,8 @@ const BoothDetail = () => {
         <section>
           {booth.images && (
             <Gallery
+              dotControl
+              size='sqaure'
               onSlideClick={(key) => {
                 console.log(key);
               }}

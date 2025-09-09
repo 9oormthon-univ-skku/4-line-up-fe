@@ -6,6 +6,7 @@ import SvgInline from './icons/SvgInline';
 import type { ComponentProps } from 'react';
 import { KeepScale } from 'react-zoom-pan-pinch';
 import type { Point } from '@/types/schema';
+import MarkerIcon from './icons/MarkerIcon';
 
 const markerCss = css`
   position: fixed;
@@ -42,6 +43,7 @@ interface MarkerProps extends ComponentProps<'div'> {
   iconUrl?: string;
   point: Point;
   color?: string;
+  categoryId?: number;
 }
 
 const Marker = ({
@@ -49,6 +51,7 @@ const Marker = ({
   iconUrl,
   point,
   color,
+  categoryId,
   ...props
 }: MarkerProps) => {
   return (
@@ -63,11 +66,14 @@ const Marker = ({
       {...props}
     >
       <MarkerPin />
+      {iconUrl ?
       <SvgInline
         className='markerIcon'
         url={iconUrl}
         defaultSvg={<DefaultMarkerIcon />}
-      />
+      />:
+        <MarkerIcon className='markerIcon' categoryId={categoryId} />
+      }
     </KeepScale>
   );
 };

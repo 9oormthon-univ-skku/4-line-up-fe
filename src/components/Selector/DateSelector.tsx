@@ -67,9 +67,15 @@ export type LabelsType = {
   center?: string;
   right: string;
 };
+export const valueIdx = {
+  left: 0,
+  right: 1,
+  center: 2,
+};
 
 interface TripleToggleSwitchProps {
   labels?: LabelsType;
+  defaultValue?: valueType;
   onChange: (value: valueType) => void;
 }
 
@@ -79,7 +85,11 @@ const dateLabels: LabelsType = {
   center: days.at(2)?.format('M/D'),
 };
 
-const DateSelector = ({ labels=dateLabels, onChange }: TripleToggleSwitchProps) => {
+const DateSelector = ({
+  labels = dateLabels,
+  defaultValue,
+  onChange,
+}: TripleToggleSwitchProps) => {
   const [switchPosition, setSwitchPosition] = useState<valueType>('left');
   const [switchStyles, setSwitchStyles] = useState({ width: 0, transform: 0 });
 
@@ -88,9 +98,17 @@ const DateSelector = ({ labels=dateLabels, onChange }: TripleToggleSwitchProps) 
   }>({});
 
   const handleSwitchChange = (value: string) => {
+    // console.log("value: ",value)
     setSwitchPosition(value as valueType);
     onChange(value as valueType);
   };
+
+  useEffect(() => {
+    // console.log("defaultvalue: ",defaultValue)
+    if(defaultValue){
+      handleSwitchChange(defaultValue);
+    }
+  }, [defaultValue]);
 
   useEffect(() => {
     const selectedLabel = labelRefs.current[switchPosition];
@@ -119,25 +137,25 @@ const DateSelector = ({ labels=dateLabels, onChange }: TripleToggleSwitchProps) 
         {labelKeys
           .filter((key) => labels[key])
           .map((key) => (
-          <label
-            key={key}
-            ref={(el) => {
-              labelRefs.current[key] = el;
-            }}
-            className={`${switchPosition === key ? 'selected-font' : ''}`}
-            htmlFor={key}
-          >
-            <input
-              defaultChecked={key === 'left'}
-              onChange={(e) => handleSwitchChange(e.target.value)}
-              name='date-switch'
-              id={key}
-              type='radio'
-              value={key}
-            />
-            <h4>{labels[key]}</h4>
-          </label>
-        ))}
+            <label
+              key={key}
+              ref={(el) => {
+                labelRefs.current[key] = el;
+              }}
+              className={`${switchPosition === key ? 'selected-font' : ''}`}
+              htmlFor={key}
+            >
+              <input
+                defaultChecked={key === defaultValue}
+                onChange={(e) => handleSwitchChange(e.target.value)}
+                name='date-switch'
+                id={key}
+                type='radio'
+                value={key}
+              />
+              <h4>{labels[key]}</h4>
+            </label>
+          ))}
       </div>
     </div>
   );

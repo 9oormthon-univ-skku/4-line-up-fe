@@ -1,41 +1,42 @@
-import Marker from '@/components/Marker';
+import { useEffect, useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { css } from '@emotion/react';
 import { colors } from '@/styles/styles';
-import { useEffect, useRef, useState } from 'react';
+import type { Booth } from '@/types/schema';
+import Marker from '@/components/Marker';
+import Card from '@/components/Card';
+import DateSelector, {
+  valueIdx,
+  type valueType,
+} from '@/components/Selector/DateSelector';
+import DayNightSelector from '@/components/Selector/DayNightSelector';
 import MapDrawer from './mapDrawer/MapDrawer';
+import BoothInfoModal from './BoothInfoModal';
+import { getBooths } from '@/api';
+import { days } from '@/constants';
+import MapImg1 from '@images/map-img-lv1.svg';
+import MapImg2 from '@images/map-img-lv2.svg';
+// import { boothsData } from '@/api/mockData';
+
 import {
   TransformComponent,
   TransformWrapper,
   useTransformComponent,
+  type ReactZoomPanPinchProps,
   type ReactZoomPanPinchRef,
 } from 'react-zoom-pan-pinch';
-import type { Booth } from '@/types/schema';
-import Card from '@/components/Card';
-import BoothInfoModal from './BoothInfoModal';
-import DateSelector, {
-  type valueType,
-} from '@/components/Selector/DateSelector';
-import DayNightSelector from '@/components/Selector/DayNightSelector';
-import { getBooths } from '@/api';
-import { days } from '@/constants';
 import dayjs, { type Dayjs } from 'dayjs';
 import isBetween from 'dayjs/plugin/isBetween';
-import { useNavigate } from 'react-router-dom';
-// import { boothsData } from '@/api/mockData';
-import MapImg1 from '@images/map-img-lv1.svg';
-import MapImg2 from '@images/map-img-lv2.svg';
-
 dayjs.extend(isBetween);
 
 const mapImgSize = { h: '1000px', w: '660px' };
-// const mapImgSize = {h: '2000px', w: '1500px'}
 
 const containerCss = css`
   .transformWrapper {
     height: 100vh;
     width: 100%;
     /* background-color: ${colors.primary10}; */
-    background-color: #2E4035;  // temp
+    background-color: #2e4035; // temp
   }
   .transformContent {
     height: ${mapImgSize.h};
@@ -60,9 +61,14 @@ const containerCss = css`
     gap: 16px;
   }
 `;
-const dayNightBoundary = 18;
+const dayNightBoundary = 18; // hour
+const secondMapScale = 1.9; // boundary between lv1 and lv2 img
+const transformWrapperProps: ReactZoomPanPinchProps = {
+  initialScale: 1.3,
+  centerZoomedOut: true,
+  centerOnInit: true,
+}; // map settings
 
-const secondMapScale = 1.9;
 const MapImg = () =>
   useTransformComponent(({ state }) => (
     <>
@@ -78,12 +84,6 @@ const MapImg = () =>
       />
     </>
   ));
-
-const valueIdx = {
-  left: 0,
-  right: 1,
-  center: 2,
-};
 
 const filterBooths = (
   booths: Booth[],
@@ -112,7 +112,9 @@ const MapPage = () => {
   const [currentDay, setCurrentDay] = useState<Dayjs>(days[0]);
   const [dayOrNight, setDayOrNight] = useState<'day' | 'night'>('day');
   const [selectedBooth, setSelectedBooth] = useState<Booth | null>(null);
-  const [onlyOnce, setOnlyOnce] = useState(false);
+  const [defaultVal, setDefaultVal] = useState<valueType>();
+  const [runOnlyOnce, setRunOnlyOnce] = useState(true);
+
   const zoomTo = (elementId: string, scale?: number) => {
     if (!transformComponentRef.current) {
       return;
@@ -122,6 +124,7 @@ const MapPage = () => {
     zoomToElement(elementId, scale ?? 3.0);
     setSelectedBooth(booths.find((e) => `m${e.id}` === elementId) ?? null);
   };
+
   const onDateChange = (value: string) => {
     // console.log(value, days.at(valueIdx[value as valueType]));
     setCurrentDay(days.at(valueIdx[value as valueType]) ?? currentDay);
@@ -131,12 +134,21 @@ const MapPage = () => {
     setDayOrNight(value as 'day' | 'night');
   };
 
+  const setDaySelector = (date: Dayjs) => {
+    setDefaultVal(
+      Object.keys(valueIdx).at(
+        days.findIndex((tgt) => tgt.isSame(date))
+      ) as valueType
+    );
+  };
+
   const navigate = useNavigate();
 
   useEffect(() => {
     // setBooths(boothsData); // Mockup data
     getBooths(setBooths);
-    setOnlyOnce(true); // resolve collision between TransformWrapper's 'centerOnInit' prop and bugfix of KeepScale
+
+    setRunOnlyOnce(false); // resolve collision between TransformWrapper's 'centerOnInit' prop and bugfix of KeepScale
     if (
       dayjs().isBetween(days[0], days.at(-1), 'day', '[]') && // during fest and..
       days.some((day) => day.isSame(dayjs(), 'day')) // today exist in days
@@ -144,26 +156,22 @@ const MapPage = () => {
       setCurrentDay(dayjs().startOf('date'));
       // if during festival, set default day with TODAY 00:00
       console.log('enjoy the festival!');
-      // TODO: set selector props
+      setDaySelector(dayjs().startOf('date'));
     }
   }, []);
 
   useEffect(() => {
     setCurrentBooths(filterBooths(booths, currentDay, dayOrNight));
-    if (transformComponentRef.current && onlyOnce) {
-      console.log("transform state: ", transformComponentRef.current.state)
+
+    if (transformComponentRef.current && runOnlyOnce === false) {
+      console.log('transform state: ', transformComponentRef.current.state);
       transformComponentRef.current.zoomIn(0); // KeepScale bugfix
     }
   }, [currentDay, booths, dayOrNight]);
 
   return (
     <div css={containerCss}>
-      <TransformWrapper
-        centerZoomedOut
-        initialScale={1.3}
-        centerOnInit
-        ref={transformComponentRef}
-      >
+      <TransformWrapper {...transformWrapperProps} ref={transformComponentRef}>
         <TransformComponent
           wrapperClass='transformWrapper'
           contentClass='transformContent'
@@ -174,7 +182,8 @@ const MapPage = () => {
                 key={i}
                 point={e.point}
                 id={`m${e.id}`}
-                iconUrl={e.category?.icon}
+                // iconUrl={e.category?.icon}
+                categoryId={e.category.id}
                 color={e.category?.color}
                 onClick={() => zoomTo(`m${e.id}`, 1.5)}
                 selected={selectedBooth?.id === e.id}
@@ -205,7 +214,7 @@ const MapPage = () => {
             desc={selectedBooth.description}
             imgUrl={selectedBooth.images?.at(0)}
             btnText='자세히 보기'
-            btnOnClick={() => {
+            onClick={() => {
               // alert(`btn ${selectedBooth.id} clicked.`);
               navigate(`/booths/${selectedBooth.id}`);
             }}
@@ -213,7 +222,7 @@ const MapPage = () => {
         </BoothInfoModal>
       )}
       <div className='controlPanels'>
-        <DateSelector onChange={onDateChange} />
+        <DateSelector onChange={onDateChange} defaultValue={defaultVal} />
         <DayNightSelector onChange={onDayNightChange} />
       </div>
     </div>

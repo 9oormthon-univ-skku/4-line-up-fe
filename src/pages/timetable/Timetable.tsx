@@ -2,10 +2,11 @@ import { colors, fonts } from '@/styles/styles';
 import { css } from '@emotion/react';
 import { useEffect, useState } from 'react';
 import DateSelector, {
+  valueIdx,
   type valueType,
 } from '@/components/Selector/DateSelector';
 import TimetableTable from './TimetableTable';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import type { Timeslot } from '@/types/schema';
 import { getTimeSlots } from '@/api';
 import dayjs, { Dayjs } from 'dayjs';
@@ -65,11 +66,6 @@ const itemCss = css`
   }
 `;
 
-const valueIdx = {
-  left: 0,
-  right: 1,
-  center: 2,
-};
 const hourRange = { start: 12, end: 23 }; // TODO: 응답 데이터 최대 최소 시각 동적으로 구하기
 
 const filterTimslots = (timeslots: Timeslot[], date: Dayjs) => {
@@ -81,28 +77,41 @@ const Timetable = () => {
   const [timeslots, setTimeslots] = useState<Timeslot[]>([]);
   const [currentTimeslots, setCurrentTimeslots] = useState<Timeslot[]>([]);
   const [currentDay, setCurrentDay] = useState<dayjs.Dayjs>(days[0]);
+  const [defaultVal, setDefaultVal] = useState<valueType>();
   const onDateChange = (value: string) => {
     // console.log(value);
     setCurrentDay(days.at(valueIdx[value as valueType]) ?? currentDay);
   };
+  const setDaySelector = (date: Dayjs) => {
+    setDefaultVal(
+      Object.keys(valueIdx).at(
+        days.findIndex((tgt) => tgt.isSame(date))
+      ) as valueType
+    );
+  };
+
+  const locState = useLocation().state;
 
   useEffect(() => {
     // setTimeslots(timeslotData); // Mockup data
     getTimeSlots(setTimeslots);
 
-    if (
+    if (locState?.date && locState.date instanceof dayjs) {
+      setCurrentDay(locState.date);
+      setDaySelector(locState.date);
+    } else if (
       dayjs().isBetween(days[0], days.at(-1), 'day', '[]') && // during fest and..
       days.some((day) => day.isSame(dayjs(), 'day')) // today exist in days
     ) {
       setCurrentDay(dayjs().startOf('date'));
       // if during festival, set default day with TODAY 00:00
       console.log('enjoy the festival!');
-      // TODO: set selector props
+      setDaySelector(dayjs().startOf('date'));
     }
   }, []);
 
   useEffect(() => {
-    console.log(currentDay.format('MMDD HHmm'));
+    // console.log(currentDay.format('MMDD HHmm'));
     setCurrentTimeslots(filterTimslots(timeslots, currentDay));
   }, [currentDay, timeslots]);
 
@@ -110,7 +119,7 @@ const Timetable = () => {
     <div css={containerCss}>
       <header>
         <h1>Time Line</h1>
-        <DateSelector onChange={onDateChange} />
+        <DateSelector onChange={onDateChange} defaultValue={defaultVal} />
         <h2>{currentDay?.format('MM.DD')}</h2>
       </header>
       <section>
