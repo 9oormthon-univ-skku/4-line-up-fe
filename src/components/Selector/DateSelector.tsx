@@ -87,10 +87,10 @@ const dateLabels: LabelsType = {
 
 const DateSelector = ({
   labels = dateLabels,
-  defaultValue = 'left',
+  defaultValue,
   onChange,
 }: TripleToggleSwitchProps) => {
-  const [switchPosition, setSwitchPosition] = useState<valueType>(defaultValue);
+  const [switchPosition, setSwitchPosition] = useState<valueType>('left');
   const [switchStyles, setSwitchStyles] = useState({ width: 0, transform: 0 });
 
   const labelRefs = useRef<{
@@ -98,12 +98,16 @@ const DateSelector = ({
   }>({});
 
   const handleSwitchChange = (value: string) => {
+    // console.log("value: ",value)
     setSwitchPosition(value as valueType);
     onChange(value as valueType);
   };
 
   useEffect(() => {
-    setSwitchPosition(defaultValue);
+    // console.log("defaultvalue: ",defaultValue)
+    if(defaultValue){
+      handleSwitchChange(defaultValue);
+    }
   }, [defaultValue]);
 
   useEffect(() => {
@@ -142,7 +146,7 @@ const DateSelector = ({
               htmlFor={key}
             >
               <input
-                defaultChecked={key === 'left'}
+                defaultChecked={key === defaultValue}
                 onChange={(e) => handleSwitchChange(e.target.value)}
                 name='date-switch'
                 id={key}
