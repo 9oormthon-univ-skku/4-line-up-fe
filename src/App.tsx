@@ -4,7 +4,7 @@ import Layout from '@/pages/Layout';
 import Home from '@/pages/home/Home';
 import MapPage from '@/pages/map/MapPage';
 import Notice from '@/pages/notice/Notice';
-import TestPage from '@/pages/TestPage';
+// import TestPage from '@/pages/TestPage';
 import Timetable from './pages/timetable/Timetable';
 import BoothDetail from './pages/booths/BoothDetail';
 
@@ -36,12 +36,16 @@ const router = createBrowserRouter([
         path: 'booths/:boothId',
         element: <BoothDetail />,
       },
+      {
+        path: '*',
+        element: <MainPage />,
+      },
     ],
   },
-  {
-    path: 'test',
-    element: <TestPage />,
-  },
+  // {
+  //   path: 'test',
+  //   element: <TestPage />,
+  // },
 ]);
 
 function App() {
