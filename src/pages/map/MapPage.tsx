@@ -182,7 +182,8 @@ const MapPage = () => {
                 key={i}
                 point={e.point}
                 id={`m${e.id}`}
-                iconUrl={e.category?.icon}
+                // iconUrl={e.category?.icon}
+                categoryId={e.category.id}
                 color={e.category?.color}
                 onClick={() => zoomTo(`m${e.id}`, 1.5)}
                 selected={selectedBooth?.id === e.id}
