@@ -1,3 +1,4 @@
+import { imageList } from '@/api/mockData';
 import Banner from '@/components/Banner';
 import Button from '@/components/Button';
 import Card from '@/components/Card';
@@ -5,7 +6,6 @@ import Gallery from '@/components/Gallery';
 import Star from '@/components/icons/Star';
 import DateSelector from '@/components/Selector/DateSelector';
 import DayNightSelector from '@/components/Selector/DayNightSelector';
-import { imageList } from '@/constants';
 import { css } from '@emotion/react';
 
 const dateSelectorLabels = {
