@@ -88,7 +88,7 @@ const containerCss = css`
 
     #inset {
       inset: 0;
-      height: 100%;
+      height: 100dvh;
       position: absolute;
       z-index: 10;
       background-color: #ffffff55;
