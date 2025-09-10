@@ -46,7 +46,8 @@ const squareCss = css`
   overflow: hidden;
   border-radius: 15px;
   .embla__slide {
-    height: 360px;
+    height: calc((100vw - 48px) * 1.25);
+    max-height: 537px;
     flex: 0 0 100%;
   }
 `;
