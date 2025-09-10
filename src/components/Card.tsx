@@ -11,6 +11,7 @@ const cardCss = css`
   background-color: ${colors.white};
   ${shadows.dropBottom};
   overflow: hidden;
+  flex-shrink: 0;
 
   .card-img {
     width: 9.5rem;
