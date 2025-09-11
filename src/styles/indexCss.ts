@@ -87,6 +87,7 @@ const indexCss = css`
     width: 100%;
     display: flex;
     justify-content: center;
+    overflow-y: hidden;
 
     font-size: 1.6rem;
     font-family: "Pretendard Variable";
