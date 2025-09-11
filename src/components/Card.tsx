@@ -2,6 +2,7 @@ import type { ComponentProps } from 'react';
 import Button from './Button';
 import { css } from '@emotion/react';
 import { colors, fonts, shadows } from '@/styles/styles';
+import defaultImg from '@images/eskara_thumbnail.jpg';
 
 const cardCss = css`
   display: flex;
@@ -58,7 +59,7 @@ interface CardProps extends ComponentProps<'div'> {
 }
 
 const Card = ({
-  imgUrl = '/img-01.jpg',
+  imgUrl = defaultImg,
   title,
   desc,
   btnText,

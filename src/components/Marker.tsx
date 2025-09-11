@@ -32,6 +32,7 @@ const markerCss = css`
 `;
 
 const selectedCss = css`
+z-index: 5;
   color: ${colors.primary20};
   svg * {
     stroke: ${colors.primary30} !important;
@@ -59,8 +60,8 @@ const Marker = ({
       onClick={props.onClick}
       css={[markerCss, selected && selectedCss]}
       style={{
-        bottom: `${point.y}px`,
-        left: `${point.x}px`,
+        bottom: `${point.y - 39.5}px`,
+        left: `${point.x - 29}px`,
         // color: color ? color : '',
       }}
       {...props}

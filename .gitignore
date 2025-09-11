@@ -13,6 +13,7 @@ dist-ssr
 *.local
 
 src/api/mockData.ts
+src/pages/TestPage.tsx
 
 # Editor directories and files
 .vscode/*

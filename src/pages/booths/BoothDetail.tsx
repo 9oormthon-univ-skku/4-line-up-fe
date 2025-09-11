@@ -11,6 +11,7 @@ import 'dayjs/locale/ko';
 import Button from '@/components/Button';
 import Star from '@/components/icons/Star';
 import Card from '@/components/Card';
+import { BoldParsedP } from '@/components/BoldParsedP';
 // import { boothsData } from '@/api/mockData';
 dayjs.locale('ko');
 
@@ -43,6 +44,10 @@ const containerCss = css`
     flex-grow: 1;
     padding: 20px;
     padding-bottom: 36px;
+    display: flex; 
+    flex-direction: column;
+    gap: 8px;
+    
     background-color: ${colors.white};
     color: ${colors.gray40};
     border: 2px solid ${colors.primary20};
@@ -50,6 +55,9 @@ const containerCss = css`
     ${fonts.desc_md};
     h3 {
       ${fonts.desc_lg};
+    }
+    b{
+      font-weight: bolder;
     }
   }
   .star-wrapper {
@@ -139,12 +147,13 @@ const BoothDetail = () => {
           )}
           <article>
             <h3>{booth.name}</h3>
-            <p>{booth.category.name}</p>
+            <p css={css`color: ${colors.primary30};`}>{booth.category.name}</p>
             <p>
-              {`운영 시간: ${booth.hour.open.format('dd HH:mm')}~${booth.hour.close.format('HH:mm')}`}
+              {`${booth.hour.open.format('dd요일 운영시간: HH:mm')}~${booth.hour.close.format('HH:mm')}`}
               {booth.summary && `\n한줄 소개: ${booth.summary}`}
-              {booth.description && `\n\n${booth.description}`}
             </p>
+            {booth.description && <BoldParsedP text={`${booth.description}`}>
+            </BoldParsedP>}
           </article>
           {booth.dtype === 'store' ? (
             <div className='store-content'>

@@ -11,6 +11,7 @@ const BoothList = ({ children, ...props }: ComponentProps<'div'>) => {
         flex-direction: column;
         gap: 12px;
         overflow-y: scroll;
+        z-index: 1;
       `}
       {...props}
     >

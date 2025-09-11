@@ -18,12 +18,12 @@ class BadResponseFormatError extends Error {
   }
 }
 
-const parseDates = (data: any): any => {
+const parseDatesAndNewlines = (data: any): any => {
   if (typeof data !== 'object' || data === null) {
     return data;
   }
   if (Array.isArray(data)) {
-    return data.map((e) => parseDates(e));
+    return data.map((e) => parseDatesAndNewlines(e));
   }
   const newData: Record<string, any> = {};
   for (const k in data) {
@@ -38,8 +38,10 @@ const parseDates = (data: any): any => {
         ).isValid()
       ) {
         newData[k] = dayjs(v); // parse string to date
+      } else if (typeof v === 'string') {
+        newData[k] = v.replaceAll('\\n', '\n'); // newline
       } else if (typeof v === 'object') {
-        newData[k] = parseDates(v); // recursion
+        newData[k] = parseDatesAndNewlines(v); // recursion
       } else {
         newData[k] = v;
       }
@@ -53,7 +55,7 @@ axiosInstance.interceptors.response.use(
     if (response.headers['content-type'] !== 'application/json') {
       throw new BadResponseFormatError(response);
     }
-    response.data = parseDates(response.data);
+    response.data = parseDatesAndNewlines(response.data);
     return response;
   },
   (error) => {
