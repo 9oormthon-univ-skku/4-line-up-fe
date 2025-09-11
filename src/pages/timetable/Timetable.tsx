@@ -54,6 +54,10 @@ const containerCss = css`
 const itemCss = css`
   position: absolute;
   width: 100%;
+  display: flex;
+  flex-direction: column;
+  /* flex-wrap: wrap; */
+  overflow: hidden;
   background-color: ${colors.primary};
   color: ${colors.white};
   border: 2px solid ${colors.primary20};
@@ -65,8 +69,6 @@ const itemCss = css`
     opacity: 80%;
   }
 `;
-
-const hourRange = { start: 12, end: 23 }; // TODO: 응답 데이터 최대 최소 시각 동적으로 구하기
 
 const filterTimslots = (timeslots: Timeslot[], date: Dayjs) => {
   console.log(`date: ${date?.format('MM/DD')} all timeslots:`, timeslots);
@@ -91,6 +93,11 @@ const Timetable = () => {
   };
 
   const locState = useLocation().state;
+
+  const hourRange = {
+    start: Math.min(...currentTimeslots.map((e) => e.startTime.hour())) - 1,
+    end: 24,
+  }; // 배열의 최소 시각부터 시작
 
   useEffect(() => {
     // setTimeslots(timeslotData); // Mockup data
