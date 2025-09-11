@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { css } from '@emotion/react';
 import { colors } from '@/styles/styles';
-import type { Booth } from '@/types/schema';
+import type { Booth, Point } from '@/types/schema';
 import Marker from '@/components/Marker';
 import Card from '@/components/Card';
 import DateSelector, {
@@ -24,12 +24,13 @@ import {
   useTransformComponent,
   type ReactZoomPanPinchProps,
   type ReactZoomPanPinchRef,
+  type ReactZoomPanPinchState,
 } from 'react-zoom-pan-pinch';
 import dayjs, { type Dayjs } from 'dayjs';
 import isBetween from 'dayjs/plugin/isBetween';
 dayjs.extend(isBetween);
 
-const mapImgSize = { h: '1000px', w: '660px' };
+const mapImgSize = { h: 1000, w: 660 };
 
 const containerCss = css`
   .transformWrapper {
@@ -39,15 +40,15 @@ const containerCss = css`
     background-color: #2e4035; // temp
   }
   .transformContent {
-    height: ${mapImgSize.h};
-    width: ${mapImgSize.w};
+    height: ${mapImgSize.h}px;
+    width: ${mapImgSize.w}px;
   }
   .markers {
     position: absolute;
   }
   #mapImg {
-    height: ${mapImgSize.h};
-    width: ${mapImgSize.w};
+    height: ${mapImgSize.h}px;
+    width: ${mapImgSize.w}px;
   }
   .hidden {
     display: none;
@@ -105,10 +106,39 @@ const filterBooths = (
   // TODO: area filtering
 };
 
+const sortBooths = (
+  booths: Booth[],
+  transformState?: ReactZoomPanPinchState
+) => {
+  const getCenterPosition = (s: number, dx: number, dy: number) => {
+    return {
+      w: (window.innerWidth / 2 - dx) / s,
+      h: (window.innerHeight / 2 - dy) / s,
+    };
+  };
+  const getDist2 = (a: Point, b: any) => {
+    return (a.y - b.h) ** 2 + (a.x - b.w) ** 2;
+  };
+  const centerPosition = transformState
+    ? getCenterPosition(
+        transformState.scale,
+        transformState.positionX,
+        transformState.positionY
+      )
+    : { h: mapImgSize.h / 2, w: mapImgSize.w / 2 };
+  console.log(transformState, centerPosition);
+
+  return booths.sort(
+    (a, b) =>
+      getDist2(a.point, centerPosition) - getDist2(b.point, centerPosition)
+  );
+};
+
 const MapPage = () => {
   const transformComponentRef = useRef<ReactZoomPanPinchRef | null>(null);
   const [booths, setBooths] = useState<Booth[]>([]);
   const [currentBooths, setCurrentBooths] = useState<Booth[]>([]);
+  const [filteredBooths, setFilteredBooths] = useState<Booth[]>([]);
   const [currentDay, setCurrentDay] = useState<Dayjs>(days[0]);
   const [dayOrNight, setDayOrNight] = useState<'day' | 'night'>('day');
   const [selectedBooth, setSelectedBooth] = useState<Booth | null>(null);
@@ -161,13 +191,22 @@ const MapPage = () => {
   }, []);
 
   useEffect(() => {
-    setCurrentBooths(filterBooths(booths, currentDay, dayOrNight));
+    setFilteredBooths(filterBooths(booths, currentDay, dayOrNight));
 
     if (transformComponentRef.current && runOnlyOnce === false) {
       console.log('transform state: ', transformComponentRef.current.state);
       transformComponentRef.current.zoomIn(0); // KeepScale bugfix
     }
   }, [currentDay, booths, dayOrNight]);
+
+  useEffect(() => {
+    setCurrentBooths(
+      sortBooths(
+        filteredBooths,
+        transformComponentRef.current?.instance.transformState
+      )
+    );
+  }, [booths, filteredBooths, selectedBooth]);
 
   return (
     <div css={containerCss}>
