@@ -13,6 +13,7 @@ const cardCss = css`
   ${shadows.dropBottom};
   overflow: hidden;
   flex-shrink: 0;
+  transform: translate3d(0,0,0);
 
   .card-img {
     width: 9.5rem;

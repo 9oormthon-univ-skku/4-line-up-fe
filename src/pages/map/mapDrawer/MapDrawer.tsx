@@ -16,12 +16,9 @@ const drawerContentCss = css`
   border-radius: 32px 32px 0 0;
   ${shadows.dropUp};
 
-  position: absolute;
+  position: fixed;
   top: 0;
   right: 0;
-  transform-style: preserve-3d;
-  will-change: transform;
-
   display: flex;
   flex-direction: column;
   align-items: center;
