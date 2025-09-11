@@ -44,10 +44,10 @@ const containerCss = css`
     flex-grow: 1;
     padding: 20px;
     padding-bottom: 36px;
-    display: flex; 
+    display: flex;
     flex-direction: column;
     gap: 8px;
-    
+
     background-color: ${colors.white};
     color: ${colors.gray40};
     border: 2px solid ${colors.primary20};
@@ -56,13 +56,14 @@ const containerCss = css`
     h3 {
       ${fonts.desc_lg};
     }
-    b{
+    b {
       font-weight: bolder;
     }
   }
   .star-wrapper {
     display: flex;
     gap: 16px;
+    justify-content: center;
     align-items: center;
     padding: 0 24px;
 
@@ -113,7 +114,7 @@ const BoothDetail = () => {
   useEffect(() => {
     if (booths.length > 0) {
       const found = booths.find((e) => e.id === Number(param.boothId));
-      console.log("found:", found, booths, Number(param.boothId))
+      console.log('found:', found, booths, Number(param.boothId));
       if (found) {
         setBooth(found);
       } else {
@@ -147,13 +148,20 @@ const BoothDetail = () => {
           )}
           <article>
             <h3>{booth.name}</h3>
-            <p css={css`color: ${colors.primary30};`}>{booth.category.name}</p>
+            <p
+              css={css`
+                color: ${colors.primary30};
+              `}
+            >
+              {booth.category.name}
+            </p>
             <p>
               {`${booth.hour.open.format('dd요일 운영시간: HH:mm')}~${booth.hour.close.format('HH:mm')}`}
               {booth.summary && `\n한줄 소개: ${booth.summary}`}
             </p>
-            {booth.description && <BoldParsedP text={`${booth.description}`}>
-            </BoldParsedP>}
+            {booth.description && (
+              <BoldParsedP text={`${booth.description}`}></BoldParsedP>
+            )}
           </article>
           {booth.dtype === 'store' ? (
             <div className='store-content'>
@@ -196,7 +204,7 @@ const BoothDetail = () => {
                   onClick={() => window.open(link.href)}
                 />
               ))}
-              <Star />
+              {booth.links && booth.links.length > 0 && <Star />}
             </div>
           )}
         </section>
