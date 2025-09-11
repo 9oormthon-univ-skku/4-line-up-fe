@@ -19,9 +19,6 @@ const drawerContentCss = css`
   position: fixed;
   top: 0;
   right: 0;
-  transform-style: preserve-3d;
-  will-change: transform;
-
   display: flex;
   flex-direction: column;
   align-items: center;
