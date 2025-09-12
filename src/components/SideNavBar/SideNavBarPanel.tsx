@@ -28,7 +28,8 @@ const SideNavBarPanelCss = css`
     flex-direction: column;
     align-items: center;
     gap: 8px;
-    margin-bottom: 6rem;
+    margin-top: 44px;
+    margin-bottom: 60px;
   }
   .disclaimer {
     ${fonts.label_xsm};
@@ -40,7 +41,7 @@ const SideNavBarPanel = (props: React.HTMLAttributes<HTMLDivElement>) => {
   return (
     <div css={SideNavBarPanelCss}>
       <div>{props.children}</div>
-      <p className='snb-footer'>
+      <div className='snb-footer'>
         <Bg
           css={css`
             color: ${colors.primary20};
@@ -55,8 +56,8 @@ const SideNavBarPanel = (props: React.HTMLAttributes<HTMLDivElement>) => {
             color: ${colors.primary30};
           `}
         />
-        <p className='disclaimer'>{disclaimerText}</p>
-      </p>
+        <div className='disclaimer'>{disclaimerText}</div>
+      </div>
     </div>
   );
 };
