@@ -158,9 +158,24 @@ const BoothDetail = () => {
             <p>
               {`${booth.hour.open.format('dd요일 운영시간: HH:mm')}~${booth.hour.close.format('HH:mm')}`}
             </p>
-            {booth.summary && <BoldParsedP text={`한줄 소개: ${booth.summary}\n\n`}></BoldParsedP>}
+            {booth.summary && (
+              <BoldParsedP
+                text={`한줄 소개: ${booth.summary}\n\n`}
+              ></BoldParsedP>
+            )}
             {booth.description && (
-              <BoldParsedP css={fonts.desc_md_l} text={`${booth.description}`}></BoldParsedP>
+              <BoldParsedP
+                css={fonts.desc_md_l}
+                text={`${booth.description}`}
+              ></BoldParsedP>
+            )}
+            {booth.dtype === 'stop' && booth.times && (
+              <div className='bustable'>
+                <h6>배차 시간표</h6>
+                {booth.times.map((time, i) => (
+                  <p>{i+1}. {time.format('HH:mm')}</p>
+                ))}
+              </div>
             )}
           </article>
           {booth.dtype === 'store' ? (
