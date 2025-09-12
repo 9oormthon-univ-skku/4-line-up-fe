@@ -224,7 +224,7 @@ const MapPage = () => {
                 // iconUrl={e.category?.icon}
                 categoryId={e.category.id}
                 color={e.category?.color}
-                onClick={() => zoomTo(`m${e.id}`)}
+                onPinClicked={() => zoomTo(`m${e.id}`)}
                 selected={selectedBooth?.id === e.id}
               />
             ))}
