@@ -11,6 +11,7 @@ interface StarProps {
 }
 
 const starCss = css`
+  will-change: filter;
   color: ${colors.primary20};
   ${shadows.dropBottom};
   flex-shrink: 0;
