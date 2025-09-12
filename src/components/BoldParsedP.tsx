@@ -4,11 +4,11 @@ interface BoldParsedPProps extends ComponentProps<'p'> {
   text: string;
 }
 
-export const BoldParsedP = ({ text }: BoldParsedPProps) => {
+export const BoldParsedP = ({ text, ...props }: BoldParsedPProps) => {
   const parts = text.split(/(\*\*.*?\*\*|__.*?__)/g);
 
   return (
-    <p>
+    <p {...props}>
       {parts.map((part, index) => {
         if (part.startsWith('**') && part.endsWith('**')) {
           const content = part.slice(2, -2);

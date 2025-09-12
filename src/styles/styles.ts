@@ -113,4 +113,9 @@ export const fonts = {
     font-size: 1.5rem;
     font-weight: bold;
   `,
+  desc_md_l: css`
+    font-family: 'Roboto Mono';
+    font-size: 1.5rem;
+    font-weight: normal;
+  `,
 };

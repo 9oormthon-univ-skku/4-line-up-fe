@@ -237,7 +237,7 @@ const MapPage = () => {
           {currentBooths.map((e, i) => (
             <Card
               title={e.name}
-              desc={e.description}
+              desc={e.summary}
               imgUrl={e.images?.at(0)}
               btnText={e.category.name}
               key={i}
@@ -250,7 +250,7 @@ const MapPage = () => {
         <BoothInfoModal>
           <Card
             title={selectedBooth.name}
-            desc={selectedBooth.description}
+            desc={selectedBooth.summary}
             imgUrl={selectedBooth.images?.at(0)}
             btnText='자세히 보기'
             onClick={() => {
