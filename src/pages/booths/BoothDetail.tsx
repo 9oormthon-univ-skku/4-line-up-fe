@@ -157,10 +157,10 @@ const BoothDetail = () => {
             </p>
             <p>
               {`${booth.hour.open.format('dd요일 운영시간: HH:mm')}~${booth.hour.close.format('HH:mm')}`}
-              {booth.summary && `\n한줄 소개: ${booth.summary}`}
             </p>
+            {booth.summary && <BoldParsedP text={`한줄 소개: ${booth.summary}\n\n`}></BoldParsedP>}
             {booth.description && (
-              <BoldParsedP text={`${booth.description}`}></BoldParsedP>
+              <BoldParsedP css={fonts.desc_md_l} text={`${booth.description}`}></BoldParsedP>
             )}
           </article>
           {booth.dtype === 'store' ? (

@@ -151,7 +151,7 @@ const MapPage = () => {
     }
     const { zoomToElement } = transformComponentRef.current;
     console.log('zoomTo', elementId);
-    zoomToElement(elementId, scale ?? 3.0);
+    zoomToElement(elementId, scale ?? transformComponentRef.current.instance.transformState.scale);
     setSelectedBooth(booths.find((e) => `m${e.id}` === elementId) ?? null);
   };
 
@@ -224,7 +224,7 @@ const MapPage = () => {
                 // iconUrl={e.category?.icon}
                 categoryId={e.category.id}
                 color={e.category?.color}
-                onClick={() => zoomTo(`m${e.id}`, 1.5)}
+                onClick={() => zoomTo(`m${e.id}`)}
                 selected={selectedBooth?.id === e.id}
               />
             ))}
@@ -237,11 +237,11 @@ const MapPage = () => {
           {currentBooths.map((e, i) => (
             <Card
               title={e.name}
-              desc={e.description}
+              desc={e.summary}
               imgUrl={e.images?.at(0)}
               btnText={e.category.name}
               key={i}
-              onClick={() => zoomTo(`m${e.id}`)}
+              onClick={() => zoomTo(`m${e.id}`, 6)}
             />
           ))}
         </MapDrawer>
@@ -250,7 +250,7 @@ const MapPage = () => {
         <BoothInfoModal>
           <Card
             title={selectedBooth.name}
-            desc={selectedBooth.description}
+            desc={selectedBooth.summary}
             imgUrl={selectedBooth.images?.at(0)}
             btnText='자세히 보기'
             onClick={() => {
