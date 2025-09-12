@@ -10,11 +10,13 @@ import MarkerIcon from './icons/MarkerIcon';
 
 const markerCss = css`
   position: fixed;
+  height: 1px;
+  width: 1px;
   color: ${colors.primary};
   & > * {
-    transform: translateY(-39.5px);
+    transform: translate(-27px, -67px) scale(0.85);
   }
-  svg {
+  & > svg {
     ${shadows.dropBottom}
   }
   path {
@@ -32,7 +34,7 @@ const markerCss = css`
 `;
 
 const selectedCss = css`
-z-index: 5;
+  z-index: 5;
   color: ${colors.primary20};
   svg * {
     stroke: ${colors.primary30} !important;
@@ -45,6 +47,7 @@ interface MarkerProps extends ComponentProps<'div'> {
   point: Point;
   color?: string;
   categoryId?: number;
+  onPinClicked: ()=>void;
 }
 
 const Marker = ({
@@ -53,28 +56,30 @@ const Marker = ({
   point,
   color,
   categoryId,
+  onPinClicked,
   ...props
 }: MarkerProps) => {
   return (
     <KeepScale
-      onClick={props.onClick}
       css={[markerCss, selected && selectedCss]}
       style={{
-        bottom: `${point.y - 39.5}px`,
-        left: `${point.x - 29}px`,
+        bottom: `${point.y}px`,
+        left: `${point.x}px`,
         // color: color ? color : '',
       }}
+      onClick={(e)=>e.preventDefault()}
       {...props}
     >
-      <MarkerPin />
-      {iconUrl ?
-      <SvgInline
-        className='markerIcon'
-        url={iconUrl}
-        defaultSvg={<DefaultMarkerIcon />}
-      />:
-        <MarkerIcon className='markerIcon' categoryId={categoryId} />
-      }
+      <MarkerPin onClick={onPinClicked} />
+      {iconUrl ? (
+        <SvgInline
+          className='markerIcon'
+          url={iconUrl}
+          defaultSvg={<DefaultMarkerIcon />}
+        />
+      ) : (
+        <MarkerIcon className='markerIcon' categoryId={categoryId} onClick={onPinClicked}/>
+      )}
     </KeepScale>
   );
 };

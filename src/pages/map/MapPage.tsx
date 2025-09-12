@@ -224,7 +224,7 @@ const MapPage = () => {
                 // iconUrl={e.category?.icon}
                 categoryId={e.category.id}
                 color={e.category?.color}
-                onClick={() => zoomTo(`m${e.id}`)}
+                onPinClicked={() => zoomTo(`m${e.id}`)}
                 selected={selectedBooth?.id === e.id}
               />
             ))}
@@ -248,6 +248,7 @@ const MapPage = () => {
       </TransformWrapper>
       {selectedBooth && (
         <BoothInfoModal>
+          {[2, 4, 6, 7, 10].includes(selectedBooth.category.id)  ? 
           <Card
             title={selectedBooth.name}
             desc={selectedBooth.summary}
@@ -257,7 +258,13 @@ const MapPage = () => {
               // alert(`btn ${selectedBooth.id} clicked.`);
               navigate(`/booths/${selectedBooth.id}`);
             }}
-          />
+          />:
+          <Card
+            title={selectedBooth.name}
+            desc={selectedBooth.summary}
+            imgUrl={selectedBooth.images?.at(0)}
+          /> 
+          }
         </BoothInfoModal>
       )}
       <div className='controlPanels'>
