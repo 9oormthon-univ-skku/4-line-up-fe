@@ -6,10 +6,10 @@ const BoothList = ({ children, ...props }: ComponentProps<'div'>) => {
     <div
       css={css`
         width: 100%;
-        padding: 0 28px 10rem 28px;
+        padding: 0 16px 10rem 16px;
         display: flex;
         flex-direction: column;
-        gap: 12px;
+        gap: 8px;
         overflow-y: scroll;
       `}
       {...props}

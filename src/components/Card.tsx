@@ -7,36 +7,30 @@ import defaultImg from '@images/default_thumbnail.jpg';
 const cardCss = css`
   display: flex;
   width: 100%;
-  height: 9.6rem;
-  border-radius: 0.8rem;
-  background-color: ${colors.white};
+  height: 8rem;
+  border-radius: 10px;
+  border: 1px solid ${colors.grayE0};
+  background-color: ${colors.primary15};
   ${shadows.dropBottom};
   overflow: hidden;
+  align-items: center;
+  gap: 12px;
   flex-shrink: 0;
   transform: translate3d(0,0,0);
 
   .card-img {
-    width: 9.5rem;
+    width: 8rem;
     height: 100%;
-    border-radius: 0.8rem;
+    border-radius: 10px;
+    border: 1px solid ${colors.grayE0};
     background: center/cover;
     flex-shrink: 0;
-  }
-  .card-content {
-    flex-grow: 1;
-    max-width: calc(100% - 9.5rem);
-    padding: 0.8rem 1rem;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    align-items: flex-end;
   }
   .card-title-wrapper {
     width: 100%;
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
-    padding: 0 1.4rem;
     div {
         white-space: nowrap;
         overflow: hidden;
@@ -44,10 +38,14 @@ const cardCss = css`
     }
   }
   .card-title {
-    ${fonts.body_lg};
+    ${fonts.body_md};
+    color: ${colors.black};
   }
   .card-desc {
     ${fonts.label_sm};
+  }
+  button {
+    margin-right: 8px;
   }
 `;
 
@@ -75,13 +73,11 @@ const Card = ({
   return (
     <div css={cardCss} {...props}>
       <div className='card-img' style={{ backgroundImage: `url(${imgUrl})` }} />
-      <div className='card-content'>
-        <div className='card-title-wrapper'>
-          <div className='card-title'>{title}</div>
-          <div className='card-desc'>{desc}</div>
-        </div>
-        {btnText && <Button text={btnText} onClick={handleBtnClick} />}
+      <div className='card-title-wrapper'>
+        <div className='card-title'>{title}</div>
+        <div className='card-desc'>{desc}</div>
       </div>
+      {btnText && <Button text={btnText} onClick={handleBtnClick} />}
     </div>
   );
 };
