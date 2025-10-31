@@ -27,7 +27,7 @@ const containerCss = css`
     cursor: pointer;
     height: 100%;
     transition: color 0.3s ease;
-    padding: 0 1rem;
+    padding: 0 25px;
     white-space: nowrap;
   }
 
