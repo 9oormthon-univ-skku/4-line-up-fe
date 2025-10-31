@@ -1,25 +1,26 @@
 import { css } from '@emotion/react';
 
-// export const colors = {
-//   primary: '#B01616',
-//   primary40: '#E55F5F',
-//   primary30: '#DE9393',
-//   primary20: '#FFC1C1',
-//   primary10: '#FFF1F1',
-//   white: '#FFFFFF',
-//   black: '#000000',
-// };
-// Green
 export const colors = {
-  primary: '#043113',
+  primary: '#B01616',
   primary40: '#E55F5F',
-  primary30: '#819E8A',
-  primary20: '#B8CEB7',
-  primary10: '#EEFBEE',
+  primary30: '#DE9393',
+  primary20: '#FFC1C1',
+  primary10: '#FFF1F1',
   white: '#FFFFFF',
   black: '#000000',
   gray40: '#404040',
 };
+// // Green
+// export const colors = {
+//   primary: '#043113',
+//   primary40: '#E55F5F',
+//   primary30: '#819E8A',
+//   primary20: '#B8CEB7',
+//   primary10: '#EEFBEE',
+//   white: '#FFFFFF',
+//   black: '#000000',
+//   gray40: '#404040',
+// };
 export const gradients = {};
 
 const _shadows = {
