@@ -2,7 +2,7 @@ import type { ComponentProps } from 'react';
 import Button from './Button';
 import { css } from '@emotion/react';
 import { colors, fonts, shadows } from '@/styles/styles';
-import defaultImg from '@images/eskara_thumbnail.jpg';
+import defaultImg from '@images/default_thumbnail.jpg';
 
 const cardCss = css`
   display: flex;
