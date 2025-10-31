@@ -36,18 +36,16 @@ const SideNavBarMissable = () => {
 
   return (
     <Drawer.Root direction='right' open={open} onOpenChange={setOpen}>
-      {!open && (
-        <Drawer.Trigger
-          css={css`
-            position: fixed;
-            right: -5rem;
-            top: 5.2rem;
-            z-index: 30;
-          `}
-        >
-          <SideNavOpenBtn />
-        </Drawer.Trigger>
-      )}
+      <Drawer.Trigger
+        css={css`
+          position: fixed;
+          right: 16px;
+          top: 5.2rem;
+          z-index: 30;
+        `}
+      >
+        <SideNavOpenBtn />
+      </Drawer.Trigger>
       <Drawer.Overlay
         css={css`
           position: fixed;
@@ -60,15 +58,6 @@ const SideNavBarMissable = () => {
         <Drawer.Content css={drawerContentCss}>
           <Drawer.Title>메뉴</Drawer.Title>
           <Drawer.Description />
-          <SideNavOpenBtn
-            onClick={onClose}
-            css={css`
-              position: fixed;
-              right: 18rem;
-              top: 5.2rem;
-              filter: none;
-            `}
-          />
           <SideNavBarPanel>
             <SideNavCloseBtn onClick={onClose} />
             <SideNavMenuBtn
