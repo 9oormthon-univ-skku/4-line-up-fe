@@ -10,6 +10,7 @@ import { getPosts } from '@/api';
 import Gallery from '@/components/Gallery';
 import { BannerLinkUrl } from '@/constants';
 // import { postsData } from '@/api/mockData';
+import Card from '@/components/Card';
 
 const containerCss = css`
   height: 100%;
@@ -182,15 +183,14 @@ const Notice = () => {
             />
             <Star size='md' color='primary' />
             {posts.map((e, i) => (
-              <Banner
-                text={e.title}
+              <Card
+                title={e.title}
                 onClick={() => {
                   handleBannerClick(e.id);
                 }}
-                variant={
-                  visitedPostIDs.includes(e.id) ? 'secondary' : 'primary'
-                }
+                imgUrl={e.images?.at(0)}
                 key={i}
+                style={{ backgroundColor: colors.white }}
               />
             ))}
           </section>
