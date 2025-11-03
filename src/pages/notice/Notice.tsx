@@ -12,6 +12,11 @@ import { BannerLinkUrl } from '@/constants';
 // import { postsData } from '@/api/mockData';
 import Card from '@/components/Card';
 
+import dayjs, { type Dayjs } from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
+import 'dayjs/locale/ko';
+dayjs.extend(relativeTime);
+
 const containerCss = css`
   height: 100%;
   overflow-x: hidden;
@@ -185,6 +190,7 @@ const Notice = () => {
             {posts.map((e, i) => (
               <Card
                 title={e.title}
+                desc={e.createdAt?.locale('ko').fromNow()}
                 onClick={() => {
                   handleBannerClick(e.id);
                 }}
