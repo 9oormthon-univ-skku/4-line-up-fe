@@ -1,15 +1,14 @@
-import Banner from '@/components/Banner';
-import Star from '@/components/icons/Star';
 import { colors, fonts, shadows } from '@/styles/styles';
 import { css } from '@emotion/react';
 import { useEffect, useState } from 'react';
 import RingBinder from '@images/ring-binder-vt.svg?react';
+import IconChat from '@icons/kko.svg?react';
+import IconIG from '@icons/ig.svg?react';
 import type { Post } from '@/types/schema';
 import BtnBack from '@/components/icons/BtnBack';
 import { getPosts } from '@/api';
 import Gallery from '@/components/Gallery';
-import { BannerLinkUrl } from '@/constants';
-// import { postsData } from '@/api/mockData';
+import { SocialLinkUrls } from '@/constants';
 import Card from '@/components/Card';
 
 import dayjs, { type Dayjs } from 'dayjs';
@@ -29,16 +28,19 @@ const containerCss = css`
   align-items: center;
 
   h1 {
-    margin: 60px auto 0 26px;
     ${fonts.title_lg};
     line-height: 100%;
   }
   header {
     width: 100%;
-    padding: 54px 0 0 26px;
-    background-color: ${colors.primary10};
-    border-bottom: dashed 5px ${colors.primary};
-    ${fonts.title_xlg};
+    padding: 54px 26px;
+    .social-links {
+      margin-top: 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: ${colors.primary};
+    }
   }
 
   section {
@@ -47,7 +49,7 @@ const containerCss = css`
     flex-direction: column;
     align-items: center;
     gap: 16px;
-    padding: 36px 24px 72px 24px;
+    padding: 6px 20px 60px 20px;
   }
 
   #modal {
@@ -138,7 +140,6 @@ const Notice = () => {
 
   return (
     <div css={containerCss}>
-      <h1>Notice</h1>
       {modalOpen ? (
         <div id='modal'>
           <BtnBack onClick={() => setModalOpen(false)} />
@@ -179,14 +180,13 @@ const Notice = () => {
       ) : (
         <>
           <header>
-            <h2>New</h2>
+            <h1>Notice</h1>
+            <div className='social-links'>
+              <button onClick={() => window.open(SocialLinkUrls.kko)}><IconChat/></button>
+              <button onClick={() => window.open(SocialLinkUrls.ig)}><IconIG/></button>
+            </div>
           </header>
           <section>
-            <Banner
-              text='총학생회 카카오톡 채널'
-              onClick={() => window.open(BannerLinkUrl)}
-            />
-            <Star size='md' color='primary' />
             {posts.map((e, i) => (
               <Card
                 title={e.title}
