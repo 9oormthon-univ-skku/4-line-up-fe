@@ -53,6 +53,10 @@ const containerCss = css`
 
     gap: 18px;
   }
+  .tab-wrapper {
+    display: flex;
+    gap: 12px;
+  }
   article {
     flex-grow: 1;
     padding: 8px;
@@ -66,46 +70,28 @@ const containerCss = css`
     b {
       font-weight: bolder;
     }
-  }
-  .star-wrapper {
-    display: flex;
-    gap: 16px;
-    justify-content: center;
-    align-items: center;
-    padding: 0 24px;
-
-    h4 {
-      ${fonts.title_lg};
-      color: ${colors.white};
-      text-align: center;
-      flex-grow: 1;
+    .booth-links {
+      margin-top: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
     }
-  }
-  .store-content {
-    display: flex;
-    flex-direction: column;
-    gap: 28px;
-    margin-top: 60px;
-    border-top: 5px dashed ${colors.white};
-    padding-top: 40px;
   }
   .menu-list {
     display: flex;
     flex-direction: column;
     gap: 8px;
+    padding: 8px 0;
     div {
       background-color: ${colors.white};
     }
-  }
-  .btn-wrapper {
-    display: flex;
-    gap: 14px;
   }
 `;
 
 const BoothDetail = () => {
   const [booths, setBooths] = useState<Booth[]>([]);
   const [booth, setBooth] = useState<Booth>();
+  const [showMenu, setShowMenu] = useState(false);
 
   const param = useParams();
   const navigate = useNavigate();
@@ -163,42 +149,65 @@ const BoothDetail = () => {
               id='gallery'
             />
           )}
-          <article>
-            {booth.description && (
-              <BoldParsedP text={`${booth.description}`}></BoldParsedP>
-            )}
-            {booth.dtype === 'stop' && booth.times && (
-              <div className='bustable'>
-                <h6>배차 시간표</h6>
-                {booth.times.map((time, i) => (
-                  <p>
-                    {i + 1}. {time.format('HH:mm')}
-                  </p>
+          {booth.dtype === 'store' && (
+            <div className='tab-wrapper'>
+              <Button
+                size='lg'
+                variant={!showMenu ? 'primary' : 'secondary'}
+                onClick={() => setShowMenu(false)}
+              >
+                소개
+              </Button>
+              <Button
+                size='lg'
+                variant={showMenu ? 'primary' : 'secondary'}
+                onClick={() => setShowMenu(true)}
+              >
+                메뉴
+              </Button>
+            </div>
+          )}
+          {!showMenu ? (
+            <article>
+              {booth.description && (
+                <BoldParsedP text={`${booth.description}`}></BoldParsedP>
+              )}
+              {booth.dtype === 'stop' && booth.times && (
+                <div className='bustable'>
+                  <h6>배차 시간표</h6>
+                  {booth.times.map((time, i) => (
+                    <p>
+                      {i + 1}. {time.format('HH:mm')}
+                    </p>
+                  ))}
+                </div>
+              )}
+              <div className="booth-links">
+                {booth.links?.map((link, i) => (
+                  <Button
+                    key={i}
+                    size='lg'
+                    variant='secondary'
+                    text={link.label}
+                    onClick={() => window.open(link.href)}
+                  />
                 ))}
               </div>
-            )}
-          </article>
-          <div className='menu-list'>
-            {booth.dtype === 'store' && booth.menus && booth.menus.length > 0
-              ? booth.menus.map((menu) => (
-                  <Card
-                    key={menu.id}
-                    title={menu.name}
-                    imgUrl={menu.image}
-                    desc={`${menu.price.toLocaleString()}원`}
-                  />
-                ))
-              : '등록된 메뉴가 없습니다.'}
-          </div>
-          {booth.links?.map((link, i) => (
-            <Button
-              key={i}
-              size='lg'
-              variant='secondary'
-              text={link.label}
-              onClick={() => window.open(link.href)}
-            />
-          ))}
+            </article>
+          ) : (
+            <div className='menu-list'>
+              {booth.dtype === 'store' && booth.menus && booth.menus.length > 0
+                ? booth.menus.map((menu) => (
+                    <Card
+                      key={menu.id}
+                      title={menu.name}
+                      imgUrl={menu.image}
+                      desc={`${menu.price.toLocaleString()}원`}
+                    />
+                  ))
+                : '등록된 메뉴가 없습니다.'}
+            </div>
+          )}
         </section>
       )}
     </div>
