@@ -1,7 +1,7 @@
 import { getBooths } from '@/api';
 import Gallery from '@/components/Gallery';
 import BtnBack from '@/components/icons/BtnBack';
-import { colors, fonts, shadows } from '@/styles/styles';
+import { colors, fonts } from '@/styles/styles';
 import type { Booth } from '@/types/schema';
 import { css } from '@emotion/react';
 import dayjs from 'dayjs';
@@ -9,100 +9,89 @@ import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import 'dayjs/locale/ko';
 import Button from '@/components/Button';
-import Star from '@/components/icons/Star';
 import Card from '@/components/Card';
 import { BoldParsedP } from '@/components/BoldParsedP';
 // import { boothsData } from '@/api/mockData';
+import Tag from '@/components/Tag';
 dayjs.locale('ko');
 
 const containerCss = css`
-  min-height: 100%;
-  overflow-y: scroll;
+  height: 100%;
   background-color: ${colors.primary10};
 
   display: flex;
   flex-direction: column;
-  gap: 22px;
-  & > button {
-    margin: 5.8rem auto 0px 26px;
+  header {
+    display: flex;
+    align-items: center;
+    padding: 5.2rem calc(16px + 5.6rem) 22px 26px;
+    h3 {
+      flex-grow: 1;
+      text-align: center;
+      ${fonts.body_lg};
+    }
   }
-
+  .info {
+    color: ${colors.gray77};
+    display: flex;
+    justify-content: space-between;
+    .left {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+  }
   section {
-    ${shadows.dropUp};
-    background-color: ${colors.primary};
-    border-radius: 14px 14px 0 0;
-    padding: 24px;
+    padding: 16px;
+    min-height: 0;
+    overflow-y: scroll;
     overflow-x: hidden;
     flex-grow: 1;
 
     display: flex;
     flex-direction: column;
 
-    gap: 24px;
+    gap: 18px;
+  }
+  .tab-wrapper {
+    display: flex;
+    gap: 12px;
   }
   article {
     flex-grow: 1;
-    padding: 20px;
-    padding-bottom: 36px;
+    padding: 8px;
+    padding-bottom: 12px;
     display: flex;
     flex-direction: column;
     gap: 8px;
 
-    background-color: ${colors.white};
     color: ${colors.gray40};
-    border: 2px solid ${colors.primary20};
-    border-radius: 14px;
-    ${fonts.desc_md};
-    h3 {
-      ${fonts.desc_lg};
-    }
+    ${fonts.label_sm};
     b {
       font-weight: bolder;
     }
-  }
-  .star-wrapper {
-    display: flex;
-    gap: 16px;
-    justify-content: center;
-    align-items: center;
-    padding: 0 24px;
-
-    h4 {
-      ${fonts.title_lg};
-      color: ${colors.white};
-      text-align: center;
-      flex-grow: 1;
+    .booth-links {
+      margin-top: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
     }
-  }
-  .store-content {
-    display: flex;
-    flex-direction: column;
-    gap: 28px;
-    margin-top: 60px;
-    border-top: 5px dashed ${colors.white};
-    padding-top: 40px;
   }
   .menu-list {
     display: flex;
     flex-direction: column;
-    gap: 10px;
-
+    gap: 8px;
+    padding: 8px 0;
     div {
-      background-color: ${colors.primary10};
+      background-color: ${colors.white};
     }
-    .card-title {
-      color: ${colors.black};
-    }
-  }
-  .btn-wrapper {
-    display: flex;
-    gap: 14px;
   }
 `;
 
 const BoothDetail = () => {
   const [booths, setBooths] = useState<Booth[]>([]);
   const [booth, setBooth] = useState<Booth>();
+  const [showMenu, setShowMenu] = useState(false);
 
   const param = useParams();
   const navigate = useNavigate();
@@ -132,9 +121,23 @@ const BoothDetail = () => {
 
   return (
     <div css={containerCss}>
-      <BtnBack onClick={() => navigate(-1)} />
+      <header>
+        <BtnBack onClick={() => navigate(-1)} />
+        <h3>{booth?.name}</h3>
+      </header>
       {booth && (
         <section>
+          <div className='info'>
+            <div className='left'>
+              <Tag text={booth.category.name} />
+              {booth.summary && (
+                <BoldParsedP text={booth.summary}></BoldParsedP>
+              )}
+            </div>
+            <p>
+              {`${booth.hour.open.locale('ko').format('MM/DD (dd) HH:mm')}~${booth.hour.close.format('HH:mm')}`}
+            </p>
+          </div>
           {booth.images && (
             <Gallery
               dotControl
@@ -146,80 +149,63 @@ const BoothDetail = () => {
               id='gallery'
             />
           )}
-          <article>
-            <h3>{booth.name}</h3>
-            <p
-              css={css`
-                color: ${colors.primary30};
-              `}
-            >
-              {booth.category.name}
-            </p>
-            <p>
-              {`${booth.hour.open.format('dd요일 운영시간: HH:mm')}~${booth.hour.close.format('HH:mm')}`}
-            </p>
-            {booth.summary && (
-              <BoldParsedP
-                text={`한줄 소개: ${booth.summary}\n\n`}
-              ></BoldParsedP>
-            )}
-            {booth.description && (
-              <BoldParsedP
-                css={fonts.desc_md_l}
-                text={`${booth.description}`}
-              ></BoldParsedP>
-            )}
-            {booth.dtype === 'stop' && booth.times && (
-              <div className='bustable'>
-                <h6>배차 시간표</h6>
-                {booth.times.map((time, i) => (
-                  <p>{i+1}. {time.format('HH:mm')}</p>
-                ))}
-              </div>
-            )}
-          </article>
-          {booth.dtype === 'store' ? (
-            <div className='store-content'>
-              <div className='star-wrapper'>
-                <Star />
-                <h4>Menu</h4>
-                <Star />
-              </div>
-              <article className='menu-list'>
-                {booth.menus && booth.menus.length > 0
-                  ? booth.menus.map((menu) => (
-                      <Card
-                        key={menu.id}
-                        title={menu.name}
-                        imgUrl={menu.image}
-                        desc={`${menu.price.toLocaleString()}원`}
-                      />
-                    ))
-                  : '등록된 메뉴가 없습니다.'}
-              </article>
-              <div className='btn-wrapper'>
+          {booth.dtype === 'store' && (
+            <div className='tab-wrapper'>
+              <Button
+                size='lg'
+                variant={!showMenu ? 'primary' : 'secondary'}
+                onClick={() => setShowMenu(false)}
+              >
+                소개
+              </Button>
+              <Button
+                size='lg'
+                variant={showMenu ? 'primary' : 'secondary'}
+                onClick={() => setShowMenu(true)}
+              >
+                메뉴
+              </Button>
+            </div>
+          )}
+          {!showMenu ? (
+            <article>
+              {booth.description && (
+                <BoldParsedP text={`${booth.description}`}></BoldParsedP>
+              )}
+              {booth.dtype === 'stop' && booth.times && (
+                <div className='bustable'>
+                  <h6>배차 시간표</h6>
+                  {booth.times.map((time, i) => (
+                    <p>
+                      {i + 1}. {time.format('HH:mm')}
+                    </p>
+                  ))}
+                </div>
+              )}
+              <div className="booth-links">
                 {booth.links?.map((link, i) => (
                   <Button
                     key={i}
                     size='lg'
+                    variant='secondary'
                     text={link.label}
                     onClick={() => window.open(link.href)}
                   />
                 ))}
               </div>
-            </div>
+            </article>
           ) : (
-            <div className='star-wrapper'>
-              <Star />
-              {booth.links?.map((link, i) => (
-                <Button
-                  key={i}
-                  size='lg'
-                  text={link.label}
-                  onClick={() => window.open(link.href)}
-                />
-              ))}
-              {booth.links && booth.links.length > 0 && <Star />}
+            <div className='menu-list'>
+              {booth.dtype === 'store' && booth.menus && booth.menus.length > 0
+                ? booth.menus.map((menu) => (
+                    <Card
+                      key={menu.id}
+                      title={menu.name}
+                      imgUrl={menu.image}
+                      desc={`${menu.price.toLocaleString()}원`}
+                    />
+                  ))
+                : '등록된 메뉴가 없습니다.'}
             </div>
           )}
         </section>
