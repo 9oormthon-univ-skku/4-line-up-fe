@@ -7,24 +7,19 @@ export const colors = {
   primary20: '#FFC1C1',
   primary15: '#FFF4F4',
   primary10: '#FFF1F1',
-  white: '#FFFFFF',
-  black: '#000000',
-  gray40: '#404040',
-  grayE0: '#E0E0E0',
-};
-// // Green
-// export const colors = {
+  // // Green
   //   primary: '#043113',
-  //   primary40: '#E55F5F',
+  //   primary40: '#44885F',
   //   primary30: '#819E8A',
   //   primary20: '#B8CEB7',
   //   primary15: '#EEFBEE',
   //   primary10: '#EEFBEE',
-  //   white: '#FFFFFF',
-  //   black: '#000000',
-  //   gray40: '#404040',
-  // grayE0: '#E0E0E0',
-// };
+  white: '#FFFFFF',
+  black: '#000000',
+  gray40: '#404040',
+  gray77: '#777777',
+  grayE0: '#E0E0E0',
+};
 export const gradients = {};
 
 const _shadows = {

@@ -43,6 +43,7 @@ const cardCss = css`
   }
   .card-desc {
     ${fonts.label_sm};
+    color: ${colors.gray77};
   }
   button {
     margin-right: 8px;

@@ -1,16 +1,21 @@
-import Banner from '@/components/Banner';
-import Star from '@/components/icons/Star';
 import { colors, fonts, shadows } from '@/styles/styles';
 import { css } from '@emotion/react';
 import { useEffect, useState } from 'react';
-import RingBinder from '@images/ring-binder-vt.svg?react';
+import IconChat from '@icons/kko.svg?react';
+import IconIG from '@icons/ig.svg?react';
 import type { Post } from '@/types/schema';
 import BtnBack from '@/components/icons/BtnBack';
 import { getPosts } from '@/api';
-import Gallery from '@/components/Gallery';
-import { BannerLinkUrl } from '@/constants';
 // import { postsData } from '@/api/mockData';
+import Gallery from '@/components/Gallery';
+import { SocialLinkUrls } from '@/constants';
 import Card from '@/components/Card';
+import Button from '@/components/Button';
+
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
+import 'dayjs/locale/ko';
+dayjs.extend(relativeTime);
 
 const containerCss = css`
   height: 100%;
@@ -24,16 +29,19 @@ const containerCss = css`
   align-items: center;
 
   h1 {
-    margin: 60px auto 0 26px;
     ${fonts.title_lg};
     line-height: 100%;
   }
   header {
     width: 100%;
-    padding: 54px 0 0 26px;
-    background-color: ${colors.primary10};
-    border-bottom: dashed 5px ${colors.primary};
-    ${fonts.title_xlg};
+    padding: 54px 26px;
+    .social-links {
+      margin-top: 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: ${colors.primary};
+    }
   }
 
   section {
@@ -42,7 +50,7 @@ const containerCss = css`
     flex-direction: column;
     align-items: center;
     gap: 16px;
-    padding: 36px 24px 72px 24px;
+    padding: 6px 20px 60px 20px;
   }
 
   #modal {
@@ -52,39 +60,42 @@ const containerCss = css`
     display: flex;
     flex-direction: column;
     gap: 16px;
-    color: ${colors.white};
-    padding: 24px;
-    padding-bottom: 0;
+    color: ${colors.gray40};
+    padding-top: 5.2rem;
+    #btn-back {
+      margin-left: 20px;
+      flex-shrink: 0;
+    }
     #notice-detail {
-      position: relative;
       width: 100%;
       flex-grow: 1;
-      /* min-height: 0; */
-      max-height: 80vh;
-      border-radius: 14px 14px 0 0;
-      background-color: ${colors.primary};
+      min-height: 0;
+      border-radius: 10px 10px 0 0;
+      background-color: ${colors.white};
       ${shadows.dropBottom};
-      padding: 20px 14px 0 56px;
+      padding: 20px 24px;
       article {
         height: 100%;
         padding-bottom: 64px;
         overflow-y: scroll;
       }
+      .heading {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
       h3 {
         ${fonts.body_lg}
       }
-    }
-    #ringbinder {
-      position: absolute;
-      top: 24px;
-      left: -12px;
-      height: calc(100% - 24px);
-      color: ${colors.primary20};
-      ${shadows.dropBottom};
-      overflow: hidden;
-    }
-    button {
-      margin: 6px;
+      .date {
+        ${fonts.label_xsm}
+      }
+      .post-links {
+        margin-top: 8rem;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
     }
 
     #inset {
@@ -92,7 +103,7 @@ const containerCss = css`
       height: 100dvh;
       position: absolute;
       z-index: 10;
-      background-color: #ffffff55;
+      background-color: #ffffffaa;
     }
     .imgModal {
       height: 120vw;
@@ -133,10 +144,9 @@ const Notice = () => {
 
   return (
     <div css={containerCss}>
-      <h1>Notice</h1>
       {modalOpen ? (
         <div id='modal'>
-          <BtnBack onClick={() => setModalOpen(false)} />
+          <BtnBack id='btn-back' onClick={() => setModalOpen(false)} />
           {currentPost?.images && currentPost.images.length > 0 && (
             <>
               <div>
@@ -161,30 +171,48 @@ const Notice = () => {
           )}
           <div id='notice-detail'>
             <article>
-              <h3>{currentPost?.title}</h3>
+              <div className='heading'>
+                <h3>{currentPost?.title}</h3>
+                <p className='date'>
+                  {currentPost?.createdAt?.format('YY.MM.DD')}
+                </p>
+              </div>
               <br />
               <br />
               <p>{currentPost?.content}</p>
+              {currentPost?.links && (
+                <div className='post-links'>
+                  {currentPost.links.map((link, i) => (
+                    <Button
+                      key={i}
+                      onClick={() => window.open(link.href)}
+                      text={link.label}
+                      size='lg'
+                    />
+                  ))}
+                </div>
+              )}
             </article>
-            <div id='ringbinder'>
-              <RingBinder />
-            </div>
           </div>
         </div>
       ) : (
         <>
           <header>
-            <h2>New</h2>
+            <h1>Notice</h1>
+            <div className='social-links'>
+              <button onClick={() => window.open(SocialLinkUrls.kko)}>
+                <IconChat />
+              </button>
+              <button onClick={() => window.open(SocialLinkUrls.ig)}>
+                <IconIG />
+              </button>
+            </div>
           </header>
           <section>
-            <Banner
-              text='총학생회 카카오톡 채널'
-              onClick={() => window.open(BannerLinkUrl)}
-            />
-            <Star size='md' color='primary' />
             {posts.map((e, i) => (
               <Card
                 title={e.title}
+                desc={e.createdAt?.locale('ko').fromNow()}
                 onClick={() => {
                   handleBannerClick(e.id);
                 }}
