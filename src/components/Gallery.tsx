@@ -19,12 +19,13 @@ const loadKeyframe = keyframes`
 const galleryCss = css`
   /* overflow: hidden; */
   width: 100%;
+  flex-shrink: 0;
   ${shadows.dropBottom}
   .embla__container {
     display: flex;
   }
   .embla__slide {
-    height: 443px;
+    height: 392px;
     flex: 0 0 314px;
     min-width: 0;
     border-radius: 15px;

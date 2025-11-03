@@ -25,19 +25,23 @@ const btnCss = css`
 const btnLargeCss = css`
   width: 100%;
   padding: 1.6rem;
-  background-color: ${colors.primary10};
-  border: 2px solid ${colors.primary20};
+  background-color: ${colors.primary20};
+  border: 2px solid ${colors.primary30};
   ${fonts.body_md};
 `;
+const secondaryCss = css`
+  background-color: ${colors.white};
+`
 
 interface ButtonProps extends ComponentProps<'button'> {
   size?: 'default' | 'lg';
+  variant?: 'primary' | 'secondary';
   text?: string;
 }
 
-const Button = ({ size = 'default', ...props }: ButtonProps) => {
+const Button = ({ size = 'default', variant = 'primary', ...props }: ButtonProps) => {
   return (
-    <button css={[btnCss, size === 'lg' && btnLargeCss]} {...props}>
+    <button css={[btnCss, size === 'lg' && btnLargeCss, variant === 'secondary' && secondaryCss]} {...props}>
       {props.text}
       {props.children}
     </button>
