@@ -36,6 +36,11 @@ const galleryCss = css`
     height: 320px;
     flex: 0 0 240px;
   }
+  .xsmall {
+    height: 218px;
+    flex: 0 0 175px;
+    margin: 0 5px;
+  }
   .embla__controls {
     position: absolute;
     bottom: 8px;
@@ -55,7 +60,7 @@ const squareCss = css`
 
 interface GalleryProps extends ComponentProps<'div'> {
   images: string[];
-  size?: 'default' | 'small' | 'sqaure';
+  size?: 'default' | 'small' | 'xsmall' | 'sqaure';
   dotControl?: boolean;
   loop?: boolean;
   onSlideClick?: (key: number) => void;

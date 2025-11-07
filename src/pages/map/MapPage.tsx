@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { css } from '@emotion/react';
 import { colors } from '@/styles/styles';
 import type { Booth, Category, Hour, Point } from '@/types/schema';
@@ -8,7 +7,6 @@ import Card from '@/components/Card';
 import DropdownSelector from '@/components/Selector/DropdownSelector';
 import CategorySelector from '@/components/Selector/CategorySelector';
 import MapDrawer from './mapDrawer/MapDrawer';
-import BoothInfoModal from './BoothInfoModal';
 import { getBooths, getCategories } from '@/api';
 import { days } from '@/constants';
 import MapImg1 from '@images/map-img-lv1.svg';
@@ -165,8 +163,6 @@ const MapPage = () => {
     setSelectedBooth(booths.find((e) => `m${e.id}` === elementId) ?? null);
   };
 
-  const navigate = useNavigate();
-
   useEffect(() => {
     // setBooths(boothsData); // Mockup data
     // setCategories(categoriesData);
@@ -231,28 +227,6 @@ const MapPage = () => {
           ))}
         </MapDrawer>
       </TransformWrapper>
-      {selectedBooth && (
-        <BoothInfoModal>
-          {[2, 4, 6, 7, 10].includes(selectedBooth.category.id) ? (
-            <Card
-              title={selectedBooth.name}
-              desc={selectedBooth.summary}
-              imgUrl={selectedBooth.images?.at(0)}
-              btnText='자세히 보기'
-              onClick={() => {
-                // alert(`btn ${selectedBooth.id} clicked.`);
-                navigate(`/booths/${selectedBooth.id}`);
-              }}
-            />
-          ) : (
-            <Card
-              title={selectedBooth.name}
-              desc={selectedBooth.summary}
-              imgUrl={selectedBooth.images?.at(0)}
-            />
-          )}
-        </BoothInfoModal>
-      )}
       <div className='controlPanels'>
         <DropdownSelector
           className='select'
