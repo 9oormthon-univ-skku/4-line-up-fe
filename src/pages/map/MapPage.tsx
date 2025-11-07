@@ -51,8 +51,11 @@ const containerCss = css`
   }
   .controlPanels {
     position: fixed;
-    top: 24px;
-    left: 24px;
+    top: 0;
+    left: 0;
+    padding: 0 24px;
+    margin-top: 6rem;
+    width: 100%;
     display: flex;
     flex-direction: column;
     gap: 16px;
