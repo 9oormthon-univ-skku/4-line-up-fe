@@ -1,19 +1,19 @@
 import { css } from '@emotion/react';
 
 export const colors = {
-  primary: '#B01616',
-  primary40: '#E55F5F',
-  primary30: '#DE9393',
-  primary20: '#FFC1C1',
-  primary15: '#FFF4F4',
-  primary10: '#FFF1F1',
-  // // Green
-  //   primary: '#043113',
-  //   primary40: '#44885F',
-  //   primary30: '#819E8A',
-  //   primary20: '#B8CEB7',
-  //   primary15: '#EEFBEE',
-  //   primary10: '#EEFBEE',
+  // primary: '#B01616',
+  // primary40: '#E55F5F',
+  // primary30: '#DE9393',
+  // primary20: '#FFC1C1',
+  // primary15: '#FFF4F4',
+  // primary10: '#FFF1F1',
+  // Green
+  primary: '#043113',
+  primary40: '#44885F',
+  primary30: '#819E8A',
+  primary20: '#B8CEB7',
+  primary15: '#EEFBEE',
+  primary10: '#EEFBEE',
   white: '#FFFFFF',
   black: '#000000',
   gray40: '#404040',
