@@ -3,7 +3,6 @@ import { css } from '@emotion/react';
 import type React from 'react';
 import { useEffect, useState, type ComponentProps } from 'react';
 import { Drawer } from 'vaul';
-import RingBinder from '@images/ring-binder-hz.svg?react';
 import BoothList from './BoothList';
 import type { Booth } from '@/types/schema';
 
@@ -24,10 +23,17 @@ const drawerContentCss = css`
   align-items: center;
   header {
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+    align-items: center;
     width: 100%;
     padding: 36px;
+    padding-top: 8px;
+    gap: 20px;
     ${fonts.display_lg};
+    .handle {
+      background-color: ${colors.primary20};
+      width: 60px;
+    }
   }
   header svg {
     position: fixed;
@@ -37,7 +43,7 @@ const drawerContentCss = css`
   z-index: 10;
 `;
 
-const snapPoints = ['130px', '300px', 1];
+const snapPoints = ['130px', '300px', 0.8];
 
 interface MapDrawerProps extends ComponentProps<'div'> {
   selected: Booth | null;
@@ -49,7 +55,7 @@ const MapDrawer = ({ selected, setSelected, children }: MapDrawerProps) => {
   const [open, setOpen] = useState(true);
 
   const handleSnapClick = () => {
-    snapMap === 1 ? setSnapMap(snapPoints[0]) : setSnapMap(1);
+    snapMap === snapPoints[2] ? setSnapMap(snapPoints[0]) : setSnapMap(snapPoints[2]);
     setSelected(null);
   };
   const onSelect = () => {
@@ -82,7 +88,7 @@ const MapDrawer = ({ selected, setSelected, children }: MapDrawerProps) => {
       <Drawer.Portal>
         <Drawer.Content css={drawerContentCss}>
           <header onClick={handleSnapClick}>
-            <RingBinder />
+            <Drawer.Handle className='handle'/>
             <Drawer.Title>부스 목록</Drawer.Title>
             <Drawer.Description />
           </header>
