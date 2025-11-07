@@ -2,17 +2,18 @@ import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { css } from '@emotion/react';
 import { colors } from '@/styles/styles';
-import type { Booth, Hour, Point } from '@/types/schema';
+import type { Booth, Category, Hour, Point } from '@/types/schema';
 import Marker from '@/components/Marker';
 import Card from '@/components/Card';
 import DropdownSelector from '@/components/Selector/DropdownSelector';
+import CategorySelector from '@/components/Selector/CategorySelector';
 import MapDrawer from './mapDrawer/MapDrawer';
 import BoothInfoModal from './BoothInfoModal';
-import { getBooths } from '@/api';
+import { getBooths, getCategories } from '@/api';
 import { days } from '@/constants';
 import MapImg1 from '@images/map-img-lv1.svg';
 import MapImg2 from '@images/map-img-lv2.svg';
-// import { boothsData } from '@/api/mockData';
+// import { boothsData, categoriesData } from '@/api/mockData';
 
 import {
   TransformComponent,
@@ -53,7 +54,7 @@ const containerCss = css`
     position: fixed;
     top: 0;
     left: 0;
-    padding: 0 24px;
+    padding: 0;
     margin-top: 6rem;
     width: 100%;
     display: flex;
@@ -88,6 +89,7 @@ const MapImg = () =>
 const filterBooths = (
   booths: Booth[],
   hour: Hour,
+  categories: string[],
   areaId?: number
 ): Booth[] => {
   console.log(
@@ -103,6 +105,7 @@ const filterBooths = (
           booth.hour.open.isBefore(hour.close) &&
           booth.hour.close.isAfter(hour.open)
       )
+      .filter((booths) => categories.length===0||categories.includes(booths.category.name))
   );
   // TODO: area filtering
 };
@@ -138,7 +141,9 @@ const sortBooths = (
 const MapPage = () => {
   const transformComponentRef = useRef<ReactZoomPanPinchRef | null>(null);
   const [booths, setBooths] = useState<Booth[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
   const [currentBooths, setCurrentBooths] = useState<Booth[]>([]);
+  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [filteredBooths, setFilteredBooths] = useState<Booth[]>([]);
   const [currentHour, setCurrentHour] = useState<Hour>({
     open: days[0],
@@ -164,20 +169,20 @@ const MapPage = () => {
 
   useEffect(() => {
     // setBooths(boothsData); // Mockup data
+    // setCategories(categoriesData);
     getBooths(setBooths);
+    getCategories(setCategories);
     setRunOnlyOnce(false); // resolve collision between TransformWrapper's 'centerOnInit' prop and bugfix of KeepScale
   }, []);
 
   useEffect(() => {
-    setFilteredBooths(
-      filterBooths(booths, currentHour)
-    );
+    setFilteredBooths(filterBooths(booths, currentHour, selectedCategories));
 
     if (transformComponentRef.current && runOnlyOnce === false) {
       console.log('transform state: ', transformComponentRef.current.state);
       transformComponentRef.current.zoomIn(0); // KeepScale bugfix
     }
-  }, [booths, currentHour]);
+  }, [booths, currentHour, selectedCategories]);
 
   useEffect(() => {
     setCurrentBooths(
@@ -250,10 +255,16 @@ const MapPage = () => {
       )}
       <div className='controlPanels'>
         <DropdownSelector
+          className='select'
           name='currentTime'
           setCurrent={setCurrentHour}
           dayNightBoundary={dayNightBoundary}
           days={days}
+        />
+        <CategorySelector
+          categories={categories}
+          selected={selectedCategories}
+          setSelected={setSelectedCategories}
         />
       </div>
     </div>

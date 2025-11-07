@@ -6,7 +6,8 @@ import { useState, useEffect, type ComponentProps } from 'react';
 
 const containerCss = css`
   position: relative;
-
+  margin: 0 24px;
+  
   select {
     appearance: none;
     padding: 1rem;

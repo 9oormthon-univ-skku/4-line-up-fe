@@ -1,4 +1,4 @@
-import type { Booth, Post, Timeslot } from '@/types/schema';
+import type { Booth, Category, Post, Timeslot } from '@/types/schema';
 import axiosInstance from './axios';
 import { API_ENDPOINTS } from './endpoints';
 import type { Dispatch, SetStateAction } from 'react';
@@ -18,4 +18,9 @@ export const getBooths = async (
 export const getTimeSlots = async (setTimeslots: Dispatch<SetStateAction<Timeslot[]>>) => {
   const { data } = await axiosInstance.get<Timeslot[]>(API_ENDPOINTS.GET_TIMETABLE);
   setTimeslots(data);
+};
+
+export const getCategories = async (setCategories: Dispatch<SetStateAction<Category[]>>) => {
+  const { data } = await axiosInstance.get<Category[]>(API_ENDPOINTS.GET_CATEGORIES);
+  setCategories(data);
 };
