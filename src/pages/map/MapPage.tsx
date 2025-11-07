@@ -1,22 +1,17 @@
 import { useEffect, useRef, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { css } from '@emotion/react';
 import { colors } from '@/styles/styles';
-import type { Booth, Point } from '@/types/schema';
+import type { Booth, Category, Hour, Point } from '@/types/schema';
 import Marker from '@/components/Marker';
 import Card from '@/components/Card';
-import DateSelector, {
-  valueIdx,
-  type valueType,
-} from '@/components/Selector/DateSelector';
-import DayNightSelector from '@/components/Selector/DayNightSelector';
+import DropdownSelector from '@/components/Selector/DropdownSelector';
+import CategorySelector from '@/components/Selector/CategorySelector';
 import MapDrawer from './mapDrawer/MapDrawer';
-import BoothInfoModal from './BoothInfoModal';
-import { getBooths } from '@/api';
+import { getBooths, getCategories } from '@/api';
 import { days } from '@/constants';
 import MapImg1 from '@images/map-img-lv1.svg';
 import MapImg2 from '@images/map-img-lv2.svg';
-// import { boothsData } from '@/api/mockData';
+// import { boothsData, categoriesData } from '@/api/mockData';
 
 import {
   TransformComponent,
@@ -26,7 +21,7 @@ import {
   type ReactZoomPanPinchRef,
   type ReactZoomPanPinchState,
 } from 'react-zoom-pan-pinch';
-import dayjs, { type Dayjs } from 'dayjs';
+import dayjs from 'dayjs';
 import isBetween from 'dayjs/plugin/isBetween';
 dayjs.extend(isBetween);
 
@@ -55,8 +50,11 @@ const containerCss = css`
   }
   .controlPanels {
     position: fixed;
-    top: 24px;
-    left: 24px;
+    top: 0;
+    left: 0;
+    padding: 0;
+    margin-top: 6rem;
+    width: 100%;
     display: flex;
     flex-direction: column;
     gap: 16px;
@@ -88,21 +86,25 @@ const MapImg = () =>
 
 const filterBooths = (
   booths: Booth[],
-  date: Dayjs,
-  dayOrNight: 'day' | 'night',
+  hour: Hour,
+  categories: string[],
   areaId?: number
 ): Booth[] => {
   console.log(
-    `date: ${date?.format('MM/DD')} areaId:${areaId} all booths:`,
+    `hour: ${hour?.open.format('MM/DD HH')}~${hour?.close.format('HH')}`,
+    `\nareaId:${areaId} \nall booths:`,
     booths
   );
-  return booths
-    .filter((booth) => date.isSame(booth.hour.open, 'day'))
-    .filter((booth) =>
-      dayOrNight === 'day'
-        ? booth.hour.open.isBefore(date.add(dayNightBoundary, 'h'))
-        : booth.hour.close.isAfter(date.add(dayNightBoundary, 'h'))
-    );
+  return (
+    booths
+      // hour.open < booth.close && hour.close > booth.open
+      .filter(
+        (booth) =>
+          booth.hour.open.isBefore(hour.close) &&
+          booth.hour.close.isAfter(hour.open)
+      )
+      .filter((booths) => categories.length===0||categories.includes(booths.category.name))
+  );
   // TODO: area filtering
 };
 
@@ -137,12 +139,15 @@ const sortBooths = (
 const MapPage = () => {
   const transformComponentRef = useRef<ReactZoomPanPinchRef | null>(null);
   const [booths, setBooths] = useState<Booth[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
   const [currentBooths, setCurrentBooths] = useState<Booth[]>([]);
+  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [filteredBooths, setFilteredBooths] = useState<Booth[]>([]);
-  const [currentDay, setCurrentDay] = useState<Dayjs>(days[0]);
-  const [dayOrNight, setDayOrNight] = useState<'day' | 'night'>('day');
+  const [currentHour, setCurrentHour] = useState<Hour>({
+    open: days[0],
+    close: days[0].add(dayNightBoundary, 'hour'),
+  });
   const [selectedBooth, setSelectedBooth] = useState<Booth | null>(null);
-  const [defaultVal, setDefaultVal] = useState<valueType>();
   const [runOnlyOnce, setRunOnlyOnce] = useState(true);
 
   const zoomTo = (elementId: string, scale?: number) => {
@@ -151,53 +156,29 @@ const MapPage = () => {
     }
     const { zoomToElement } = transformComponentRef.current;
     console.log('zoomTo', elementId);
-    zoomToElement(elementId, scale ?? transformComponentRef.current.instance.transformState.scale);
+    zoomToElement(
+      elementId,
+      scale ?? transformComponentRef.current.instance.transformState.scale
+    );
     setSelectedBooth(booths.find((e) => `m${e.id}` === elementId) ?? null);
   };
 
-  const onDateChange = (value: string) => {
-    // console.log(value, days.at(valueIdx[value as valueType]));
-    setCurrentDay(days.at(valueIdx[value as valueType]) ?? currentDay);
-  };
-  const onDayNightChange = (value: string) => {
-    console.log(value);
-    setDayOrNight(value as 'day' | 'night');
-  };
-
-  const setDaySelector = (date: Dayjs) => {
-    setDefaultVal(
-      Object.keys(valueIdx).at(
-        days.findIndex((tgt) => tgt.isSame(date))
-      ) as valueType
-    );
-  };
-
-  const navigate = useNavigate();
-
   useEffect(() => {
     // setBooths(boothsData); // Mockup data
+    // setCategories(categoriesData);
     getBooths(setBooths);
-
+    getCategories(setCategories);
     setRunOnlyOnce(false); // resolve collision between TransformWrapper's 'centerOnInit' prop and bugfix of KeepScale
-    if (
-      dayjs().isBetween(days[0], days.at(-1), 'day', '[]') && // during fest and..
-      days.some((day) => day.isSame(dayjs(), 'day')) // today exist in days
-    ) {
-      setCurrentDay(dayjs().startOf('date'));
-      // if during festival, set default day with TODAY 00:00
-      console.log('enjoy the festival!');
-      setDaySelector(dayjs().startOf('date'));
-    }
   }, []);
 
   useEffect(() => {
-    setFilteredBooths(filterBooths(booths, currentDay, dayOrNight));
+    setFilteredBooths(filterBooths(booths, currentHour, selectedCategories));
 
     if (transformComponentRef.current && runOnlyOnce === false) {
       console.log('transform state: ', transformComponentRef.current.state);
       transformComponentRef.current.zoomIn(0); // KeepScale bugfix
     }
-  }, [currentDay, booths, dayOrNight]);
+  }, [booths, currentHour, selectedCategories]);
 
   useEffect(() => {
     setCurrentBooths(
@@ -246,30 +227,19 @@ const MapPage = () => {
           ))}
         </MapDrawer>
       </TransformWrapper>
-      {selectedBooth && (
-        <BoothInfoModal>
-          {[2, 4, 6, 7, 10].includes(selectedBooth.category.id)  ? 
-          <Card
-            title={selectedBooth.name}
-            desc={selectedBooth.summary}
-            imgUrl={selectedBooth.images?.at(0)}
-            btnText='자세히 보기'
-            onClick={() => {
-              // alert(`btn ${selectedBooth.id} clicked.`);
-              navigate(`/booths/${selectedBooth.id}`);
-            }}
-          />:
-          <Card
-            title={selectedBooth.name}
-            desc={selectedBooth.summary}
-            imgUrl={selectedBooth.images?.at(0)}
-          /> 
-          }
-        </BoothInfoModal>
-      )}
       <div className='controlPanels'>
-        <DateSelector onChange={onDateChange} defaultValue={defaultVal} />
-        <DayNightSelector onChange={onDayNightChange} />
+        <DropdownSelector
+          className='select'
+          name='currentTime'
+          setCurrent={setCurrentHour}
+          dayNightBoundary={dayNightBoundary}
+          days={days}
+        />
+        <CategorySelector
+          categories={categories}
+          selected={selectedCategories}
+          setSelected={setSelectedCategories}
+        />
       </div>
     </div>
   );

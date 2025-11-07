@@ -3,9 +3,13 @@ import { css } from '@emotion/react';
 import type React from 'react';
 import { useEffect, useState, type ComponentProps } from 'react';
 import { Drawer } from 'vaul';
-import RingBinder from '@images/ring-binder-hz.svg?react';
 import BoothList from './BoothList';
 import type { Booth } from '@/types/schema';
+import { useNavigate } from 'react-router-dom';
+import Tag from '@/components/Tag';
+import { BoldParsedP } from '@/components/BoldParsedP';
+import Gallery from '@/components/Gallery';
+import Button from '@/components/Button';
 
 const drawerContentCss = css`
   background-color: ${colors.white};
@@ -24,10 +28,16 @@ const drawerContentCss = css`
   align-items: center;
   header {
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+    align-items: center;
     width: 100%;
-    padding: 36px;
+    padding: 8px 36px;
+    gap: 20px;
     ${fonts.display_lg};
+    .handle {
+      background-color: ${colors.primary20};
+      width: 60px;
+    }
   }
   header svg {
     position: fixed;
@@ -37,7 +47,31 @@ const drawerContentCss = css`
   z-index: 10;
 `;
 
-const snapPoints = ['130px', '300px', 1];
+const boothInfoCss = css`
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+  padding: 12px 16px;
+  ${fonts.label_xsm};
+  color: ${colors.gray77};
+  .title-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    .left {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    h3 {
+      ${fonts.body_md};
+      color: ${colors.gray40};
+    }
+  }
+`;
+
+const snapPoints = ['280px', '480px', 0.85];
 
 interface MapDrawerProps extends ComponentProps<'div'> {
   selected: Booth | null;
@@ -49,12 +83,16 @@ const MapDrawer = ({ selected, setSelected, children }: MapDrawerProps) => {
   const [open, setOpen] = useState(true);
 
   const handleSnapClick = () => {
-    snapMap === 1 ? setSnapMap(snapPoints[0]) : setSnapMap(1);
+    snapMap === snapPoints[2]
+      ? setSnapMap(snapPoints[0])
+      : setSnapMap(snapPoints[2]);
     setSelected(null);
   };
   const onSelect = () => {
-    setSnapMap(snapPoints[0]);
+    setSnapMap(snapPoints[1]);
   };
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (selected) {
@@ -63,7 +101,7 @@ const MapDrawer = ({ selected, setSelected, children }: MapDrawerProps) => {
   }, [selected]);
 
   useEffect(() => {
-    if (snapMap !== snapPoints[0]) {
+    if (snapMap !== snapPoints[1]) {
       setSelected(null);
     }
   }, [snapMap]);
@@ -82,11 +120,60 @@ const MapDrawer = ({ selected, setSelected, children }: MapDrawerProps) => {
       <Drawer.Portal>
         <Drawer.Content css={drawerContentCss}>
           <header onClick={handleSnapClick}>
-            <RingBinder />
-            <Drawer.Title>부스 목록</Drawer.Title>
-            <Drawer.Description />
+            <Drawer.Handle className='handle' />
+            {!selected && (
+              <>
+                <Drawer.Title>부스 목록</Drawer.Title>
+                <Drawer.Description />
+              </>
+            )}
           </header>
-          <BoothList onClick={onSelect}>{children}</BoothList>
+          {selected ? (
+            <div css={boothInfoCss}>
+              <div className='title-wrapper'>
+                <div className='left'>
+                  <h3>{selected.name}</h3>
+                  <BoldParsedP text={selected.summary || ''} />
+                </div>
+                <Tag text={selected.category.name} />
+              </div>
+              <p>
+                {`${selected.hour.open.locale('ko').format('MM/DD (dd) HH:mm')}~${selected.hour.close.format('HH:mm')}`}
+              </p>
+              {selected.images && (
+                <Gallery
+                  dotControl
+                  size='xsmall'
+                  onSlideClick={(key) => {
+                    console.log(key);
+                  }}
+                  images={selected?.images}
+                  id='gallery'
+                />
+              )}
+              <Button
+                className='btn-detail'
+                size='lg'
+                onClick={() => {
+                  navigate(`/booths/${selected.id}`);
+                }}
+              >
+                자세히 보기
+              </Button>
+            </div>
+          ) : (
+            <BoothList
+              onClick={onSelect}
+              css={
+                snapMap === snapPoints[2] &&
+                css`
+                  overflow-y: scroll;
+                `
+              }
+            >
+              {children}
+            </BoothList>
+          )}
         </Drawer.Content>
       </Drawer.Portal>
     </Drawer.Root>
