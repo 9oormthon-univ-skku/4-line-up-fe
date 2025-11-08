@@ -5,7 +5,7 @@ import IconChat from '@icons/kko.svg?react';
 import IconIG from '@icons/ig.svg?react';
 import type { Post } from '@/types/schema';
 import BtnBack from '@/components/icons/BtnBack';
-import { getPosts } from '@/api';
+import { getPost, getPosts } from '@/api';
 // import { postsData } from '@/api/mockData';
 import Gallery from '@/components/Gallery';
 import { SocialLinkUrls } from '@/constants';
@@ -125,8 +125,10 @@ const Notice = () => {
   const [currentPost, setCurrentPost] = useState<Post>();
   const [visitedPostIDs, setVisitedPostIDs] = useState<number[]>([]);
   const handleBannerClick = (id: number) => {
+    console.log(posts);
     // console.log(Posts.at(i)?.content);
-    setCurrentPost(posts.find((e) => e.id === id));
+    // setCurrentPost(posts.find((e) => e.id === id));
+    getPost(id, setCurrentPost);
     setModalOpen(true);
     setVisitedPostIDs([...visitedPostIDs, id]);
   };
@@ -216,7 +218,7 @@ const Notice = () => {
                 onClick={() => {
                   handleBannerClick(e.id);
                 }}
-                imgUrl={e.images?.at(0)}
+                imgUrl={e?.thumbnail}
                 key={i}
                 style={{ backgroundColor: colors.white }}
               />

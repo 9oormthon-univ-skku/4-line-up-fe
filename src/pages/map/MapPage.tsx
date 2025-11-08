@@ -11,7 +11,7 @@ import { getBooths, getCategories } from '@/api';
 import { days } from '@/constants';
 import MapImg1 from '@images/map-img-lv1.svg';
 import MapImg2 from '@images/map-img-lv2.svg';
-// import { boothsData, categoriesData } from '@/api/mockData';
+// import { areasData, boothsData, categoriesData } from '@/api/mockData';
 
 import {
   TransformComponent,
@@ -87,11 +87,12 @@ const MapImg = () =>
 const filterBooths = (
   booths: Booth[],
   hour: Hour,
-  categories: string[],
+  categoryIds: number[],
   areaId?: number
 ): Booth[] => {
   console.log(
     `hour: ${hour?.open.format('MM/DD HH')}~${hour?.close.format('HH')}`,
+    `\nselected categorys: `, categoryIds,
     `\nareaId:${areaId} \nall booths:`,
     booths
   );
@@ -101,9 +102,9 @@ const filterBooths = (
       .filter(
         (booth) =>
           booth.hour.open.isBefore(hour.close) &&
-          booth.hour.close.isAfter(hour.open)
+          booth.hour.close.isAfter(hour.open) &&
+          (categoryIds.length === 0 || categoryIds.includes(booth.categoryId))
       )
-      .filter((booths) => categories.length===0||categories.includes(booths.category.name))
   );
   // TODO: area filtering
 };
@@ -138,15 +139,17 @@ const sortBooths = (
 
 const MapPage = () => {
   const transformComponentRef = useRef<ReactZoomPanPinchRef | null>(null);
+  // const [areas, setAreas] = useState<Area[]>([]);
   const [booths, setBooths] = useState<Booth[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
   const [currentBooths, setCurrentBooths] = useState<Booth[]>([]);
-  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [filteredBooths, setFilteredBooths] = useState<Booth[]>([]);
   const [currentHour, setCurrentHour] = useState<Hour>({
     open: days[0],
     close: days[0].add(dayNightBoundary, 'hour'),
   });
+  // const [selectedAreas, setSelectedAreas] = useState<Area|null>(null);
+  const [selectedCategoryIds, setSelectedCategoryIds] = useState<number[]>([]);
   const [selectedBooth, setSelectedBooth] = useState<Booth | null>(null);
   const [runOnlyOnce, setRunOnlyOnce] = useState(true);
 
@@ -164,6 +167,7 @@ const MapPage = () => {
   };
 
   useEffect(() => {
+    // setAreas(areasData);
     // setBooths(boothsData); // Mockup data
     // setCategories(categoriesData);
     getBooths(setBooths);
@@ -172,13 +176,14 @@ const MapPage = () => {
   }, []);
 
   useEffect(() => {
-    setFilteredBooths(filterBooths(booths, currentHour, selectedCategories));
+    console.log(categories);
+    setFilteredBooths(filterBooths(booths, currentHour, selectedCategoryIds));
 
     if (transformComponentRef.current && runOnlyOnce === false) {
       console.log('transform state: ', transformComponentRef.current.state);
       transformComponentRef.current.zoomIn(0); // KeepScale bugfix
     }
-  }, [booths, currentHour, selectedCategories]);
+  }, [booths, currentHour, selectedCategoryIds]);
 
   useEffect(() => {
     setCurrentBooths(
@@ -203,8 +208,8 @@ const MapPage = () => {
                 point={e.point}
                 id={`m${e.id}`}
                 // iconUrl={e.category?.icon}
-                categoryId={e.category.id}
-                color={e.category?.color}
+                categoryId={e.categoryId}
+                // color={e.category?.color}
                 onPinClicked={() => zoomTo(`m${e.id}`)}
                 selected={selectedBooth?.id === e.id}
               />
@@ -214,13 +219,13 @@ const MapPage = () => {
             <MapImg />
           </div>
         </TransformComponent>
-        <MapDrawer selected={selectedBooth} setSelected={setSelectedBooth}>
+        <MapDrawer selected={selectedBooth} setSelected={setSelectedBooth} selcectedCatName={categories.find(cat=>cat.id===selectedBooth?.categoryId)?.name}>
           {currentBooths.map((e, i) => (
             <Card
               title={e.name}
               desc={e.summary}
-              imgUrl={e.images?.at(0)}
-              btnText={e.category.name}
+              imgUrl={e.thumbnail}
+              btnText={categories.find((cat) => cat.id === e.categoryId)?.name}
               key={i}
               onClick={() => zoomTo(`m${e.id}`, 6)}
             />
@@ -237,8 +242,8 @@ const MapPage = () => {
         />
         <CategorySelector
           categories={categories}
-          selected={selectedCategories}
-          setSelected={setSelectedCategories}
+          selectedIds={selectedCategoryIds}
+          setSelectedIds={setSelectedCategoryIds}
         />
       </div>
     </div>
