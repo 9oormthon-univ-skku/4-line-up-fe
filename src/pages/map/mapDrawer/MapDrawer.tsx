@@ -59,10 +59,18 @@ const boothInfoCss = css`
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
+    gap: 8px;
+
     .left {
       display: flex;
       flex-direction: column;
       gap: 4px;
+      min-width: 0;
+      * {
+        white-space: nowrap;
+        overflow-x: hidden;
+        text-overflow: ellipsis;
+      }
     }
     h3 {
       ${fonts.body_md};
@@ -79,7 +87,12 @@ interface MapDrawerProps extends ComponentProps<'div'> {
   selcectedCatName?: string;
 }
 
-const MapDrawer = ({ selected, setSelected, selcectedCatName, children }: MapDrawerProps) => {
+const MapDrawer = ({
+  selected,
+  setSelected,
+  selcectedCatName,
+  children,
+}: MapDrawerProps) => {
   const [snapMap, setSnapMap] = useState<number | string | null>(snapPoints[0]);
   const [open, setOpen] = useState(true);
 

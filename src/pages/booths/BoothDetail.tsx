@@ -25,20 +25,26 @@ const containerCss = css`
     display: flex;
     align-items: center;
     padding: 5.2rem calc(16px + 5.6rem) 22px 26px;
+    gap: 8px;
     h3 {
       flex-grow: 1;
       text-align: center;
       ${fonts.body_lg};
+      white-space: nowrap;
+      overflow-x: hidden;
+      text-overflow: ellipsis;
     }
   }
   .info {
     color: ${colors.gray77};
     display: flex;
+    flex-direction: column;
     justify-content: space-between;
-    .left {
+    gap: 8px;
+    .above {
       display: flex;
-      flex-direction: column;
-      gap: 8px;
+      justify-content: space-between;
+      align-items: center;
     }
   }
   section {
@@ -89,7 +95,7 @@ const containerCss = css`
 `;
 
 const BoothDetail = () => {
-  const [booth, setBooth] = useState<Booth>();
+  const [booth, setBooth] = useState<Booth | null>(null);
   const [categories, setCategories] = useState<Category[]>([]);
   const [showMenu, setShowMenu] = useState(false);
 
@@ -99,8 +105,8 @@ const BoothDetail = () => {
   useEffect(() => {
     // setBooth(boothsData.find(e=>e.id===Number(param.boothId))); // Mockup Data
     const boothId = Number(param.boothId);
-    getCategories(setCategories)
-    if(!isNaN(boothId)) getBooth(boothId, setBooth);
+    getCategories(setCategories);
+    if (!isNaN(boothId)) getBooth(boothId, setBooth);
     else navigate('/home');
   }, []);
 
@@ -119,15 +125,17 @@ const BoothDetail = () => {
       {booth && (
         <section>
           <div className='info'>
-            <div className='left'>
-              <Tag text={ categories.find(cat=>cat.id=== booth.categoryId)?.name} />
-              {booth.summary && (
-                <BoldParsedP text={booth.summary}></BoldParsedP>
-              )}
+            <div className='above'>
+              <Tag
+                text={
+                  categories.find((cat) => cat.id === booth.categoryId)?.name
+                }
+              />
+              <p>
+                {`${booth.hour.open.locale('ko').format('MM/DD (dd) HH:mm')}~${booth.hour.close.format('HH:mm')}`}
+              </p>
             </div>
-            <p>
-              {`${booth.hour.open.locale('ko').format('MM/DD (dd) HH:mm')}~${booth.hour.close.format('HH:mm')}`}
-            </p>
+            {booth.summary && <BoldParsedP text={booth.summary}></BoldParsedP>}
           </div>
           {booth.images && (
             <Gallery
@@ -173,7 +181,7 @@ const BoothDetail = () => {
                   ))}
                 </div>
               )}
-              <div className="booth-links">
+              <div className='booth-links'>
                 {booth.links?.map((link, i) => (
                   <Button
                     key={i}

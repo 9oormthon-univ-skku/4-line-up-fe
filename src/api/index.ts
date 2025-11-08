@@ -30,7 +30,7 @@ export const getBooths = async (
 };
 export const getBooth = async (
   boothId: number,
-  setBooth: Dispatch<SetStateAction<Booth | undefined>>
+  setBooth: Dispatch<SetStateAction<Booth | null>>
 ) => {
   const response = await axiosInstance.get<Booth>(
     `${API_ENDPOINTS.GET_BOOTHS}/${boothId}`

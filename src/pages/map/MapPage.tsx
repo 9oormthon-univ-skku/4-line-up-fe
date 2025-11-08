@@ -7,7 +7,7 @@ import Card from '@/components/Card';
 import DropdownSelector from '@/components/Selector/DropdownSelector';
 import CategorySelector from '@/components/Selector/CategorySelector';
 import MapDrawer from './mapDrawer/MapDrawer';
-import { getBooths, getCategories } from '@/api';
+import { getBooth, getBooths, getCategories } from '@/api';
 import { days } from '@/constants';
 import MapImg1 from '@images/map-img-lv1.svg';
 import MapImg2 from '@images/map-img-lv2.svg';
@@ -163,7 +163,8 @@ const MapPage = () => {
       elementId,
       scale ?? transformComponentRef.current.instance.transformState.scale
     );
-    setSelectedBooth(booths.find((e) => `m${e.id}` === elementId) ?? null);
+    // setSelectedBooth(booths.find((e) => `m${e.id}` === elementId) ?? null);
+    getBooth(Number(elementId.slice(1)), setSelectedBooth)
   };
 
   useEffect(() => {
