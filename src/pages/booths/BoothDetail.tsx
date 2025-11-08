@@ -1,8 +1,8 @@
-import { getBooths } from '@/api';
+import { getBooth, getCategories } from '@/api';
 import Gallery from '@/components/Gallery';
 import BtnBack from '@/components/icons/BtnBack';
 import { colors, fonts } from '@/styles/styles';
-import type { Booth } from '@/types/schema';
+import type { Booth, Category } from '@/types/schema';
 import { css } from '@emotion/react';
 import dayjs from 'dayjs';
 import { useEffect, useState } from 'react';
@@ -25,20 +25,26 @@ const containerCss = css`
     display: flex;
     align-items: center;
     padding: 5.2rem calc(16px + 5.6rem) 22px 26px;
+    gap: 8px;
     h3 {
       flex-grow: 1;
       text-align: center;
       ${fonts.body_lg};
+      white-space: nowrap;
+      overflow-x: hidden;
+      text-overflow: ellipsis;
     }
   }
   .info {
     color: ${colors.gray77};
     display: flex;
+    flex-direction: column;
     justify-content: space-between;
-    .left {
+    gap: 8px;
+    .above {
       display: flex;
-      flex-direction: column;
-      gap: 8px;
+      justify-content: space-between;
+      align-items: center;
     }
   }
   section {
@@ -89,32 +95,23 @@ const containerCss = css`
 `;
 
 const BoothDetail = () => {
-  const [booths, setBooths] = useState<Booth[]>([]);
-  const [booth, setBooth] = useState<Booth>();
+  const [booth, setBooth] = useState<Booth | null>(null);
+  const [categories, setCategories] = useState<Category[]>([]);
   const [showMenu, setShowMenu] = useState(false);
 
   const param = useParams();
   const navigate = useNavigate();
 
   useEffect(() => {
-    // setBooths(boothsData); // Mockup Data
-    getBooths(setBooths);
+    // setBooth(boothsData.find(e=>e.id===Number(param.boothId))); // Mockup Data
+    const boothId = Number(param.boothId);
+    getCategories(setCategories);
+    if (!isNaN(boothId)) getBooth(boothId, setBooth);
+    else navigate('/home');
   }, []);
-  useEffect(() => {
-    if (booths.length > 0) {
-      const found = booths.find((e) => e.id === Number(param.boothId));
-      console.log('found:', found, booths, Number(param.boothId));
-      if (found) {
-        setBooth(found);
-      } else {
-        // Not Found
-        navigate('/home');
-      }
-    }
-  }, [booths]);
 
   useEffect(() => {
-    if (booth?.dtype === 'store') {
+    if (booth?.dtype === 'STORE') {
       console.log(booth.menus);
     }
   }, [booth]);
@@ -128,15 +125,17 @@ const BoothDetail = () => {
       {booth && (
         <section>
           <div className='info'>
-            <div className='left'>
-              <Tag text={booth.category.name} />
-              {booth.summary && (
-                <BoldParsedP text={booth.summary}></BoldParsedP>
-              )}
+            <div className='above'>
+              <Tag
+                text={
+                  categories.find((cat) => cat.id === booth.categoryId)?.name
+                }
+              />
+              <p>
+                {`${booth.hour.open.locale('ko').format('MM/DD (dd) HH:mm')}~${booth.hour.close.format('HH:mm')}`}
+              </p>
             </div>
-            <p>
-              {`${booth.hour.open.locale('ko').format('MM/DD (dd) HH:mm')}~${booth.hour.close.format('HH:mm')}`}
-            </p>
+            {booth.summary && <BoldParsedP text={booth.summary}></BoldParsedP>}
           </div>
           {booth.images && (
             <Gallery
@@ -149,7 +148,7 @@ const BoothDetail = () => {
               id='gallery'
             />
           )}
-          {booth.dtype === 'store' && (
+          {booth.dtype === 'STORE' && (
             <div className='tab-wrapper'>
               <Button
                 size='lg'
@@ -172,7 +171,7 @@ const BoothDetail = () => {
               {booth.description && (
                 <BoldParsedP text={`${booth.description}`}></BoldParsedP>
               )}
-              {booth.dtype === 'stop' && booth.times && (
+              {booth.dtype === 'STOP' && booth.times && (
                 <div className='bustable'>
                   <h6>배차 시간표</h6>
                   {booth.times.map((time, i) => (
@@ -182,7 +181,7 @@ const BoothDetail = () => {
                   ))}
                 </div>
               )}
-              <div className="booth-links">
+              <div className='booth-links'>
                 {booth.links?.map((link, i) => (
                   <Button
                     key={i}
@@ -196,7 +195,7 @@ const BoothDetail = () => {
             </article>
           ) : (
             <div className='menu-list'>
-              {booth.dtype === 'store' && booth.menus && booth.menus.length > 0
+              {booth.dtype === 'STORE' && booth.menus && booth.menus.length > 0
                 ? booth.menus.map((menu) => (
                     <Card
                       key={menu.id}

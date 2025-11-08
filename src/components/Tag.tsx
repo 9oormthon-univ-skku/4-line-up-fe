@@ -9,6 +9,7 @@ const tagCss = css`
   justify-content: center;
   gap: 8px;
   padding: 4px 8px;
+  flex-shrink: 0;
 
   border-radius: 2rem;
   border: 2px solid ${colors.primary30};
