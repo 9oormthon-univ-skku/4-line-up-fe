@@ -5,7 +5,8 @@ import IconChat from '@icons/kko.svg?react';
 import IconIG from '@icons/ig.svg?react';
 import type { Post } from '@/types/schema';
 import BtnBack from '@/components/icons/BtnBack';
-import { getPost, getPosts } from '@/api';
+// import { getPost, getPosts } from '@/api';
+import { getPosts } from '@/api';
 // import { postsData } from '@/api/mockData';
 import Gallery from '@/components/Gallery';
 import { SocialLinkUrls } from '@/constants';
@@ -127,8 +128,8 @@ const Notice = () => {
   const handleBannerClick = (id: number) => {
     console.log(posts);
     // console.log(Posts.at(i)?.content);
-    // setCurrentPost(posts.find((e) => e.id === id));
-    getPost(id, setCurrentPost);
+    setCurrentPost(posts.find((e) => e.id === id));
+    // getPost(id, setCurrentPost);
     setModalOpen(true);
     setVisitedPostIDs([...visitedPostIDs, id]);
   };

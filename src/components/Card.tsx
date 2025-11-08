@@ -1,8 +1,8 @@
 import type { ComponentProps } from 'react';
-import Button from './Button';
 import { css } from '@emotion/react';
 import { colors, fonts, shadows } from '@/styles/styles';
 import defaultImg from '@images/default_thumbnail.jpg';
+import Tag from './Tag';
 
 const cardCss = css`
   display: flex;
@@ -27,7 +27,8 @@ const cardCss = css`
     flex-shrink: 0;
   }
   .card-title-wrapper {
-    width: 100%;
+    flex-grow: 1;
+    min-width: 0;
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
@@ -45,7 +46,7 @@ const cardCss = css`
     ${fonts.label_sm};
     color: ${colors.gray77};
   }
-  button {
+  .tag {
     margin-right: 8px;
   }
 `;
@@ -78,7 +79,7 @@ const Card = ({
         <div className='card-title'>{title}</div>
         <div className='card-desc'>{desc}</div>
       </div>
-      {btnText && <Button text={btnText} onClick={handleBtnClick} />}
+      {btnText && <Tag className='tag' text={btnText} onClick={handleBtnClick} />}
     </div>
   );
 };
