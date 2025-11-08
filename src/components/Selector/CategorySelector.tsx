@@ -9,6 +9,9 @@ const containerCss = css`
   display: flex;
   gap: 8px;
   padding-left: 24px;
+  div {
+    flex-shrink: 0;
+  }
 `;
 
 const selectedCss = css`
@@ -17,24 +20,24 @@ const selectedCss = css`
 
 interface SelectorProps extends ComponentProps<'div'> {
   categories: Category[];
-  selected: string[];
-  setSelected: React.Dispatch<React.SetStateAction<string[]>>;
+  selectedIds: number[];
+  setSelectedIds: React.Dispatch<React.SetStateAction<number[]>>;
 }
 
 const CategorySelector = ({
   categories,
-  selected,
-  setSelected,
+  selectedIds,
+  setSelectedIds,
   ...props
 }: SelectorProps) => {
   const onTagClick = (e: React.MouseEvent<HTMLDivElement>) => {
     const tgt = e.target as HTMLElement;
-    const cat = tgt.textContent;
-    if (cat === null) return;
-    if (selected.includes(cat)) {
-      setSelected(selected.filter((e) => e !== cat));
+    const cat = Number(tgt.id);
+    if (isNaN(cat)) return;
+    if (selectedIds.includes(cat)) {
+      setSelectedIds(selectedIds.filter((e) => e !== cat));
     } else {
-      setSelected([...selected, cat]);
+      setSelectedIds([...selectedIds, cat]);
     }
   };
 
@@ -45,7 +48,8 @@ const CategorySelector = ({
           key={i}
           onClick={onTagClick}
           variant='secondary'
-          css={selected.includes(category.name) && selectedCss}
+          css={selectedIds.includes(category.id) && selectedCss}
+          id={`${category.id}`}
         >
           {category.name}
         </Tag>

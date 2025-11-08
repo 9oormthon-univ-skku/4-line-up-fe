@@ -24,6 +24,7 @@ export interface Link {
 export interface Post extends BaseEntity {
   title: string;
   content: string;
+  thumbnail?: string;
   images?: string[];
   links?: Link[];
 }
@@ -45,14 +46,15 @@ export interface Area extends BaseEntity {
 }
 
 interface BoothBase extends BaseEntity {
-  dtype: 'marker' | 'gate' | 'stop' | 'store';
-  category: Category;
+  dtype: 'MARKER' | 'GATE' | 'STOP' | 'STORE';
+  categoryId: number;
   area: Area;
   name: string;
   summary?: string;
   description?: string;
   point: Point;
   hour: Hour;
+  thumbnail?: string;
   images?: string[];
   links?: Link[];
 }
@@ -64,18 +66,18 @@ interface Menu extends BaseEntity {
 }
 
 interface Marker extends BoothBase {
-  dtype: 'marker';
+  dtype: 'MARKER';
 }
 interface Gate extends BoothBase {
-  dtype: 'gate';
+  dtype: 'GATE';
   type: 'ENTRY' | 'EXIT' | 'ALL';
 }
 interface Stop extends BoothBase {
-  dtype: 'stop';
+  dtype: 'STOP';
   times: dayjs.Dayjs[];
 }
 interface Store extends BoothBase {
-  dtype: 'store';
+  dtype: 'STORE';
   menus: Menu[];
 }
 
